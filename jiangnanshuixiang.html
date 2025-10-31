@@ -192,6 +192,12 @@
       box-shadow: 0 0 15px gold;
     }
 
+    .wrapper .game-box .game-area table#game .game-row td .pic-box img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
     .wrapper .game-box .game-area #canvas {
       position: absolute;
       left: 0;
@@ -405,10 +411,28 @@
       this.rows = (config.rows || 6) + 2;
       this.level = config.level || 0;
       this.leftDisorderTime = 5;
-      // 使用emoji表情作为图标
+      // 使用图片地址作为图标（您可以根据需要修改这些地址）
       this.gifts = [
-        '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
-        '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐤', '🦆'
+        'images/game-icons/icon1.png',
+        'images/game-icons/icon2.png',
+        'images/game-icons/icon3.png',
+        'images/game-icons/icon4.png',
+        'images/game-icons/icon5.png',
+        'images/game-icons/icon6.png',
+        'images/game-icons/icon7.png',
+        'images/game-icons/icon8.png',
+        'images/game-icons/icon9.png',
+        'images/game-icons/icon10.png',
+        'images/game-icons/icon11.png',
+        'images/game-icons/icon12.png',
+        'images/game-icons/icon13.png',
+        'images/game-icons/icon14.png',
+        'images/game-icons/icon15.png',
+        'images/game-icons/icon16.png',
+        'images/game-icons/icon17.png',
+        'images/game-icons/icon18.png',
+        'images/game-icons/icon19.png',
+        'images/game-icons/icon20.png'
       ];
       this.isGameOver = false;
       return this;
@@ -601,7 +625,8 @@
           for (var col = 1; col < this.cols - 1; col++) {
             var picture = this.pictures[row][col];
             var emptyClass = picture.isEmpty ? 'empty' : '';
-            html += `<td><div class="pic-box ${emptyClass}" data-row="${row}" data-col="${col}" data-index="${picture.index}">${picture.pic}</div></td>`;
+            // 修改这里：使用img标签显示图片
+            html += `<td><div class="pic-box ${emptyClass}" data-row="${row}" data-col="${col}" data-index="${picture.index}"><img src="${picture.pic}" alt="图标"></div></td>`;
           }
           html += '</tr>';
         }
@@ -656,11 +681,7 @@
         console.log('检查连接:', {pre: [preCol, preRow], cur: [curCol, curRow]});
         if (this.canCleanup(preCol, preRow, curCol, curRow)) {
           console.log('可以连接');
-          this.linkPictures = [];
-          for (var i = 0; i < this.points.length - 1; i++) {
-            this.mergeArray(this.linkPictures, this.countPoints(this.points[i], this.points[i + 1]));
-          }
-          this.drawLine();
+          // 移除连线相关的代码
           this.updateStatus(preRow, preCol, curRow, curCol, preIndex, curIndex);
         } else {
           console.log('无法连接');
@@ -737,38 +758,9 @@
         $('.scoring').text(this.score);
       },
 
+      // 移除drawLine函数
       drawLine: function () {
-        var canvas = document.getElementById('canvas');
-        if (!canvas.getContext) return;
-        
-        var ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.beginPath();
-        ctx.strokeStyle = "#fbff98";
-        ctx.lineWidth = 4;
-        
-        if (this.linkPictures.length > 0) {
-          var first = this.linkPictures[0];
-          var startX = (first.col - 1) * 80 + 40;
-          var startY = (first.row - 1) * 80 + 40;
-          ctx.moveTo(startX, startY);
-          
-          for (var i = 1; i < this.linkPictures.length; i++) {
-            var point = this.linkPictures[i];
-            var x = (point.col - 1) * 80 + 40;
-            var y = (point.row - 1) * 80 + 40;
-            ctx.lineTo(x, y);
-          }
-        }
-        
-        ctx.stroke();
-        canvas.classList.remove('hidden');
-        
-        setTimeout(function () {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          canvas.classList.add('hidden');
-        }, 500);
+        // 这个函数现在为空，不执行任何操作
       },
 
       updateStatus: function (preRow, preCol, curRow, curCol, preIndex, curIndex) {
