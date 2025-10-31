@@ -455,19 +455,19 @@
       }
       
       .game-area table#game .game-row td {
-        width: 40x;     /* 手机方块宽度 */
+        width: 40px;     /* 手机方块宽度 */
         height: 40px;    /* 手机方块高度 */
       }
       
       .game-area table#game .game-row td .pic-box {
         width: 40px;     /* 手机方块容器宽度 */
         height: 40px;    /* 手机方块容器高度 */
-        font-size: 35px; /* 手机图标字体大小 */
+        font-size: 15px; /* 手机图标字体大小 */
       }
       
       .game-area table#game .game-row td .pic-box.active {
-        width: 74px;
-        height: 74px;
+        width: 40px;
+        height: 40px;
       }
       
       /* 手机端游戏结束提示变小 */
@@ -1229,7 +1229,7 @@
         const isMobile = window.innerWidth <= 768;
         
         var gameConfig = {
-          rows: isMobile ? 7 : 10,     // 手机7行，平板/桌面10行
+          rows: isMobile ? 8 : 10,     // 手机7行，平板/桌面10行
           cols: isMobile ? 8 : 12,     // 手机8列，平板/桌面12列
           level: 0,
         };
