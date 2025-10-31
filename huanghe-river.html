@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄河漂流大冒险 - 方寸屏间，万里河山</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a192f, #112240, #1a2a6c);
+            color: white;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: rgba(10, 25, 47, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        .page-hero {
+            position: relative;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #a8b2d1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .game-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-section {
+            text-align: center;
+        }
+        
+        .game-section h3 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .game-section p {
+            color: #a8b2d1;
+            margin-bottom: 2rem;
+        }
+        
+        /* 黄河游戏样式 */
+        .river-game-container {
+            margin: 1rem auto;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0 1rem;
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .stat-item {
+            background: rgba(100, 255, 218, 0.1);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a8b2d1;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #64ffda;
+        }
+        
+        .river-game {
+            position: relative;
+            margin: 1rem auto;
+        }
+        
+        .river-game canvas {
+            border: 3px solid #64ffda;
+            border-radius: 12px;
+            background: linear-gradient(to bottom, #1a5276, #2980b9, #85c1e9);
+            display: block;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 游戏控制按钮 */
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: #64ffda;
+            color: #0a192f;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background: #4fd3c4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+        
+        .btn:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #64ffda;
+            border: 1px solid #64ffda;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        /* 游戏说明 */
+        .game-instructions {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+        
+        .game-instructions h4 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+        }
+        
+        .game-instructions p {
+            color: #a8b2d1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .difficulty-info {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .difficulty-item {
+            text-align: center;
+        }
+        
+        .difficulty-item .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 游戏结果 */
+        .game-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+            color: #4caf50;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        
+        .info-message {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            color: #64ffda;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        
+        .warning-message {
+            background: rgba(255, 152, 0, 0.2);
+            border: 1px solid #ff9800;
+            color: #ff9800;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(10, 25, 47, 0.9);
+            margin-top: 3rem;
+        }
+        
+        footer a {
+            color: #64ffda;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .game-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .stats-container {
+                justify-content: center;
+            }
+            
+            .river-game canvas {
+                width: 100%;
+                max-width: 500px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-item {
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/item/item.jpg" alt="方寸屏间，万里河山" class="logo-image">
+            <span class="logo-text">方寸屏间，万里河山</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html#mountains" class="btn">返回</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="page-hero">
+        <div class="hero-content">
+            <h1>黄河漂流大冒险</h1>
+            <p>沿着母亲河黄河漂流，收集沿岸风景，避开危险障碍，体验黄河的壮丽与惊险</p>
+        </div>
+    </section>
+    
+    <main class="game-container">
+        <div class="game-section">
+            <h3>黄河漂流挑战</h3>
+            <p>控制小船在黄河上漂流，收集风景金币，避开危险障碍，挑战最高分数！</p>
+            
+            <div class="river-game-container">
+                <div class="game-header">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-label">当前分数</div>
+                            <div class="stat-value" id="score">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">剩余生命</div>
+                            <div class="stat-value" id="lives">3</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">漂流距离</div>
+                            <div class="stat-value" id="distance">0m</div>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">游戏难度</div>
+                        <div class="stat-value" id="difficulty">普通</div>
+                    </div>
+                </div>
+                
+                <div class="river-game">
+                    <canvas id="riverCanvas" width="800" height="500"></canvas>
+                </div>
+                
+                <div class="game-controls">
+                    <button class="btn" id="startGameBtn">开始漂流</button>
+                    <button class="btn btn-secondary" id="pauseBtn" disabled>暂停游戏</button>
+                    <button class="btn btn-secondary" id="restartBtn">重新开始</button>
+                </div>
+                
+                <div id="gameResult" class="game-result">
+                    <div class="info-message">
+                        使用 ← → 方向键控制船只移动，空格键加速！避开炸弹和漩涡，收集金币和风景点！
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-instructions">
+                <h4>游戏说明 & 难度提升</h4>
+                <p>🎯 <strong>游戏目标：</strong>在黄河上尽可能漂流更远距离，收集更多风景金币</p>
+                <p>🎮 <strong>操作方式：</strong>← → 方向键控制左右移动，空格键短暂加速</p>
+                <p>⚠️ <strong>危险障碍：</strong>
+                    <span style="color:#ff4444">💣 炸弹</span> - 碰到减少生命值 | 
+                    <span style="color:#ff6b6b">🌀 漩涡</span> - 使船只失控 | 
+                    <span style="color:#ffa726">🌪️ 风暴</span> - 持续伤害
+                </p>
+                <p>🌟 <strong>收集物品：</strong>
+                    <span style="color:#ffd700">💰 金币</span> - 增加分数 | 
+                    <span style="color:#4caf50">💚 生命</span> - 恢复生命值 | 
+                    <span style="color:#2196f3">📸 风景点</span> - 大量分数
+                </p>
+                
+                <div class="difficulty-info">
+                    <div class="difficulty-item">
+                        <div class="icon">🌊</div>
+                        <div>水流速度随距离增加</div>
+                    </div>
+                    <div class="difficulty-item">
+                        <div class="icon">⚡</div>
+                        <div>障碍物频率提升</div>
+                    </div>
+                    <div class="difficulty-item">
+                        <div class="icon">🎯</div>
+                        <div>收集物移动轨迹复杂</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>方寸屏间，万里河山</p>
+        <p>2025武汉大学参赛作品 | <a href="message-board.html">分享你的山河故事</a></p>
+    </footer>
+
+    <script>
+        // 游戏变量
+        let gameActive = false;
+        let gamePaused = false;
+        let score = 0;
+        let lives = 3;
+        let distance = 0;
+        let boatX = 400;
+        let boatY = 400;
+        let boatVelocityX = 0;
+        let boatSpeed = 5;
+        let boostActive = false;
+        let boostTime = 0;
+        let gameInterval;
+        
+        // 游戏元素
+        let scenery = [];
+        let obstacles = [];
+        let powerUps = [];
+        let particles = [];
+        let lastObstacleTime = 0;
+        let lastSceneryTime = 0;
+        let lastPowerUpTime = 0;
+        let gameTime = 0;
+        
+        // 难度设置
+        let difficultyLevel = 1;
+        let obstacleFrequency = 1.5;
+        let sceneryFrequency = 2;
+        let currentSpeed = 3;
+        
+        // DOM元素
+        const canvas = document.getElementById('riverCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+        const distanceElement = document.getElementById('distance');
+        const difficultyElement = document.getElementById('difficulty');
+        const startGameBtn = document.getElementById('startGameBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const gameResult = document.getElementById('gameResult');
+        
+        // 初始化游戏
+        function initGame() {
+            // 停止之前的游戏循环
+            if (gameInterval) {
+                clearInterval(gameInterval);
+                gameInterval = null;
+            }
+            
+            gameActive = false;
+            gamePaused = false;
+            score = 0;
+            lives = 3;
+            distance = 0;
+            boatX = 400;
+            boatY = 400;
+            boatVelocityX = 0;
+            difficultyLevel = 1;
+            obstacleFrequency = 1.5;
+            sceneryFrequency = 2;
+            currentSpeed = 3;
+            gameTime = 0;
+            
+            // 清空所有游戏元素
+            scenery = [];
+            obstacles = [];
+            powerUps = [];
+            particles = [];
+            lastObstacleTime = 0;
+            lastSceneryTime = 0;
+            lastPowerUpTime = 0;
+            
+            updateDisplay();
+            drawGame();
+            
+            startGameBtn.disabled = false;
+            startGameBtn.textContent = '开始漂流';
+            pauseBtn.disabled = true;
+            pauseBtn.textContent = '暂停游戏';
+            
+            gameResult.innerHTML = `
+                <div class="info-message">
+                    准备开始黄河漂流！使用 ← → 方向键控制船只，空格键加速！
+                </div>
+            `;
+        }
+        
+        // 开始游戏
+        function startGame() {
+            if (gameActive) return;
+            
+            gameActive = true;
+            gamePaused = false;
+            startGameBtn.disabled = true;
+            pauseBtn.disabled = false;
+            
+            gameResult.innerHTML = `
+                <div class="info-message">
+                    游戏进行中！避开危险，收集风景金币！
+                </div>
+            `;
+            
+            // 游戏主循环
+            gameInterval = setInterval(() => {
+                if (!gameActive || gamePaused) return;
+                
+                updateGame();
+                drawGame();
+                updateDisplay();
+                
+                // 更新难度
+                updateDifficulty();
+                
+            }, 16);
+        }
+        
+        // 更新游戏状态
+        function updateGame() {
+            if (!gameActive || gamePaused) return;
+            
+            gameTime += 0.016;
+            
+            // 更新船只位置
+            boatX += boatVelocityX;
+            boatX = Math.max(30, Math.min(canvas.width - 30, boatX));
+            
+            // 处理加速效果
+            if (boostActive) {
+                boostTime -= 0.016;
+                if (boostTime <= 0) {
+                    boostActive = false;
+                }
+            }
+            
+            // 生成障碍物
+            if (gameTime - lastObstacleTime > obstacleFrequency) {
+                generateObstacle();
+                lastObstacleTime = gameTime;
+            }
+            
+            // 生成风景点
+            if (gameTime - lastSceneryTime > sceneryFrequency) {
+                generateScenery();
+                lastSceneryTime = gameTime;
+            }
+            
+            // 生成能量道具
+            if (gameTime - lastPowerUpTime > 8) {
+                generatePowerUp();
+                lastPowerUpTime = gameTime;
+            }
+            
+            // 更新障碍物
+            updateObstacles();
+            
+            // 更新风景点
+            updateScenery();
+            
+            // 更新能量道具
+            updatePowerUps();
+            
+            // 更新粒子效果
+            updateParticles();
+            
+            // 增加漂流距离
+            distance += currentSpeed * 0.1;
+        }
+        
+        // 更新障碍物
+        function updateObstacles() {
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obstacle = obstacles[i];
+                obstacle.y += obstacle.speed;
+                obstacle.rotation += obstacle.rotationSpeed;
+                
+                // 碰撞检测
+                const distance = Math.sqrt(
+                    Math.pow(boatX - obstacle.x, 2) + Math.pow(boatY - obstacle.y, 2)
+                );
+                
+                if (distance < 30 + obstacle.radius) {
+                    lives -= obstacle.damage;
+                    createExplosion(obstacle.x, obstacle.y, obstacle.color);
+                    obstacles.splice(i, 1);
+                    
+                    // 立即更新显示
+                    updateDisplay();
+                    
+                    // 检查游戏结束
+                    if (lives <= 0) {
+                        gameOver();
+                        return; // 立即返回，不再处理其他障碍物
+                    }
+                    continue;
+                }
+                
+                // 移除超出屏幕的障碍物
+                if (obstacle.y > canvas.height + 50) {
+                    obstacles.splice(i, 1);
+                }
+            }
+        }
+        
+        // 游戏结束 - 修复这个函数
+        function gameOver() {
+            console.log("游戏结束被调用，当前生命值:", lives); // 调试信息
+            
+            // 立即停止游戏循环
+            if (gameInterval) {
+                clearInterval(gameInterval);
+                gameInterval = null;
+            }
+            
+            gameActive = false;
+            lives = 0; // 确保生命值为0
+            
+            // 更新按钮状态
+            startGameBtn.disabled = false;
+            startGameBtn.textContent = '重新开始';
+            pauseBtn.disabled = true;
+            
+            // 更新显示
+            updateDisplay();
+            
+            gameResult.innerHTML = `
+                <div class="warning-message">
+                    💥 漂流结束！<br>
+                    最终分数: ${score} | 漂流距离: ${Math.floor(distance)}m | 难度: ${difficultyElement.textContent}<br>
+                    <small>点击"重新开始"再次挑战黄河！</small>
+                </div>
+            `;
+        }
+        
+        // 暂停游戏
+        function pauseGame() {
+            if (!gameActive) return;
+            
+            gamePaused = !gamePaused;
+            pauseBtn.textContent = gamePaused ? '继续游戏' : '暂停游戏';
+            
+            if (gamePaused) {
+                gameResult.innerHTML = `
+                    <div class="info-message">
+                        游戏已暂停
+                    </div>
+                `;
+            } else {
+                gameResult.innerHTML = `
+                    <div class="info-message">
+                        游戏继续！
+                    </div>
+                `;
+            }
+        }
+        
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (!gameActive || gamePaused) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    boatVelocityX = -boatSpeed;
+                    break;
+                case 'ArrowRight':
+                    boatVelocityX = boatSpeed;
+                    break;
+                case ' ':
+                case 'Spacebar':
+                    if (!boostActive) {
+                        boostActive = true;
+                        boostTime = 3;
+                    }
+                    break;
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                boatVelocityX = 0;
+            }
+        });
+        
+        // 按钮事件 - 修复开始游戏按钮逻辑
+        startGameBtn.addEventListener('click', function() {
+            if (lives <= 0) {
+                // 如果生命值为0，重新初始化游戏
+                initGame();
+            } else {
+                // 否则开始新游戏
+                startGame();
+            }
+        });
+        
+        pauseBtn.addEventListener('click', pauseGame);
+        restartBtn.addEventListener('click', initGame);
+        
+        // 生成障碍物
+        function generateObstacle() {
+            const obstacleTypes = [
+                { type: 'bomb', emoji: '💣', color: '#ff4444', radius: 25, speed: currentSpeed + 1, damage: 1 },
+                { type: 'vortex', emoji: '🌀', color: '#ff6b6b', radius: 30, speed: currentSpeed, damage: 0.5 },
+                { type: 'storm', emoji: '🌪️', color: '#ffa726', radius: 35, speed: currentSpeed - 0.5, damage: 0.3 }
+            ];
+            
+            const type = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+            
+            obstacles.push({
+                x: Math.random() * (canvas.width - 60) + 30,
+                y: -30,
+                ...type,
+                rotation: 0,
+                rotationSpeed: (Math.random() - 0.5) * 0.1
+            });
+        }
+        
+        // 生成风景点
+        function generateScenery() {
+            // 金币
+            scenery.push({
+                x: Math.random() * (canvas.width - 40) + 20,
+                y: -20,
+                type: 'coin',
+                emoji: '💰',
+                value: 10,
+                radius: 20,
+                speed: currentSpeed + 0.5,
+                collected: false,
+                rotation: 0
+            });
+            
+            // 偶尔生成高价值风景点
+            if (Math.random() < 0.3) {
+                scenery.push({
+                    x: Math.random() * (canvas.width - 60) + 30,
+                    y: -40,
+                    type: 'landmark',
+                    emoji: '📸',
+                    value: 50,
+                    radius: 25,
+                    speed: currentSpeed,
+                    collected: false,
+                    rotation: 0
+                });
+            }
+        }
+        
+        // 生成能量道具
+        function generatePowerUp() {
+            const powerUpTypes = [
+                { type: 'health', emoji: '💚', color: '#4caf50', radius: 22 },
+                { type: 'boost', emoji: '⚡', color: '#2196f3', radius: 22 },
+                { type: 'shield', emoji: '🛡️', color: '#9c27b0', radius: 22 }
+            ];
+            
+            const type = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)];
+            
+            powerUps.push({
+                x: Math.random() * (canvas.width - 40) + 20,
+                y: -20,
+                ...type,
+                speed: currentSpeed,
+                collected: false,
+                rotation: 0
+            });
+        }
+        
+        // 更新障碍物
+        function updateObstacles() {
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obstacle = obstacles[i];
+                obstacle.y += obstacle.speed;
+                obstacle.rotation += obstacle.rotationSpeed;
+                
+                // 碰撞检测
+                const distance = Math.sqrt(
+                    Math.pow(boatX - obstacle.x, 2) + Math.pow(boatY - obstacle.y, 2)
+                );
+                
+                if (distance < 30 + obstacle.radius) {
+                    lives -= obstacle.damage;
+                    createExplosion(obstacle.x, obstacle.y, obstacle.color);
+                    obstacles.splice(i, 1);
+                    
+                    if (lives <= 0) {
+                        gameOver();
+                        return;
+                    }
+                    continue;
+                }
+                
+                // 移除超出屏幕的障碍物
+                if (obstacle.y > canvas.height + 50) {
+                    obstacles.splice(i, 1);
+                }
+            }
+        }
+        
+        // 更新风景点
+        function updateScenery() {
+            for (let i = scenery.length - 1; i >= 0; i--) {
+                const item = scenery[i];
+                item.y += item.speed;
+                item.rotation += 0.05;
+                
+                // 碰撞检测
+                const dist = Math.sqrt(
+                    Math.pow(boatX - item.x, 2) + Math.pow(boatY - item.y, 2)
+                );
+                
+                if (dist < 30 + item.radius && !item.collected) {
+                    item.collected = true;
+                    score += item.value;
+                    createCollectionEffect(item.x, item.y, item.color);
+                    scenery.splice(i, 1);
+                    continue;
+                }
+                
+                // 移除超出屏幕的风景点
+                if (item.y > canvas.height + 50) {
+                    scenery.splice(i, 1);
+                }
+            }
+        }
+        
+        // 更新能量道具
+        function updatePowerUps() {
+            for (let i = powerUps.length - 1; i >= 0; i--) {
+                const powerUp = powerUps[i];
+                powerUp.y += powerUp.speed;
+                powerUp.rotation += 0.03;
+                
+                // 碰撞检测
+                const dist = Math.sqrt(
+                    Math.pow(boatX - powerUp.x, 2) + Math.pow(boatY - powerUp.y, 2)
+                );
+                
+                if (dist < 30 + powerUp.radius && !powerUp.collected) {
+                    powerUp.collected = true;
+                    applyPowerUp(powerUp.type);
+                    createCollectionEffect(powerUp.x, powerUp.y, powerUp.color);
+                    powerUps.splice(i, 1);
+                    continue;
+                }
+                
+                // 移除超出屏幕的能量道具
+                if (powerUp.y > canvas.height + 50) {
+                    powerUps.splice(i, 1);
+                }
+            }
+        }
+        
+        // 应用能量道具效果
+        function applyPowerUp(type) {
+            switch(type) {
+                case 'health':
+                    lives = Math.min(5, lives + 1);
+                    break;
+                case 'boost':
+                    boostActive = true;
+                    boostTime = 3; // 3秒加速
+                    break;
+                case 'shield':
+                    // 护盾效果 - 暂时免疫伤害
+                    createShieldEffect();
+                    break;
+            }
+        }
+        
+        // 更新粒子效果
+        function updateParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i];
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                particle.life -= 0.02;
+                
+                if (particle.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+        
+        // 创建爆炸效果
+        function createExplosion(x, y, color) {
+            for (let i = 0; i < 15; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    life: 1.0,
+                    color: color,
+                    size: Math.random() * 4 + 2
+                });
+            }
+        }
+        
+        // 创建收集效果
+        function createCollectionEffect(x, y, color) {
+            for (let i = 0; i < 8; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: (Math.random() - 0.5) * 4,
+                    life: 1.0,
+                    color: color,
+                    size: Math.random() * 3 + 1
+                });
+            }
+        }
+        
+        // 创建护盾效果
+        function createShieldEffect() {
+            for (let i = 0; i < 20; i++) {
+                const angle = (i / 20) * Math.PI * 2;
+                particles.push({
+                    x: boatX + Math.cos(angle) * 40,
+                    y: boatY + Math.sin(angle) * 40,
+                    vx: Math.cos(angle) * 2,
+                    vy: Math.sin(angle) * 2,
+                    life: 2.0,
+                    color: '#9c27b0',
+                    size: 3
+                });
+            }
+        }
+        
+        // 更新难度
+        function updateDifficulty() {
+            // 根据距离增加难度
+            difficultyLevel = Math.floor(distance / 500) + 1;
+            currentSpeed = 3 + difficultyLevel * 0.5;
+            obstacleFrequency = Math.max(0.5, 1.5 - difficultyLevel * 0.1);
+            
+            // 更新难度显示
+            const difficultyNames = ['简单', '普通', '困难', '专家', '大师'];
+            difficultyElement.textContent = difficultyNames[Math.min(difficultyLevel - 1, 4)] || '极限';
+        }
+        
+        // 绘制游戏
+        function drawGame() {
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制背景 - 黄河
+            drawRiverBackground();
+            
+            // 绘制粒子效果
+            drawParticles();
+            
+            // 绘制障碍物
+            drawObstacles();
+            
+            // 绘制风景点
+            drawScenery();
+            
+            // 绘制能量道具
+            drawPowerUps();
+            
+            // 绘制船只
+            drawBoat();
+            
+            // 绘制UI信息
+            drawUI();
+        }
+        
+        // 绘制黄河背景
+        function drawRiverBackground() {
+            // 天空
+            const skyGradient = ctx.createLinearGradient(0, 0, 0, 150);
+            skyGradient.addColorStop(0, '#1a5276');
+            skyGradient.addColorStop(1, '#2980b9');
+            ctx.fillStyle = skyGradient;
+            ctx.fillRect(0, 0, canvas.width, 150);
+            
+            // 黄河
+            const riverGradient = ctx.createLinearGradient(0, 150, 0, canvas.height);
+            riverGradient.addColorStop(0, '#2980b9');
+            riverGradient.addColorStop(0.6, '#5499c7');
+            riverGradient.addColorStop(1, '#85c1e9');
+            ctx.fillStyle = riverGradient;
+            ctx.fillRect(0, 150, canvas.width, canvas.height - 150);
+            
+            // 黄河波纹
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1.5;
+            const time = Date.now() * 0.002;
+            for (let i = 0; i < canvas.width; i += 30) {
+                ctx.beginPath();
+                const waveOffset = Math.sin(time + i * 0.1) * 4;
+                ctx.moveTo(i, 250 + waveOffset);
+                ctx.lineTo(i + 15, 255 + waveOffset);
+                ctx.stroke();
+            }
+            
+            // 两岸景色
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+            ctx.fillStyle = '#228B22';
+            ctx.fillRect(0, canvas.height - 50, canvas.width, 15);
+        }
+        
+        // 绘制粒子效果
+        function drawParticles() {
+            particles.forEach(particle => {
+                ctx.save();
+                ctx.globalAlpha = particle.life;
+                ctx.fillStyle = particle.color;
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+        
+        // 绘制障碍物
+        function drawObstacles() {
+            obstacles.forEach(obstacle => {
+                ctx.save();
+                ctx.translate(obstacle.x, obstacle.y);
+                ctx.rotate(obstacle.rotation);
+                
+                // 绘制emoji障碍物
+                ctx.font = `${obstacle.radius * 1.5}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(obstacle.emoji, 0, 0);
+                
+                ctx.restore();
+            });
+        }
+        
+        // 绘制风景点
+        function drawScenery() {
+            scenery.forEach(item => {
+                if (item.collected) return;
+                
+                ctx.save();
+                ctx.translate(item.x, item.y);
+                ctx.rotate(item.rotation);
+                
+                // 绘制emoji风景点
+                ctx.font = `${item.radius * 1.5}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(item.emoji, 0, 0);
+                
+                ctx.restore();
+            });
+        }
+        
+        // 绘制能量道具
+        function drawPowerUps() {
+            powerUps.forEach(powerUp => {
+                if (powerUp.collected) return;
+                
+                ctx.save();
+                ctx.translate(powerUp.x, powerUp.y);
+                ctx.rotate(powerUp.rotation);
+                
+                // 绘制emoji能量道具
+                ctx.font = `${powerUp.radius * 1.5}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(powerUp.emoji, 0, 0);
+                
+                ctx.restore();
+            });
+        }
+        
+        // 绘制船只
+        function drawBoat() {
+            ctx.save();
+            ctx.translate(boatX, boatY);
+            
+            // 船体
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 25, 12, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // 船舱
+            ctx.fillStyle = '#A52A2A';
+            ctx.fillRect(-15, -15, 30, 10);
+            
+            // 船帆 - 根据加速状态改变颜色
+            ctx.fillStyle = boostActive ? '#ff6b6b' : '#FFFFFF';
+            ctx.beginPath();
+            ctx.moveTo(0, -15);
+            ctx.lineTo(20, -15);
+            ctx.lineTo(0, -40);
+            ctx.closePath();
+            ctx.fill();
+            
+            // 船帆条纹
+            ctx.strokeStyle = boostActive ? '#ffffff' : '#FF4444';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(5, -15);
+            ctx.lineTo(5, -35);
+            ctx.moveTo(10, -15);
+            ctx.lineTo(10, -32);
+            ctx.stroke();
+            
+            // 加速效果
+            if (boostActive) {
+                ctx.fillStyle = 'rgba(255, 107, 107, 0.6)';
+                ctx.beginPath();
+                ctx.moveTo(-25, 5);
+                ctx.lineTo(-35, 0);
+                ctx.lineTo(-25, -5);
+                ctx.closePath();
+                ctx.fill();
+            }
+            
+            ctx.restore();
+        }
+        
+        // 绘制UI信息
+        function drawUI() {
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText(`分数: ${score}`, 10, 25);
+            ctx.fillText(`生命: ${lives}`, 10, 50);
+            ctx.fillText(`距离: ${Math.floor(distance)}m`, 10, 75);
+            ctx.fillText(`难度: ${difficultyElement.textContent}`, 10, 100);
+            
+            // 绘制生命值图标
+            for (let i = 0; i < lives; i++) {
+                ctx.fillStyle = '#ff4444';
+                ctx.beginPath();
+                ctx.arc(80 + i * 25, 40, 8, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // 绘制加速条
+            if (boostActive) {
+                ctx.fillStyle = '#2196f3';
+                ctx.fillRect(canvas.width - 120, 20, 100 * (boostTime / 3), 15);
+                ctx.strokeStyle = '#ffffff';
+                ctx.strokeRect(canvas.width - 120, 20, 100, 15);
+            }
+        }
+        
+        // 更新显示
+        function updateDisplay() {
+            scoreElement.textContent = score;
+            livesElement.textContent = lives;
+            distanceElement.textContent = `${Math.floor(distance)}m`;
+        }
+        
+        // 游戏结束
+        function gameOver() {
+            gameActive = false;
+            clearInterval(gameInterval);
+            startGameBtn.disabled = false;
+            pauseBtn.disabled = true;
+            
+            gameResult.innerHTML = `
+                <div class="warning-message">
+                    💥 漂流结束！<br>
+                    最终分数: ${score} | 漂流距离: ${Math.floor(distance)}m | 难度: ${difficultyElement.textContent}<br>
+                    <small>点击"开始漂流"再次挑战黄河！</small>
+                </div>
+            `;
+        }
+        
+        // 暂停游戏
+        function pauseGame() {
+            gamePaused = !gamePaused;
+            pauseBtn.textContent = gamePaused ? '继续游戏' : '暂停游戏';
+            
+            if (gamePaused) {
+                gameResult.innerHTML = `
+                    <div class="info-message">
+                        游戏已暂停
+                    </div>
+                `;
+            } else {
+                gameResult.innerHTML = `
+                    <div class="info-message">
+                        游戏继续！
+                    </div>
+                `;
+            }
+        }
+        
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (!gameActive || gamePaused) return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    boatVelocityX = -boatSpeed;
+                    break;
+                case 'ArrowRight':
+                    boatVelocityX = boatSpeed;
+                    break;
+                case ' ':
+                case 'Spacebar':
+                    if (!boostActive) {
+                        boostActive = true;
+                        boostTime = 3;
+                    }
+                    break;
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                boatVelocityX = 0;
+            }
+        });
+        
+        // 按钮事件
+        startGameBtn.addEventListener('click', startGame);
+        pauseBtn.addEventListener('click', pauseGame);
+        restartBtn.addEventListener('click', initGame);
+        
+        // 初始化游戏
+        initGame();
+    </script>
+</body>
+</html>

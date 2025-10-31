@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>山河留言板 - 分享你的山河故事</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/message-board.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html" style="color: #64ffda; text-decoration: none;">方寸屏间，万里河山</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="btn">返回首页</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="page-hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1>山河留言板</h1>
+            <p>分享你心目中的壮美山河，推荐家乡的山水美景，让更多人了解中国的美丽角落</p>
+        </div>
+    </section>
+    
+    <main class="message-board-container">
+        <!-- 留言表单 -->
+        <section class="message-form-section">
+            <div class="container">
+                <h2>分享你的山河故事</h2>
+                <p class="section-subtitle">推荐你家乡或旅行中发现的美丽山水，让更多人了解这些隐藏的瑰宝</p>
+                
+                <form id="messageForm" class="message-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="userName">你的昵称 *</label>
+                            <input type="text" id="userName" name="userName" required placeholder="请输入你的昵称">
+                        </div>
+                        <div class="form-group">
+                            <label for="userLocation">所在地区</label>
+                            <input type="text" id="userLocation" name="userLocation" placeholder="例如：浙江杭州">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="messageType">推荐类型 *</label>
+                        <select id="messageType" name="messageType" required>
+                            <option value="">请选择推荐类型</option>
+                            <option value="mountain">名山峻岭</option>
+                            <option value="river">江河湖海</option>
+                            <option value="region">区域特色</option>
+                            <option value="other">其他美景</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="placeName">景点名称 *</label>
+                        <input type="text" id="placeName" name="placeName" required placeholder="例如：黄山、西湖、张家界">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="placeLocation">具体位置 *</label>
+                        <input type="text" id="placeLocation" name="placeLocation" required placeholder="例如：安徽省黄山市">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="messageContent">推荐理由和故事 *</label>
+                        <textarea id="messageContent" name="messageContent" required rows="6" placeholder="请详细描述这个景点的特色、你的游览体验、推荐理由等..."></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span>/500 字
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="photoUrl">图片链接（可选）</label>
+                        <input type="url" id="photoUrl" name="photoUrl" placeholder="可以粘贴网络图片链接">
+                        <small class="help-text">支持 jpg, png 等格式的图片链接</small>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="previewBtn" class="btn btn-secondary">预览留言</button>
+                        <button type="submit" class="btn btn-primary">提交推荐</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <!-- 留言展示区 -->
+        <section class="messages-section">
+            <div class="container">
+                <h2>山河推荐墙</h2>
+                <p class="section-subtitle">看看其他网友推荐的美景</p>
+                
+                <div class="messages-filter">
+                    <button class="filter-btn active" data-filter="all">全部推荐</button>
+                    <button class="filter-btn" data-filter="mountain">名山峻岭</button>
+                    <button class="filter-btn" data-filter="river">江河湖海</button>
+                    <button class="filter-btn" data-filter="region">区域特色</button>
+                    <button class="filter-btn" data-filter="other">其他美景</button>
+                </div>
+                
+                <div class="messages-grid" id="messagesGrid">
+                    <!-- 留言卡片将通过JavaScript动态生成 -->
+                    <div class="no-messages">
+                        <div class="no-messages-icon">💬</div>
+                        <h3>还没有推荐内容</h3>
+                        <p>成为第一个分享山河美景的人吧！</p>
+                    </div>
+                </div>
+                
+                <div class="load-more">
+                    <button id="loadMoreBtn" class="btn btn-outline">加载更多推荐</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- 预览模态框 -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content preview-modal">
+            <span class="close-btn">&times;</span>
+            <h2>预览你的推荐</h2>
+            <div id="previewContent" class="preview-content">
+                <!-- 预览内容将通过JavaScript动态生成 -->
+            </div>
+            <div class="preview-actions">
+                <button type="button" class="btn btn-secondary" onclick="closePreview()">返回修改</button>
+                <button type="button" class="btn btn-primary" onclick="submitMessage()">确认提交</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>方寸屏间，万里河山</p>
+        <p>2025武汉大学参赛作品| <a href="message-board.html" style="color: #64ffda;">分享你的山河故事</a></p>
+    </footer>
+
+    <script src="js/message-board.js"></script>
+</body>
+</html>

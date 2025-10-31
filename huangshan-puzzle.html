@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黄山拼图挑战 - 方寸屏间，万里河山</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a192f, #112240, #1a2a6c);
+            color: white;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: rgba(10, 25, 47, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        .page-hero {
+            position: relative;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #a8b2d1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-section {
+            text-align: center;
+        }
+        
+        .game-section h3 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .game-section p {
+            color: #a8b2d1;
+            margin-bottom: 2rem;
+        }
+        
+        /* 修复拼图游戏样式 */
+        .puzzle-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0; /* 改为0，用边框来分隔 */
+            margin: 1.5rem auto;
+            width: 240px; /* 固定宽度 */
+            height: 240px; /* 固定高度 */
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #64ffda;
+            border-radius: 5px;
+            overflow: hidden; /* 防止边框溢出 */
+        }
+        
+        .puzzle-piece {
+            width: 80px;
+            height: 80px;
+            background-size: 240px 240px; /* 背景图大小与容器一致 */
+            border: none; /* 移除边框，用背景图分隔 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            /* 确保图片不被拉伸 */
+            background-repeat: no-repeat;
+        }
+        
+        .puzzle-piece:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+            z-index: 2; /* 悬停时在上层 */
+        }
+        
+        .puzzle-piece.selected {
+            border: 3px solid #FFD700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            transform: scale(1.1);
+            z-index: 3; /* 选中时在最上层 */
+        }
+        
+        /* 游戏控制按钮 */
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: #64ffda;
+            color: #0a192f;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background: #4fd3c4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #64ffda;
+            border: 1px solid #64ffda;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        /* 游戏结果样式 */
+        .game-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+            color: #4caf50;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        
+        .info-message {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            color: #64ffda;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        
+        /* 游戏说明 */
+        .game-instructions {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+        
+        .game-instructions h4 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+        }
+        
+        .game-instructions p {
+            color: #a8b2d1;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(10, 25, 47, 0.9);
+            margin-top: 3rem;
+        }
+        
+        footer a {
+            color: #64ffda;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .puzzle-container {
+                width: 240px;
+                height: 240px;
+            }
+            
+            .puzzle-piece {
+                width: 80px;
+                height: 80px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .puzzle-container {
+                width: 240px;
+                height: 240px;
+            }
+            
+            .puzzle-piece {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/item/item.jpg" alt="方寸屏间，万里河山" class="logo-image">
+            <span class="logo-text">方寸屏间，万里河山</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html#mountains" class="btn">返回</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="page-hero">
+        <div class="hero-content">
+            <h1>黄山拼图挑战</h1>
+            <p>通过拼图游戏了解黄山的奇松怪石，体验"方寸屏间，万里河山"的意境</p>
+        </div>
+    </section>
+    
+    <main class="game-container">
+        <div class="game-section">
+            <h3>黄山美景拼图</h3>
+            <p>点击两个拼图块交换位置，还原黄山美景！体验黄山的奇松、怪石、云海、温泉四绝</p>
+            
+            <div class="puzzle-game-container">
+                <div class="puzzle-container" id="puzzleContainer">
+                    <!-- 拼图块将通过JavaScript动态生成 -->
+                </div>
+                
+                <div class="game-controls">
+                    <button class="btn" id="newGameBtn">开始新游戏</button>
+                    <button class="btn btn-secondary" id="checkBtn">完成检查</button>
+                </div>
+                
+                <div id="gameResult" class="game-result">
+                    <div class="info-message">
+                        点击两个拼图块交换它们的位置，还原黄山美景！
+                    </div>
+                </div>
+            </div>
+            
+            <div class="game-instructions">
+                <h4>游戏说明</h4>
+                <p>🎯 <strong>游戏目标：</strong>通过交换拼图块的位置，还原完整的黄山美景图片</p>
+                <p>🎮 <strong>操作方式：</strong>点击一个拼图块选中它，再点击另一个拼图块交换位置</p>
+                <p>🏔️ <strong>黄山特色：</strong>体验黄山的奇松、怪石、云海、温泉四绝景观</p>
+                <p>💡 <strong>小技巧：</strong>先完成边角，再处理中间部分</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>方寸屏间，万里河山</p>
+        <p>2025武汉大学参赛作品 | <a href="message-board.html">分享你的山河故事</a></p>
+    </footer>
+
+    <script>
+        // 拼图游戏变量
+        let puzzlePieces = [];
+        let correctOrder = [];
+        let selectedPuzzlePiece = null;
+        
+        // DOM元素
+        const puzzleContainer = document.getElementById('puzzleContainer');
+        const gameResult = document.getElementById('gameResult');
+        const newGameBtn = document.getElementById('newGameBtn');
+        const checkBtn = document.getElementById('checkBtn');
+        
+        // 初始化拼图游戏
+        function initPuzzle() {
+            // 清空容器和结果
+            puzzleContainer.innerHTML = '';
+            gameResult.innerHTML = '';
+            puzzlePieces = [];
+            correctOrder = [];
+            selectedPuzzlePiece = null;
+            
+            const pieceCount = 9; // 3x3拼图
+            const pieceSize = 80;
+            const containerSize = 240; // 容器大小
+            
+            // 创建拼图块
+            for(let i = 0; i < pieceCount; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'puzzle-piece';
+                piece.style.width = `${pieceSize}px`;
+                piece.style.height = `${pieceSize}px`;
+                
+                // 设置背景图片位置（模拟拼图效果）
+                const row = Math.floor(i / 3);
+                const col = i % 3;
+                
+                // 使用黄山图片作为背景
+                piece.style.backgroundImage = "url('images/huangshan/1.jpg')";
+                piece.style.backgroundSize = `${containerSize}px ${containerSize}px`;
+                piece.style.backgroundPosition = `-${col * pieceSize}px -${row * pieceSize}px`;
+                
+                piece.dataset.correctPosition = i;
+                piece.dataset.currentPosition = i;
+                piece.dataset.index = i;
+                
+                // 点击事件
+                piece.addEventListener('click', () => handlePuzzleClick(piece));
+                
+                puzzleContainer.appendChild(piece);
+                puzzlePieces.push(piece);
+                correctOrder.push(i);
+            }
+            
+            // 打乱拼图
+            shufflePuzzle();
+            
+            gameResult.innerHTML = `
+                <div class="info-message">
+                    游戏已开始！点击两个拼图块交换位置，还原黄山美景
+                </div>
+            `;
+        }
+        
+        // 打乱拼图
+        function shufflePuzzle() {
+            // 简单打乱：随机交换位置
+            for (let i = 0; i < 50; i++) {
+                const index1 = Math.floor(Math.random() * 9);
+                const index2 = Math.floor(Math.random() * 9);
+                if (index1 !== index2) {
+                    const piece1 = puzzlePieces[index1];
+                    const piece2 = puzzlePieces[index2];
+                    
+                    // 交换order值
+                    const tempOrder = piece1.style.order || piece1.dataset.correctPosition;
+                    piece1.style.order = piece2.style.order || piece2.dataset.correctPosition;
+                    piece2.style.order = tempOrder;
+                }
+            }
+            
+            // 确保所有拼图都有order值
+            puzzlePieces.forEach((piece, index) => {
+                if (!piece.style.order) {
+                    piece.style.order = piece.dataset.correctPosition;
+                }
+                piece.dataset.currentPosition = piece.style.order;
+            });
+        }
+        
+        // 处理拼图点击
+        function handlePuzzleClick(clickedPiece) {
+            // 如果没有选中的拼图，选中当前点击的
+            if (!selectedPuzzlePiece) {
+                selectedPuzzlePiece = clickedPiece;
+                clickedPiece.classList.add('selected');
+                return;
+            }
+            
+            // 如果点击的是已选中的拼图，取消选中
+            if (selectedPuzzlePiece === clickedPiece) {
+                selectedPuzzlePiece.classList.remove('selected');
+                selectedPuzzlePiece = null;
+                return;
+            }
+            
+            // 交换两个拼图的位置
+            swapPuzzlePieces(selectedPuzzlePiece, clickedPiece);
+            
+            // 取消选中状态
+            selectedPuzzlePiece.classList.remove('selected');
+            selectedPuzzlePiece = null;
+            
+            // 检查是否完成
+            setTimeout(checkPuzzleCompletion, 100);
+        }
+        
+        // 交换拼图块
+        function swapPuzzlePieces(piece1, piece2) {
+            // 交换order值
+            const tempOrder = piece1.style.order;
+            piece1.style.order = piece2.style.order;
+            piece2.style.order = tempOrder;
+            
+            // 更新当前位置
+            piece1.dataset.currentPosition = piece1.style.order;
+            piece2.dataset.currentPosition = piece2.style.order;
+            
+            // 添加交换动画
+            piece1.style.transform = 'scale(1.1)';
+            piece2.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                piece1.style.transform = 'scale(1)';
+                piece2.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        // 检查拼图完成情况
+        function checkPuzzleCompletion() {
+            let correctCount = 0;
+            puzzlePieces.forEach(piece => {
+                const currentPos = parseInt(piece.style.order);
+                const correctPos = parseInt(piece.dataset.correctPosition);
+                if (currentPos === correctPos) {
+                    correctCount++;
+                }
+            });
+            
+            const isComplete = correctCount === puzzlePieces.length;
+            
+            if(isComplete) {
+                gameResult.innerHTML = `
+                    <div class="success-message">
+                        🎉 恭喜！你成功还原了黄山美景！<br>
+                        <small>真正体会到了"方寸屏间，万里河山"的意境</small>
+                    </div>
+                `;
+                
+                // 添加完成动画
+                puzzlePieces.forEach((piece, index) => {
+                    setTimeout(() => {
+                        piece.style.borderColor = '#4caf50';
+                        piece.style.boxShadow = '0 0 15px rgba(76, 175, 80, 0.5)';
+                    }, index * 100);
+                });
+            } else {
+                gameResult.innerHTML = `
+                    <div class="info-message">
+                        已完成: ${correctCount}/${puzzlePieces.length}<br>
+                        <small>点击两个拼图块交换它们的位置</small>
+                    </div>
+                `;
+            }
+        }
+        
+        // 按钮事件
+        newGameBtn.addEventListener('click', initPuzzle);
+        checkBtn.addEventListener('click', checkPuzzleCompletion);
+        
+        // 初始化游戏
+        initPuzzle();
+    </script>
+</body>
+</html>

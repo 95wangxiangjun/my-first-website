@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>连连看游戏</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      padding-top: 40px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      background: #000;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      position: relative;
+      width: 800px;
+      height: 660px;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .wrapper .init-box {
+      position: relative; 
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      text-align: center;
+    }
+
+    .wrapper .init-box h1 {
+      font-size: 48px;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .wrapper .init-box p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      max-width: 80%;
+    }
+
+    .wrapper .init-box .start-btn {
+      width: 200px;
+      height: 60px;
+      margin: 20px auto;
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      border-radius: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .wrapper .init-box .start-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .wrapper .game-box {
+      position: relative; 
+      width: 100%;
+      height: 100%;
+    }
+
+    .wrapper .game-box .toolbar {
+      font-size: 24px;
+      line-height: 92px;
+      position: relative; 
+      width: 100%;
+      height: 92px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .wrapper .game-box .toolbar > div {
+      display: flex;
+      align-items: center;
+    }
+
+    .wrapper .game-box .toolbar .time {
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffcc00;
+    }
+
+    .wrapper .game-box .toolbar .level {
+      font-size: 28px;
+      font-weight: bold;
+      color: #00ccff;
+    }
+
+    .wrapper .game-box .toolbar .disorder {
+      width: 120px;
+      height: 84px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      transition: background 0.3s;
+    }
+
+    .wrapper .game-box .toolbar .disorder:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .wrapper .game-box .toolbar .scoring {
+      font-size: 28px;
+      font-weight: bold;
+      color: #ff66cc;
+    }
+
+    .wrapper .game-box .game-area {
+      position: relative;
+      height: calc(100% - 92px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .wrapper .game-box .game-area table#game {
+      border-spacing: 0; 
+      border-collapse: collapse;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .wrapper .game-box .game-area table#game .game-row {
+      height: 80px;
+    }
+
+    .wrapper .game-box .game-area table#game .game-row td {
+      width: 80px;
+      height: 80px;
+      text-align: center;
+      vertical-align: middle;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .wrapper .game-box .game-area table#game .game-row td .pic-box {
+      line-height: 64px;
+      display: inline-block;
+      width: 64px;
+      height: 64px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      transition: all 0.2s;
+      font-size: 32px;
+    }
+
+    .wrapper .game-box .game-area table#game .game-row td .pic-box:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .wrapper .game-box .game-area table#game .game-row td .pic-box.active {
+      width: 70px;
+      height: 70px;
+      border-radius: 16px; 
+      background: rgba(255, 215, 0, 0.5);
+      box-shadow: 0 0 15px gold;
+    }
+
+    .wrapper .game-box .game-area #canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 800px;
+      height: 560px;
+      pointer-events: none;
+    }
+
+    .wrapper .game-over {
+      position: absolute;
+      top: 0;
+      width: 800px;
+      height: 660px;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .wrapper .game-over h2 {
+      font-size: 60px;
+      margin-bottom: 30px;
+      color: #ff416c;
+      text-shadow: 0 0 10px rgba(255, 65, 108, 0.5);
+    }
+
+    .wrapper .game-over .current-score {
+      font-size: 48px;
+      margin: 20px 0;
+      color: #ffcc00;
+    }
+
+    .wrapper .game-over .history-score {
+      font-size: 24px; 
+      margin: 10px 0;
+      color: #aaa;
+    }
+
+    .wrapper .game-over .replay-btn {
+      width: 200px;
+      height: 60px;
+      margin: 30px auto;
+      background: linear-gradient(to right, #00b4db, #0083b0);
+      border-radius: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .wrapper .game-over .replay-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .empty {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .number {
+      display: inline-block;
+      width: 34px; 
+      height: 34px;
+      background-size: contain;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="init-box">
+      <h1>连连看游戏</h1>
+      <p>点击相同的图标，用不超过两个拐角的线连接它们</p>
+      <div class="start-btn">开始游戏</div>
+    </div>
+    <div class="game-box hidden">
+      <div class="toolbar">
+        <div class="time">100</div>
+        <div class="level">1</div>
+        <div class="disorder" title="重排">重排: 5</div>
+        <div class="scoring">0</div>
+      </div>
+      <div class="game-area">
+        <table id="game"></table>
+        <canvas id="canvas" class="hidden" width=800 height=560></canvas>
+      </div>
+    </div>
+    <div class="game-over hidden">
+      <h2>游戏结束</h2>
+      <div class="current-score">得分: 0</div>
+      <div class="history-score">最高分: 0</div>
+      <div class="replay-btn">重新开始</div>
+    </div>
+  </div>
+
+  <script>
+    // 简化的DOM操作函数
+    const $ = (selector) => {
+      if (typeof selector === 'string') {
+        const elements = document.querySelectorAll(selector);
+        return {
+          html: (content) => {
+            elements.forEach(el => {
+              if (content === undefined) return el.innerHTML;
+              el.innerHTML = content;
+            });
+            return elements[0];
+          },
+          text: (content) => {
+            elements.forEach(el => {
+              if (content === undefined) return el.textContent;
+              el.textContent = content;
+            });
+            return elements[0];
+          },
+          addClass: (className) => {
+            elements.forEach(el => el.classList.add(className));
+            return elements[0];
+          },
+          removeClass: (className) => {
+            elements.forEach(el => el.classList.remove(className));
+            return elements[0];
+          },
+          on: (event, handler) => {
+            elements.forEach(el => el.addEventListener(event, handler));
+            return elements[0];
+          },
+          eq: (index) => {
+            if (elements[index]) {
+              return $(elements[index]);
+            }
+            return $('');
+          },
+          click: (handler) => {
+            elements.forEach(el => el.addEventListener('click', handler));
+            return elements[0];
+          },
+          append: (content) => {
+            elements.forEach(el => {
+              if (typeof content === 'string') {
+                el.innerHTML += content;
+              } else {
+                el.appendChild(content);
+              }
+            });
+            return elements[0];
+          },
+          length: elements.length,
+          [0]: elements[0],
+          forEach: (callback) => elements.forEach(callback)
+        };
+      } else if (selector) {
+        // 如果是单个元素
+        return {
+          html: (content) => {
+            if (content === undefined) return selector.innerHTML;
+            selector.innerHTML = content;
+            return selector;
+          },
+          text: (content) => {
+            if (content === undefined) return selector.textContent;
+            selector.textContent = content;
+            return selector;
+          },
+          addClass: (className) => {
+            selector.classList.add(className);
+            return selector;
+          },
+          removeClass: (className) => {
+            selector.classList.remove(className);
+            return selector;
+          },
+          on: (event, handler) => {
+            selector.addEventListener(event, handler);
+            return selector;
+          },
+          click: (handler) => {
+            selector.addEventListener('click', handler);
+            return selector;
+          }
+        };
+      }
+      return {
+        html: () => '',
+        text: () => '',
+        addClass: () => {},
+        removeClass: () => {},
+        on: () => {},
+        click: () => {},
+        eq: () => $(''),
+        append: () => {}
+      };
+    };
+
+    function LinkGame(config) {
+      if (!(this instanceof LinkGame)) {
+        return new LinkGame(config);
+      }
+      this.score = 0;
+      this.$box = $('#game');
+      this.cols = (config.cols || 8) + 2;
+      this.rows = (config.rows || 6) + 2;
+      this.level = config.level || 0;
+      this.leftDisorderTime = 5;
+      // 使用emoji表情作为图标
+      this.gifts = [
+        '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯',
+        '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐤', '🦆'
+      ];
+      this.isGameOver = false;
+      return this;
+    }
+
+    LinkGame.prototype = {
+      init: function (isReset) {
+        console.log('初始化游戏');
+        var self = this;
+        this.stack = [];
+        this.iconTypeCount = Math.min(this.level + 5, 10); // 限制图标种类
+        this.count = (this.rows - 2) * (this.cols - 2);
+        // 确保count是偶数
+        if (this.count % 2 !== 0) {
+          this.count--;
+        }
+        this.remain = this.count;
+        this.pictures = [];
+        this.linkPictures = [];
+        this.preClickInfo = null;
+        this.leftTime = 100;
+        this.points = [];
+        this.isGameOver = false;
+        
+        // 清除之前的计时器
+        if (this.timmer) {
+          clearInterval(this.timmer);
+        }
+        
+        this.timmer = setInterval(function () {
+          self.updateCountDown();
+        }, 1000);
+        
+        this.createMap();
+        this.disorder();
+        !isReset && this.bindDomEvents();
+        this.updateLevel();
+        this.domUpdateScore();
+        this.updateDisorderTime();
+      },
+
+      reset: function () {
+        this.init(true);
+      },
+
+      nextLevel: function () {
+        clearInterval(this.timmer);
+        this.level++;
+        this.leftTime = 100 + this.level * 10;
+        this.reset();
+      },
+
+      random: function (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      },
+
+      swapProperties: function (obj1, obj2, properties) {
+        properties.forEach(function (property) {
+          var temp = obj1[property];
+          obj1[property] = obj2[property];
+          obj2[property] = temp;
+        });
+      },
+
+      cloneObj: function (source) {
+        var target = {};
+        for (var pro in source) {
+          if (source.hasOwnProperty(pro)) {
+            target[pro] = source[pro];
+          }
+        }
+        return target;
+      },
+
+      getHistoryScore: function () {
+        return window.localStorage.getItem('highestScore') || 0;
+      },
+
+      setHistoryScore: function (score) {
+        var highestScore = this.getHistoryScore('highestScore');
+        if (score > highestScore) {
+          window.localStorage.setItem('highestScore', score);
+        }
+      },
+
+      updateCountDown: function () {
+        if (this.isGameOver) return;
+        
+        this.leftTime--;
+        $('.time').text(this.leftTime);
+        
+        if (this.leftTime <= 0) {
+          clearInterval(this.timmer);
+          this.gameOver();
+          return;
+        }
+      },
+
+      gameOver: function () {
+        this.isGameOver = true;
+        $('.game-over').removeClass('hidden');
+        $('.current-score').text('得分: ' + this.score);
+        $('.history-score').text('最高分: ' + this.getHistoryScore());
+        this.setHistoryScore(this.score);
+      },
+
+      updateLevel: function () {
+        $('.level').text(this.level + 1);
+      },
+
+      createMap: function () {
+        console.log('创建地图:', this.rows, 'x', this.cols);
+        var count = 0;
+        // 创建成对的图标索引
+        var iconIndices = [];
+        var pairsNeeded = this.count / 2;
+        
+        for (var i = 0; i < pairsNeeded; i++) {
+          var iconIndex = i % this.iconTypeCount;
+          iconIndices.push(iconIndex, iconIndex);
+        }
+        
+        // 打乱图标顺序
+        for (var i = iconIndices.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = iconIndices[i];
+          iconIndices[i] = iconIndices[j];
+          iconIndices[j] = temp;
+        }
+        
+        for (var row = 0; row < this.rows; row++) {
+          this.pictures.push([]);
+          for (var col = 0; col < this.cols; col++) {
+            if (row === 0 || row === this.rows - 1 || col === 0 || col === this.cols - 1) {
+              // 边界
+              this.pictures[row].push({
+                row: row,
+                col: col,
+                isEmpty: true,
+                isBoundary: true
+              });
+            } else {
+              // 游戏区域
+              this.pictures[row].push({
+                row: row,
+                col: col,
+                isEmpty: false,
+                index: count,
+                pic: this.gifts[iconIndices[count]],
+                isBoundary: false
+              });
+              count++;
+            }
+          }
+        }
+        console.log('地图创建完成，图标数量:', count);
+      },
+
+      disorder: function () {
+        var pictures = this.pictures;
+        for (var i = 0; i < this.count * 5; i++) {
+          var row1 = this.random(1, this.rows - 2);
+          var col1 = this.random(1, this.cols - 2);
+          var row2 = this.random(1, this.rows - 2);
+          var col2 = this.random(1, this.cols - 2);
+          
+          var picture1 = pictures[row1][col1];
+          var picture2 = pictures[row2][col2];
+          
+          // 只交换非空图标的图片
+          if (!picture1.isEmpty && !picture2.isEmpty) {
+            var tempPic = picture1.pic;
+            picture1.pic = picture2.pic;
+            picture2.pic = tempPic;
+          }
+        }
+        this.renderMap();
+        this.updateDisorderTime();
+      },
+
+      updateDisorderTime: function () {
+        $('.disorder').text('重排: ' + this.leftDisorderTime);
+      },
+
+      renderMap: function () {
+        console.log('渲染地图');
+        var html = '';
+        for (var row = 1; row < this.rows - 1; row++) {
+          html += '<tr class="game-row">';
+          for (var col = 1; col < this.cols - 1; col++) {
+            var picture = this.pictures[row][col];
+            var emptyClass = picture.isEmpty ? 'empty' : '';
+            html += `<td><div class="pic-box ${emptyClass}" data-row="${row}" data-col="${col}" data-index="${picture.index}">${picture.pic}</div></td>`;
+          }
+          html += '</tr>';
+        }
+        this.$box.html(html);
+        console.log('地图渲染完成');
+      },
+
+      checkMatch: function (curClickInfo) {
+        if (this.isGameOver) return;
+        
+        console.log('检查匹配:', curClickInfo);
+        var pictures = this.pictures;
+        var curRow = +curClickInfo.row;
+        var curCol = +curClickInfo.col;
+        var curIndex = +curClickInfo.index;
+
+        if (pictures[curRow][curCol].isEmpty) {
+          return;
+        }
+        
+        // 如果之前没有选中任何图标
+        if (!this.preClickInfo) {
+          this.preClickInfo = curClickInfo;
+          this.domAddActive(curIndex);
+          console.log('第一次选择:', curClickInfo);
+          return;
+        }
+
+        var preClickInfo = this.preClickInfo;
+        var preRow = +preClickInfo.row;
+        var preCol = +preClickInfo.col;
+        var preIndex = +preClickInfo.index;
+
+        // 如果点击的是同一个图标，取消选中
+        if (preIndex === curIndex) {
+          this.domRemoveActive(preIndex);
+          this.preClickInfo = null;
+          console.log('取消选择');
+          return;
+        }
+
+        // 如果两个图标类型不同
+        if (pictures[preRow][preCol].pic !== pictures[curRow][curCol].pic) {
+          this.domRemoveActive(preIndex);
+          this.preClickInfo = curClickInfo;
+          this.domAddActive(curIndex);
+          console.log('类型不同，重新选择');
+          return;
+        }
+        
+        // 检查是否可以连接
+        console.log('检查连接:', {pre: [preCol, preRow], cur: [curCol, curRow]});
+        if (this.canCleanup(preCol, preRow, curCol, curRow)) {
+          console.log('可以连接');
+          this.linkPictures = [];
+          for (var i = 0; i < this.points.length - 1; i++) {
+            this.mergeArray(this.linkPictures, this.countPoints(this.points[i], this.points[i + 1]));
+          }
+          this.drawLine();
+          this.updateStatus(preRow, preCol, curRow, curCol, preIndex, curIndex);
+        } else {
+          console.log('无法连接');
+          this.domRemoveActive(preIndex);
+          this.preClickInfo = curClickInfo;
+          this.domAddActive(curIndex);
+        }
+      },
+
+      mergeArray: function (target, source) {
+        source.forEach(function (e) {
+          if (target.indexOf(e) === -1) {
+            target.push(e);
+          }
+        });
+      },
+
+      countPoints: function (start, end) {
+        var points = [];
+        var pictures = this.pictures;
+        if (start[0] === end[0]) {
+          var x = start[0];
+          if (start[1] > end[1]) {
+            for (var i = start[1]; i >= end[1]; i--) {
+              points.push(pictures[i][x]);
+            }
+          } else {
+            for (var i = start[1]; i <= end[1]; i++) {
+              points.push(pictures[i][x]);
+            }
+          }
+        } else if (start[1] === end[1]) {
+          var y = start[1];
+          if (start[0] > end[0]) {
+            for (var i = start[0]; i >= end[0]; i--) {
+              points.push(pictures[y][i]);
+            }
+          } else {
+            for (var i = start[0]; i <= end[0]; i++) {
+              points.push(pictures[y][i]);
+            }
+          }
+        }
+        return points;
+      },
+
+      domAddActive: function (index) {
+        var boxes = document.querySelectorAll('.pic-box');
+        if (boxes[index]) {
+          boxes[index].classList.add('active');
+        }
+        return this;
+      },
+
+      domRemoveActive: function (index) {
+        var boxes = document.querySelectorAll('.pic-box');
+        if (boxes[index]) {
+          boxes[index].classList.remove('active');
+        }
+        return this;
+      },
+
+      domAddEmpty: function (index) {
+        var boxes = document.querySelectorAll('.pic-box');
+        if (boxes[index]) {
+          boxes[index].classList.add('empty');
+          boxes[index].classList.remove('active');
+          boxes[index].innerHTML = '';
+        }
+        return this;
+      },
+
+      domUpdateScore: function () {
+        $('.scoring').text(this.score);
+      },
+
+      drawLine: function () {
+        var canvas = document.getElementById('canvas');
+        if (!canvas.getContext) return;
+        
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.beginPath();
+        ctx.strokeStyle = "#fbff98";
+        ctx.lineWidth = 4;
+        
+        if (this.linkPictures.length > 0) {
+          var first = this.linkPictures[0];
+          var startX = (first.col - 1) * 80 + 40;
+          var startY = (first.row - 1) * 80 + 40;
+          ctx.moveTo(startX, startY);
+          
+          for (var i = 1; i < this.linkPictures.length; i++) {
+            var point = this.linkPictures[i];
+            var x = (point.col - 1) * 80 + 40;
+            var y = (point.row - 1) * 80 + 40;
+            ctx.lineTo(x, y);
+          }
+        }
+        
+        ctx.stroke();
+        canvas.classList.remove('hidden');
+        
+        setTimeout(function () {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          canvas.classList.add('hidden');
+        }, 500);
+      },
+
+      updateStatus: function (preRow, preCol, curRow, curCol, preIndex, curIndex) {
+        var self = this;
+        this.remain -= 2;
+        this.score += 10;
+        this.preClickInfo = null;
+        this.domUpdateScore();
+        
+        setTimeout(function () {
+          self.pictures[preRow][preCol].isEmpty = true;
+          self.pictures[curRow][curCol].isEmpty = true;
+          self.domAddEmpty(preIndex);
+          self.domAddEmpty(curIndex);
+          
+          if (self.remain === 0) {
+            self.nextLevel();
+          }
+        }, 500);
+      },
+
+      isRowEmpty: function (x1, y1, x2, y2) {
+        if (y1 !== y2) return false;
+        
+        var start = Math.min(x1, x2) + 1;
+        var end = Math.max(x1, x2);
+        
+        for (var x = start; x < end; x++) {
+          if (!this.pictures[y1][x].isEmpty) {
+            return false;
+          }
+        }
+        return true;
+      },
+
+      isColEmpty: function (x1, y1, x2, y2) {
+        if (x1 !== x2) return false;
+        
+        var start = Math.min(y1, y2) + 1;
+        var end = Math.max(y1, y2);
+        
+        for (var y = start; y < end; y++) {
+          if (!this.pictures[y][x1].isEmpty) {
+            return false;
+          }
+        }
+        return true;
+      },
+
+      canCleanup: function (x1, y1, x2, y2) {
+        console.log('检查连接路径:', x1, y1, '->', x2, y2);
+        this.points = [];
+        
+        // 直接相邻
+        if ((x1 === x2 && Math.abs(y1 - y2) === 1) || (y1 === y2 && Math.abs(x1 - x2) === 1)) {
+          this.points = [[x1, y1], [x2, y2]];
+          console.log('直接相邻');
+          return true;
+        }
+        
+        // 直线连接（水平）
+        if (y1 === y2 && this.isRowEmpty(x1, y1, x2, y2)) {
+          this.points = [[x1, y1], [x2, y2]];
+          console.log('水平直线');
+          return true;
+        }
+        
+        // 直线连接（垂直）
+        if (x1 === x2 && this.isColEmpty(x1, y1, x2, y2)) {
+          this.points = [[x1, y1], [x2, y2]];
+          console.log('垂直直线');
+          return true;
+        }
+        
+        // 一个拐点 - 先水平后垂直
+        if (this.isRowEmpty(x1, y1, x2, y1) && this.isColEmpty(x2, y1, x2, y2)) {
+          this.points = [[x1, y1], [x2, y1], [x2, y2]];
+          console.log('一个拐点 - 先水平后垂直');
+          return true;
+        }
+        
+        // 一个拐点 - 先垂直后水平
+        if (this.isColEmpty(x1, y1, x1, y2) && this.isRowEmpty(x1, y2, x2, y2)) {
+          this.points = [[x1, y1], [x1, y2], [x2, y2]];
+          console.log('一个拐点 - 先垂直后水平');
+          return true;
+        }
+        
+        // 两个拐点
+        for (var i = 0; i < this.cols; i++) {
+          if (i !== x1 && i !== x2 && 
+              this.isRowEmpty(x1, y1, i, y1) && 
+              this.isColEmpty(i, y1, i, y2) && 
+              this.isRowEmpty(i, y2, x2, y2) &&
+              this.pictures[y1][i].isEmpty && 
+              this.pictures[y2][i].isEmpty) {
+            this.points = [[x1, y1], [i, y1], [i, y2], [x2, y2]];
+            console.log('两个拐点 - 通过列', i);
+            return true;
+          }
+        }
+        
+        for (var i = 0; i < this.rows; i++) {
+          if (i !== y1 && i !== y2 && 
+              this.isColEmpty(x1, y1, x1, i) && 
+              this.isRowEmpty(x1, i, x2, i) && 
+              this.isColEmpty(x2, i, x2, y2) &&
+              this.pictures[i][x1].isEmpty && 
+              this.pictures[i][x2].isEmpty) {
+            this.points = [[x1, y1], [x1, i], [x2, i], [x2, y2]];
+            console.log('两个拐点 - 通过行', i);
+            return true;
+          }
+        }
+        
+        console.log('无法连接');
+        return false;
+      },
+
+      bindDomEvents: function () {
+        var self = this;
+        
+        // 使用事件委托处理图标点击
+        $('#game').on('click', function (e) {
+          var target = e.target.closest('.pic-box');
+          if (target && !target.classList.contains('empty')) {
+            var data = {
+              row: target.dataset.row,
+              col: target.dataset.col,
+              index: target.dataset.index
+            };
+            console.log('图标点击:', data);
+            self.checkMatch(data);
+          }
+        });
+        
+        $('.disorder').on('click', function () {
+          if (self.leftDisorderTime > 0 && !self.isGameOver) {
+            self.leftDisorderTime--;
+            self.disorder();
+          }
+        });
+        
+        $('.replay-btn').on('click', function () {
+          self.score = 0;
+          self.level = 0;
+          self.leftDisorderTime = 5;
+          $('.game-over').addClass('hidden');
+          self.reset();
+        });
+      }
+    };
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('页面加载完成');
+      $('.start-btn').on('click', function () {
+        console.log('开始游戏点击');
+        $('.init-box').addClass('hidden');
+        $('.game-box').removeClass('hidden');
+        var gameConfig = {
+          rows: 6,
+          cols: 8,
+          level: 0,
+        };
+        var game = new LinkGame(gameConfig);
+        game.init();
+      });
+    });
+  </script>
+</body>
+</html>
