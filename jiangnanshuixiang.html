@@ -10,6 +10,10 @@
       padding: 0;
       box-sizing: border-box;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
     
     body {
@@ -437,21 +441,167 @@
       text-decoration: none;
     }
     
-    /* 响应式设计 */
-    @media (max-width: 768px) {
+    /* 响应式设计 - 平板和手机 */
+    @media (max-width: 1024px) {
+      /* 平板优化 */
+      header {
+        padding: 1rem;
+      }
+      
+      .logo-text {
+        font-size: 22px;
+      }
+      
+      .logo-image {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .page-hero {
+        padding: 3rem 1rem;
+      }
+      
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+      
+      .game-container {
+        margin: 1.5rem auto;
+        padding: 1.5rem;
+      }
+      
       .link-game-container {
         width: 100%;
         height: auto;
         aspect-ratio: 720/600;
       }
       
+      .game-area table#game .game-row td {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .game-area table#game .game-row td .pic-box {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+      }
+      
+      .game-area table#game .game-row td .pic-box.active {
+        width: 46px;
+        height: 46px;
+      }
+      
+      .game-area #canvas {
+        width: 100%;
+        height: 100%;
+      }
+      
+      .game-over {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      /* 手机优化 */
+      header {
+        padding: 0.8rem;
+      }
+      
+      .logo-text {
+        font-size: 18px;
+      }
+      
+      .logo-image {
+        width: 40px;
+        height: 40px;
+      }
+      
+      nav ul {
+        gap: 0.8rem;
+      }
+      
+      nav a {
+        padding: 0.4rem 0.8rem;
+        font-size: 14px;
+      }
+      
+      .page-hero {
+        padding: 2rem 1rem;
+      }
+      
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      
+      .hero-content p {
+        font-size: 1rem;
+      }
+      
+      .game-container {
+        margin: 1rem auto;
+        padding: 1rem;
+      }
+      
+      .game-section h3 {
+        font-size: 1.5rem;
+      }
+      
       .game-info-bar {
         flex-direction: column;
         gap: 1rem;
+        padding: 1rem;
       }
       
       .game-stats {
         gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .stat-item {
+        min-width: 70px;
+      }
+      
+      .stat-label {
+        font-size: 0.8rem;
+      }
+      
+      .stat-value {
+        font-size: 1.3rem;
+      }
+      
+      .game-controls {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+      
+      .link-game-container {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 720/600;
+      }
+      
+      .init-box h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+      }
+      
+      .init-box p {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      
+      .start-btn {
+        width: 160px;
+        height: 50px;
+        font-size: 20px;
       }
       
       .game-area table#game .game-row td {
@@ -468,6 +618,100 @@
       .game-area table#game .game-row td .pic-box.active {
         width: 36px;
         height: 36px;
+      }
+      
+      .game-over h2 {
+        font-size: 40px;
+        margin-bottom: 20px;
+      }
+      
+      .game-over .current-score {
+        font-size: 32px;
+      }
+      
+      .game-over .history-score {
+        font-size: 18px;
+      }
+      
+      .replay-btn {
+        width: 160px;
+        height: 50px;
+        font-size: 20px;
+      }
+      
+      .game-instructions {
+        padding: 1rem;
+      }
+      
+      .game-instructions h4 {
+        font-size: 1.1rem;
+      }
+      
+      .game-instructions p {
+        font-size: 0.9rem;
+      }
+      
+      footer {
+        padding: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      /* 小屏手机优化 */
+      .game-area table#game .game-row td {
+        width: 32px;
+        height: 32px;
+      }
+      
+      .game-area table#game .game-row td .pic-box {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+      }
+      
+      .game-area table#game .game-row td .pic-box.active {
+        width: 28px;
+        height: 28px;
+      }
+      
+      .init-box h1 {
+        font-size: 28px;
+      }
+      
+      .init-box p {
+        font-size: 14px;
+      }
+      
+      .game-stats {
+        gap: 0.5rem;
+      }
+      
+      .stat-item {
+        min-width: 60px;
+      }
+    }
+    
+    /* 横屏优化 */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .link-game-container {
+        height: 80vh;
+        aspect-ratio: unset;
+      }
+      
+      .game-area table#game .game-row td {
+        width: 35px;
+        height: 35px;
+      }
+      
+      .game-area table#game .game-row td .pic-box {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+      }
+      
+      .game-area table#game .game-row td .pic-box.active {
+        width: 32px;
+        height: 32px;
       }
     }
   </style>
@@ -1107,8 +1351,13 @@
       bindDomEvents: function () {
         var self = this;
         
-        // 使用事件委托处理图标点击
-        $('#game').on('click', function (e) {
+        // 使用事件委托处理图标点击和触摸
+        $('#game').on('click touchstart', function (e) {
+          // 阻止触摸事件的默认行为，防止双击缩放
+          if (e.type === 'touchstart') {
+            e.preventDefault();
+          }
+          
           var target = e.target;
           if (target.classList.contains('pic-box') && !target.classList.contains('empty')) {
             var data = {
@@ -1121,14 +1370,20 @@
           }
         });
         
-        $('#disorderBtn').on('click', function () {
+        $('#disorderBtn').on('click touchstart', function (e) {
+          if (e.type === 'touchstart') {
+            e.preventDefault();
+          }
           if (self.leftDisorderTime > 0 && !self.isGameOver) {
             self.leftDisorderTime--;
             self.disorder();
           }
         });
         
-        $('.replay-btn').on('click', function () {
+        $('.replay-btn').on('click touchstart', function (e) {
+          if (e.type === 'touchstart') {
+            e.preventDefault();
+          }
           self.score = 0;
           self.level = 0;
           self.leftDisorderTime = 5;
@@ -1136,7 +1391,10 @@
           self.reset();
         });
         
-        $('#newGameBtn').on('click', function () {
+        $('#newGameBtn').on('click touchstart', function (e) {
+          if (e.type === 'touchstart') {
+            e.preventDefault();
+          }
           self.score = 0;
           self.level = 0;
           self.leftDisorderTime = 5;
@@ -1149,7 +1407,10 @@
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', function() {
       console.log('页面加载完成');
-      $('.start-btn').on('click', function () {
+      $('.start-btn').on('click touchstart', function (e) {
+        if (e.type === 'touchstart') {
+          e.preventDefault();
+        }
         console.log('开始游戏点击');
         $('.init-box').addClass('hidden');
         $('.game-box').removeClass('hidden');
