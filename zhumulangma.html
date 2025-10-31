@@ -10,6 +10,12 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
         
         body {
@@ -17,6 +23,7 @@
             color: white;
             min-height: 100vh;
             line-height: 1.6;
+            overflow-x: hidden;
         }
         
         header {
@@ -26,6 +33,8 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
         }
         
         .logo {
@@ -51,7 +60,6 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         
-        
         nav ul {
             list-style: none;
             display: flex;
@@ -72,7 +80,7 @@
         
         .page-hero {
             position: relative;
-            padding: 4rem 2rem;
+            padding: 3rem 2rem;
             text-align: center;
             background: rgba(0, 0, 0, 0.3);
         }
@@ -160,6 +168,7 @@
             grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(4, 1fr);
             gap: 10px;
+            touch-action: none;
         }
         
         .tile {
@@ -174,20 +183,60 @@
             background-position: center;
         }
         
-        .tile-2 { background-color: rgba(255, 255, 255, 0.8); color: #333; }
-        .tile-4 { background-color: rgba(255, 255, 200, 0.8); color: #333; }
-        .tile-8 { background-color: rgba(255, 200, 100, 0.8); color: #333; }
-        .tile-16 { background-color: rgba(255, 150, 50, 0.8); color: #333; }
-        .tile-32 { background-color: rgba(255, 100, 0, 0.8); color: white; }
-        .tile-64 { background-color: rgba(255, 50, 0, 0.8); color: white; }
-        .tile-128 { background-color: rgba(255, 0, 0, 0.8); color: white; font-size: 20px; }
-        .tile-256 { background-color: rgba(200, 0, 0, 0.8); color: white; font-size: 20px; }
-        .tile-512 { background-color: rgba(150, 0, 0, 0.8); color: white; font-size: 18px; }
-        .tile-1024 { background-color: rgba(100, 0, 0, 0.8); color: white; font-size: 18px; }
+        .tile-2 { 
+    background: url('images/zumulangma/4.jpg') center/cover;
+    color: white;
+    font-size: 50px;
+}
+        .tile-4 { 
+    background: url('images/zumulangma/5.jpg') center/cover;
+    color: black;
+    font-size: 50px;
+}
+        .tile-8 { 
+    background: url('images/zumulangma/6.jpg') center/cover;
+    color: white;
+    font-size: 50px;
+}
+        .tile-16 { 
+    background: url('images/zumulangma/7.jpg') center/cover;
+    color: white;
+    font-size: 50px;
+}
+        .tile-32 { 
+    background: url('images/zumulangma/8.jpg') center/cover;
+    color: white;
+    font-size: 50px;
+}
+        .tile-64 { 
+    background: url('images/zumulangma/9.jpg') center/cover;
+    color: white;
+    font-size: 50px;
+}
+        .tile-128 { 
+    background: url('images/zumulangma/10.jpg') center/cover;
+    color: white;
+    font-size: 50px;
+}
+        .tile-256 { 
+    background: url('images/zumulangma/11.jpg') center/cover;
+    color: white;
+    font-size: 50px;
+}
+        .tile-512{ 
+    background: url('images/zumulangma/3.jpg') center/cover;
+    color: white;
+    font-size: 50px;
+}
+        .tile-1024 { 
+    background: url('images/zumulangma/2.jpg') center/cover;
+    color: white;
+    font-size: 50px;
+}
         .tile-2048 { 
-            background: linear-gradient(45deg, #64ffda, #4fd3c4);;
+            background: url('images/zumulangma/1.jpg') center/cover;
             color: white;
-            font-size: 16px;
+            font-size: 50px;
         }
         
         /* 游戏控制按钮 */
@@ -226,6 +275,44 @@
         .btn-secondary:hover {
             background: rgba(100, 255, 218, 0.1);
         }
+        
+        /* 移动端控制按钮 */
+        .mobile-controls {
+            display: none;
+            grid-template-areas:
+                ". up ."
+                "left . right"
+                ". down .";
+            gap: 10px;
+            margin: 2rem auto;
+            width: 200px;
+            height: 200px;
+        }
+        
+        .mobile-controls button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(100, 255, 218, 0.8);
+            border: none;
+            font-size: 24px;
+            color: #0a192f;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .mobile-controls button:active {
+            background: #4fd3c4;
+            transform: scale(0.95);
+        }
+        
+        .control-up { grid-area: up; }
+        .control-down { grid-area: down; }
+        .control-left { grid-area: left; }
+        .control-right { grid-area: right; }
         
         /* 游戏说明 */
         .game-instructions {
@@ -284,6 +371,27 @@
         
         /* 响应式设计 */
         @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            .logo-text {
+                font-size: 22px;
+            }
+            
+            .page-hero {
+                padding: 2rem 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .game-container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
             .game-board {
                 width: 350px;
                 height: 350px;
@@ -304,9 +412,39 @@
             .tile-2048 {
                 font-size: 14px;
             }
+            
+            .mobile-controls {
+                display: grid;
+            }
         }
         
         @media (max-width: 480px) {
+            .logo {
+                gap: 10px;
+            }
+            
+            .logo-image {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .logo-text {
+                font-size: 18px;
+            }
+            
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            .game-container {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+            
             .game-board {
                 width: 300px;
                 height: 300px;
@@ -331,6 +469,34 @@
             
             .tile-2048 {
                 font-size: 10px;
+            }
+            
+            .mobile-controls {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .mobile-controls button {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .game-board {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
             }
         }
     </style>
@@ -376,6 +542,14 @@
                     <!-- 游戏格子将通过JavaScript动态生成 -->
                 </div>
                 
+                <!-- 移动端控制按钮 -->
+                <div class="mobile-controls">
+                    <button class="control-up">↑</button>
+                    <button class="control-down">↓</button>
+                    <button class="control-left">←</button>
+                    <button class="control-right">→</button>
+                </div>
+                
                 <div class="game-controls">
                     <button class="btn" id="newGameBtn">开始新游戏</button>
                     <button class="btn btn-secondary" id="restartBtn">重新开始</button>
@@ -383,7 +557,7 @@
                 
                 <div id="gameResult" class="game-result">
                     <div class="info-message">
-                        使用方向键移动数字方块，相同数字碰撞会合并成更大的数字！
+                        使用方向键或触摸滑动移动数字方块，相同数字碰撞会合并成更大的数字！
                     </div>
                 </div>
             </div>
@@ -391,7 +565,7 @@
             <div class="game-instructions">
                 <h4>游戏说明</h4>
                 <p>🎯 <strong>游戏目标：</strong>通过移动合并相同数字，尽可能创造出2048这个数字！</p>
-                <p>🎮 <strong>操作方式：</strong>使用键盘方向键（↑↓←→）移动数字方块</p>
+                <p>🎮 <strong>操作方式：</strong>使用键盘方向键（↑↓←→）或触摸滑动移动数字方块</p>
                 <p>🏔️ <strong>攀登意义：</strong>每个数字代表不同的海拔高度，2048象征着成功登顶！</p>
                 <p>💡 <strong>小技巧：</strong>尽量保持最大数字在角落，规划好移动策略</p>
             </div>
@@ -410,6 +584,9 @@
         let gameBoard = [];
         const boardSize = 4;
         
+        // 触摸滑动变量
+        let touchStartX, touchStartY;
+        
         // DOM元素
         const gameBoardElement = document.getElementById('gameBoard');
         const scoreElement = document.getElementById('score');
@@ -417,6 +594,12 @@
         const newGameBtn = document.getElementById('newGameBtn');
         const restartBtn = document.getElementById('restartBtn');
         const gameResult = document.getElementById('gameResult');
+        
+        // 移动端控制按钮
+        const controlUp = document.querySelector('.control-up');
+        const controlDown = document.querySelector('.control-down');
+        const controlLeft = document.querySelector('.control-left');
+        const controlRight = document.querySelector('.control-right');
         
         // 初始化游戏
         function initGame() {
@@ -449,7 +632,7 @@
             
             gameResult.innerHTML = `
                 <div class="info-message">
-                    游戏开始！使用方向键移动数字方块，向2048发起挑战！
+                    游戏开始！使用方向键或触摸滑动移动数字方块，向2048发起挑战！
                 </div>
             `;
         }
@@ -697,6 +880,38 @@
             return true;
         }
         
+        // 触摸事件处理
+        function handleTouchStart(event) {
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+        }
+        
+        function handleTouchEnd(event) {
+            if (!touchStartX || !touchStartY) return;
+            
+            const touchEndX = event.changedTouches[0].clientX;
+            const touchEndY = event.changedTouches[0].clientY;
+            
+            const dx = touchEndX - touchStartX;
+            const dy = touchEndY - touchStartY;
+            const minSwipeDistance = 30;
+            
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (Math.abs(dx) > minSwipeDistance) {
+                    if (dx > 0) move('right');
+                    else move('left');
+                }
+            } else {
+                if (Math.abs(dy) > minSwipeDistance) {
+                    if (dy > 0) move('down');
+                    else move('up');
+                }
+            }
+            
+            touchStartX = null;
+            touchStartY = null;
+        }
+        
         // 键盘控制
         document.addEventListener('keydown', (e) => {
             switch(e.key) {
@@ -718,6 +933,16 @@
                     break;
             }
         });
+        
+        // 触摸事件监听
+        gameBoardElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+        gameBoardElement.addEventListener('touchend', handleTouchEnd, { passive: false });
+        
+        // 移动端控制按钮事件
+        controlUp.addEventListener('click', () => move('up'));
+        controlDown.addEventListener('click', () => move('down'));
+        controlLeft.addEventListener('click', () => move('left'));
+        controlRight.addEventListener('click', () => move('right'));
         
         // 按钮事件
         newGameBtn.addEventListener('click', initGame);
