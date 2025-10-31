@@ -3,40 +3,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>连连看游戏</title>
+  <title>江南水乡连连看 - 方寸屏间，万里河山</title>
   <style>
     * {
       margin: 0;
       padding: 0;
-      border: 0;
       box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
+    
     body {
-      padding-top: 40px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-      background: #000;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      background: linear-gradient(135deg, #0a192f, #112240, #1a2a6c);
+      color: white;
       min-height: 100vh;
+      line-height: 1.6;
+    }
+    
+    header {
+      background: rgba(10, 25, 47, 0.95);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
     }
 
-    .wrapper {
+    .logo-image {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid white;
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(45deg, #64ffda, #4fd3c4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    nav a:hover {
+      background: rgba(100, 255, 218, 0.1);
+    }
+    
+    .page-hero {
       position: relative;
-      width: 800px;
-      height: 660px;
-      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      padding: 4rem 2rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, #64ffda, #4fd3c4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .hero-content p {
+      font-size: 1.2rem;
+      color: #a8b2d1;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .game-container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .game-section {
+      text-align: center;
+    }
+    
+    .game-section h3 {
+      color: #64ffda;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+    
+    .game-section p {
+      color: #a8b2d1;
+      margin-bottom: 2rem;
+    }
+    
+    /* 游戏信息和控制栏 */
+    .game-info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(100, 255, 218, 0.3);
+    }
+    
+    .game-stats {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #a8b2d1;
+      margin-bottom: 0.3rem;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .time-value {
+      color: #ffcc00;
+    }
+    
+    .level-value {
+      color: #00ccff;
+    }
+    
+    .score-value {
+      color: #ff66cc;
+    }
+    
+    .disorder-value {
+      color: #64ffda;
+    }
+    
+    /* 连连看游戏容器 */
+    .link-game-container {
+      margin: 1.5rem auto;
+      width: 100%;
+      max-width: 720px;
+      height: auto;
+      aspect-ratio: 720/600;
+      background: url('images/jiangnanshuixiang/1.jpg') center/cover;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       overflow: hidden;
+      position: relative;
     }
-
-    .wrapper .init-box {
+    
+    .init-box {
       position: relative; 
       width: 100%;
       height: 100%;
@@ -47,262 +191,598 @@
       background: rgba(0, 0, 0, 0.7);
       color: white;
       text-align: center;
+      padding: 2rem;
     }
-
-    .wrapper .init-box h1 {
-      font-size: 48px;
-      margin-bottom: 30px;
+    
+    .init-box h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 1.5rem;
       text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
-
-    .wrapper .init-box p {
-      font-size: 18px;
-      margin-bottom: 30px;
-      max-width: 80%;
+    
+    .init-box p {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      margin-bottom: 2rem;
+      max-width: 90%;
     }
-
-    .wrapper .init-box .start-btn {
-      width: 200px;
-      height: 60px;
+    
+    .start-btn {
+      width: clamp(180px, 50vw, 200px);
+      height: clamp(50px, 8vh, 60px);
       margin: 20px auto;
-      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      background: linear-gradient(to right, #64ffda, #4fd3c4);
       border-radius: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 24px;
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
       font-weight: bold;
       cursor: pointer;
       transition: transform 0.3s;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      color: #0a192f;
     }
-
-    .wrapper .init-box .start-btn:hover {
+    
+    .start-btn:hover {
       transform: scale(1.05);
     }
-
-    .wrapper .game-box {
+    
+    .game-box {
       position: relative; 
       width: 100%;
       height: 100%;
     }
-
-    .wrapper .game-box .toolbar {
-      font-size: 24px;
-      line-height: 92px;
-      position: relative; 
-      width: 100%;
-      height: 92px;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
-
-    .wrapper .game-box .toolbar > div {
-      display: flex;
-      align-items: center;
-    }
-
-    .wrapper .game-box .toolbar .time {
-      font-size: 28px;
-      font-weight: bold;
-      color: #ffcc00;
-    }
-
-    .wrapper .game-box .toolbar .level {
-      font-size: 28px;
-      font-weight: bold;
-      color: #00ccff;
-    }
-
-    .wrapper .game-box .toolbar .disorder {
-      width: 120px;
-      height: 84px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      transition: background 0.3s;
-    }
-
-    .wrapper .game-box .toolbar .disorder:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .wrapper .game-box .toolbar .scoring {
-      font-size: 28px;
-      font-weight: bold;
-      color: #ff66cc;
-    }
-
-    .wrapper .game-box .game-area {
+    
+    .game-area {
       position: relative;
-      height: calc(100% - 92px);
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 1rem;
     }
-
-    .wrapper .game-box .game-area table#game {
+    
+    .game-area table#game {
       border-spacing: 0; 
       border-collapse: collapse;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 10px;
+      border-radius: 8px;
+      padding: 0.5rem;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
     }
-
-    .wrapper .game-box .game-area table#game .game-row {
-      height: 80px;
+    
+    .game-area table#game .game-row {
+      height: auto;
     }
-
-    .wrapper .game-box .game-area table#game .game-row td {
-      width: 80px;
-      height: 80px;
+    
+    .game-area table#game .game-row td {
       text-align: center;
       vertical-align: middle;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
     }
-
-    .wrapper .game-box .game-area table#game .game-row td .pic-box {
-      line-height: 64px;
-      display: inline-block;
-      width: 64px;
-      height: 64px;
+    
+    .game-area table#game .game-row td .pic-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.98);
+      border-radius: 6px;
       transition: all 0.2s;
-      font-size: 32px;
+      padding: 0;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      height: 100%;
+      font-size: clamp(1rem, 3vw, 1.5rem);
     }
-
-    .wrapper .game-box .game-area table#game .game-row td .pic-box:hover {
-      background: rgba(255, 255, 255, 0.2);
+    
+    .game-area table#game .game-row td .pic-box:hover {
+      background: rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
     }
-
-    .wrapper .game-box .game-area table#game .game-row td .pic-box.active {
-      width: 70px;
-      height: 70px;
-      border-radius: 16px; 
-      background: rgba(255, 215, 0, 0.5);
-      box-shadow: 0 0 15px gold;
+    
+    .game-area table#game .game-row td .pic-box.active {
+      border-radius: 10px; 
+      background: rgba(255, 215, 0, 0.98);
+      box-shadow: 0 0 15px gold, inset 0 0 12px rgba(255, 200, 0, 0.6);
+      border: 2px solid gold;
+      transform: scale(0.95);
     }
-
-    .wrapper .game-box .game-area table#game .game-row td .pic-box img {
-      width: 50px;
-      height: 50px;
-      object-fit: contain;
-    }
-
-    .wrapper .game-box .game-area #canvas {
+    
+    .game-area #canvas {
       position: absolute;
       left: 0;
       top: 0;
-      width: 800px;
-      height: 560px;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
     }
-
-    .wrapper .game-over {
+    
+    .game-over {
       position: absolute;
       top: 0;
-      width: 800px;
-      height: 660px;
+      width: 100%;
+      height: 100%;
       background: rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       color: white;
+      padding: 2rem;
+      text-align: center;
     }
-
-    .wrapper .game-over h2 {
-      font-size: 60px;
-      margin-bottom: 30px;
-      color: #ff416c;
-      text-shadow: 0 0 10px rgba(255, 65, 108, 0.5);
+    
+    .game-over h2 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      margin-bottom: 1.5rem;
+      color: #64ffda;
+      text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
     }
-
-    .wrapper .game-over .current-score {
-      font-size: 48px;
-      margin: 20px 0;
+    
+    .game-over .current-score {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      margin: 1rem 0;
       color: #ffcc00;
     }
-
-    .wrapper .game-over .history-score {
-      font-size: 24px; 
-      margin: 10px 0;
+    
+    .game-over .history-score {
+      font-size: clamp(1rem, 3vw, 1.2rem); 
+      margin: 0.5rem 0;
       color: #aaa;
     }
-
-    .wrapper .game-over .replay-btn {
-      width: 200px;
-      height: 60px;
-      margin: 30px auto;
-      background: linear-gradient(to right, #00b4db, #0083b0);
+    
+    .replay-btn {
+      width: clamp(180px, 50vw, 200px);
+      height: clamp(50px, 8vh, 60px);
+      margin: 1.5rem auto;
+      background: linear-gradient(to right, #64ffda, #4fd3c4);
       border-radius: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 24px;
+      font-size: clamp(1.2rem, 4vw, 1.5rem);
       font-weight: bold;
       cursor: pointer;
       transition: transform 0.3s;
+      color: #0a192f;
     }
-
-    .wrapper .game-over .replay-btn:hover {
+    
+    .replay-btn:hover {
       transform: scale(1.05);
     }
-
+    
     .empty {
       opacity: 0;
       pointer-events: none;
     }
-
+    
     .hidden {
       display: none !important;
     }
-
+    
     .number {
       display: inline-block;
       width: 34px; 
       height: 34px;
       background-size: contain;
     }
+    
+    /* 游戏控制按钮 */
+    .game-controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .btn {
+      background: #64ffda;
+      color: #0a192f;
+      border: none;
+      padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 3vw, 1.5rem);
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      min-width: 120px;
+    }
+    
+    .btn:hover {
+      background: #4fd3c4;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: #64ffda;
+      border: 1px solid #64ffda;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(100, 255, 218, 0.1);
+    }
+    
+    /* 游戏说明 */
+    .game-instructions {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(100, 255, 218, 0.1);
+      border-radius: 10px;
+      border: 1px solid rgba(100, 255, 218, 0.3);
+    }
+    
+    .game-instructions h4 {
+      color: #64ffda;
+      margin-bottom: 1rem;
+      font-size: clamp(1.2rem, 3vw, 1.5rem);
+    }
+    
+    .game-instructions p {
+      color: #a8b2d1;
+      margin-bottom: 0.5rem;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+    }
+    
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(10, 25, 47, 0.9);
+      margin-top: 3rem;
+    }
+    
+    footer a {
+      color: #64ffda;
+      text-decoration: none;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 1024px) {
+      .game-container {
+        padding: 1.5rem;
+        margin: 1rem auto;
+      }
+      
+      .page-hero {
+        padding: 3rem 1.5rem;
+      }
+      
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .logo-text {
+        font-size: 1.5rem;
+      }
+      
+      .logo-image {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .page-hero {
+        padding: 2rem 1rem;
+      }
+      
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      
+      .game-container {
+        padding: 1rem;
+        margin: 0.5rem auto;
+      }
+      
+      .game-info-bar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+      }
+      
+      .game-stats {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .stat-item {
+        min-width: 80px;
+      }
+      
+      .stat-label {
+        font-size: 0.8rem;
+      }
+      
+      .stat-value {
+        font-size: 1.2rem;
+      }
+      
+      .game-controls {
+        width: 100%;
+      }
+      
+      .btn {
+        flex: 1;
+        min-width: 140px;
+      }
+      
+      .init-box h1 {
+        font-size: 1.8rem;
+      }
+      
+      .init-box p {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .logo-text {
+        font-size: 1.2rem;
+      }
+      
+      nav ul {
+        gap: 0.5rem;
+      }
+      
+      nav a {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      
+      .page-hero {
+        padding: 1.5rem 1rem;
+      }
+      
+      .hero-content h1 {
+        font-size: 1.5rem;
+      }
+      
+      .hero-content p {
+        font-size: 1rem;
+      }
+      
+      .game-section h3 {
+        font-size: 1.4rem;
+      }
+      
+      .game-stats {
+        gap: 0.5rem;
+      }
+      
+      .stat-item {
+        min-width: 70px;
+      }
+      
+      .stat-label {
+        font-size: 0.7rem;
+      }
+      
+      .stat-value {
+        font-size: 1rem;
+      }
+      
+      .game-controls {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      
+      .game-area {
+        padding: 0.5rem;
+      }
+      
+      .game-area table#game {
+        padding: 0.25rem;
+      }
+      
+      .game-area table#game .game-row td .pic-box {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .logo {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .game-stats {
+        gap: 0.3rem;
+      }
+      
+      .stat-item {
+        min-width: 60px;
+      }
+      
+      .stat-label {
+        font-size: 0.6rem;
+      }
+      
+      .stat-value {
+        font-size: 0.9rem;
+      }
+    }
+    
+    /* 横屏优化 */
+    @media (max-height: 600px) and (orientation: landscape) {
+      .page-hero {
+        padding: 1rem;
+      }
+      
+      .hero-content h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .game-container {
+        padding: 1rem;
+        margin: 0.5rem auto;
+      }
+      
+      .link-game-container {
+        max-height: 70vh;
+      }
+    }
+    
+    /* 防止文本选择 */
+    .no-select {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    
+    /* 触摸设备优化 */
+    @media (hover: none) and (pointer: coarse) {
+      .pic-box:hover {
+        transform: none !important;
+      }
+      
+      .btn:hover {
+        transform: none !important;
+      }
+      
+      .start-btn:hover, .replay-btn:hover {
+        transform: none !important;
+      }
+    }
   </style>
 </head>
-<body>
-  <div class="wrapper">
-    <div class="init-box">
-      <h1>连连看游戏</h1>
-      <p>点击相同的图标，用不超过两个拐角的线连接它们</p>
-      <div class="start-btn">开始游戏</div>
+<body class="no-select">
+  <header>
+    <div class="logo">
+      <img src="images/item/item.jpg" alt="方寸屏间，万里河山" class="logo-image">
+      <span class="logo-text">方寸屏间，万里河山</span>
     </div>
-    <div class="game-box hidden">
-      <div class="toolbar">
-        <div class="time">100</div>
-        <div class="level">1</div>
-        <div class="disorder" title="重排">重排: 5</div>
-        <div class="scoring">0</div>
+    <nav>
+      <ul>
+        <li><a href="index.html#mountains" class="btn">返回</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <section class="page-hero">
+    <div class="hero-content">
+      <h1>江南水乡连连看</h1>
+      <p>点击相同的图标，用任意拐角的线连接它们，体验江南水乡的温婉与灵动</p>
+    </div>
+  </section>
+  
+  <main class="game-container">
+    <div class="game-section">
+      <h3>江南水乡连连看</h3>
+      <p>连接相同的江南元素，体验"方寸屏间，万里河山"的意境</p>
+      
+      <!-- 游戏信息和控制栏 -->
+      <div class="game-info-bar">
+        <div class="game-stats">
+          <div class="stat-item">
+            <div class="stat-label">时间</div>
+            <div class="stat-value time-value">180</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">关卡</div>
+            <div class="stat-value level-value">1</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">得分</div>
+            <div class="stat-value score-value">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">重排次数</div>
+            <div class="stat-value disorder-value">5</div>
+          </div>
+        </div>
+        
+        <div class="game-controls">
+          <button class="btn" id="newGameBtn">开始新游戏</button>
+          <button class="btn btn-secondary" id="disorderBtn">重排</button>
+        </div>
       </div>
-      <div class="game-area">
-        <table id="game"></table>
-        <canvas id="canvas" class="hidden" width=800 height=560></canvas>
+      
+      <div class="link-game-container">
+        <div class="init-box">
+          <h1>江南水乡连连看</h1>
+          <p>点击相同的图标，用任意拐角的线连接它们</p>
+          <div class="start-btn">开始游戏</div>
+        </div>
+        <div class="game-box hidden">
+          <div class="game-area">
+            <table id="game"></table>
+            <canvas id="canvas" class="hidden" width=720 height=600></canvas>
+          </div>
+        </div>
+        <div class="game-over hidden">
+          <h2>游戏结束</h2>
+          <div class="current-score">得分: 0</div>
+          <div class="history-score">最高分: 0</div>
+          <div class="replay-btn">重新开始</div>
+        </div>
+      </div>
+      
+      <div class="game-instructions">
+        <h4>游戏说明</h4>
+        <p>🎯 <strong>游戏目标：</strong>连接所有相同的江南元素图标，消除所有方块</p>
+        <p>🎮 <strong>操作方式：</strong>点击两个相同的图标，如果它们可以用任意拐角的线连接，即可消除</p>
+        <p>🏞️ <strong>江南特色：</strong>体验江南水乡的自然风光和人文景观</p>
+        <p>💡 <strong>小技巧：</strong>优先消除边角的图标，注意时间限制</p>
       </div>
     </div>
-    <div class="game-over hidden">
-      <h2>游戏结束</h2>
-      <div class="current-score">得分: 0</div>
-      <div class="history-score">最高分: 0</div>
-      <div class="replay-btn">重新开始</div>
-    </div>
-  </div>
+  </main>
+  
+  <footer>
+    <p>方寸屏间，万里河山</p>
+    <p>2025武汉大学参赛作品 | <a href="message-board.html">分享你的山河故事</a></p>
+  </footer>
 
   <script>
+    // 检测设备类型
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isTablet = /iPad|Android|Tablet/i.test(navigator.userAgent);
+    
+    // 根据设备类型调整游戏参数
+    function getGameConfig() {
+      if (isMobile) {
+        return {
+          rows: 8,   // 手机端减少行数
+          cols: 8,   // 手机端减少列数
+          level: 0,
+        };
+      } else if (isTablet) {
+        return {
+          rows: 10,  // 平板端适中
+          cols: 10,
+          level: 0,
+        };
+      } else {
+        return {
+          rows: 12,  // 桌面端保持原样
+          cols: 12,
+          level: 0,
+        };
+      }
+    }
+
     // 简化的DOM操作函数
     const $ = (selector) => {
       if (typeof selector === 'string') {
@@ -407,32 +887,14 @@
       }
       this.score = 0;
       this.$box = $('#game');
-      this.cols = (config.cols || 8) + 2;
-      this.rows = (config.rows || 6) + 2;
+      this.cols = (config.cols || 11) + 2;
+      this.rows = (config.rows || 12) + 2;
       this.level = config.level || 0;
       this.leftDisorderTime = 5;
-      // 使用图片地址作为图标（您可以根据需要修改这些地址）
+      // 使用20个不同的自然元素emoji
       this.gifts = [
-        'images/game-icons/icon1.png',
-        'images/game-icons/icon2.png',
-        'images/game-icons/icon3.png',
-        'images/game-icons/icon4.png',
-        'images/game-icons/icon5.png',
-        'images/game-icons/icon6.png',
-        'images/game-icons/icon7.png',
-        'images/game-icons/icon8.png',
-        'images/game-icons/icon9.png',
-        'images/game-icons/icon10.png',
-        'images/game-icons/icon11.png',
-        'images/game-icons/icon12.png',
-        'images/game-icons/icon13.png',
-        'images/game-icons/icon14.png',
-        'images/game-icons/icon15.png',
-        'images/game-icons/icon16.png',
-        'images/game-icons/icon17.png',
-        'images/game-icons/icon18.png',
-        'images/game-icons/icon19.png',
-        'images/game-icons/icon20.png'
+        '🌿', '🏞️', '🌅', '🏔️', '🌳', '🌲', '🌴', '🍃', '🍂', '🌸',
+        '🌺', '🌻', '💧', '☀️', '🌙', '⭐', '🌈', '🍁', '🌱', '🍀'
       ];
       this.isGameOver = false;
       return this;
@@ -443,7 +905,8 @@
         console.log('初始化游戏');
         var self = this;
         this.stack = [];
-        this.iconTypeCount = Math.min(this.level + 5, 10); // 限制图标种类
+        // 关键修改：确保每次使用所有20种图标
+        this.iconTypeCount = 20; // 固定使用20种图标
         this.count = (this.rows - 2) * (this.cols - 2);
         // 确保count是偶数
         if (this.count % 2 !== 0) {
@@ -453,7 +916,7 @@
         this.pictures = [];
         this.linkPictures = [];
         this.preClickInfo = null;
-        this.leftTime = 100;
+        this.leftTime = 180; // 修改为3分钟（180秒）
         this.points = [];
         this.isGameOver = false;
         
@@ -481,7 +944,7 @@
       nextLevel: function () {
         clearInterval(this.timmer);
         this.level++;
-        this.leftTime = 100 + this.level * 10;
+        this.leftTime = 180 + this.level * 10; // 修改为3分钟（180秒）
         this.reset();
       },
 
@@ -522,7 +985,7 @@
         if (this.isGameOver) return;
         
         this.leftTime--;
-        $('.time').text(this.leftTime);
+        $('.time-value').text(this.leftTime);
         
         if (this.leftTime <= 0) {
           clearInterval(this.timmer);
@@ -540,19 +1003,26 @@
       },
 
       updateLevel: function () {
-        $('.level').text(this.level + 1);
+        $('.level-value').text(this.level + 1);
       },
 
       createMap: function () {
         console.log('创建地图:', this.rows, 'x', this.cols);
         var count = 0;
-        // 创建成对的图标索引
+        // 创建成对的图标索引 - 确保使用所有20种图标
         var iconIndices = [];
         var pairsNeeded = this.count / 2;
         
+        // 关键修改：确保每种图标都出现
         for (var i = 0; i < pairsNeeded; i++) {
           var iconIndex = i % this.iconTypeCount;
           iconIndices.push(iconIndex, iconIndex);
+        }
+        
+        // 如果图标数量不够，补充随机图标
+        while (iconIndices.length < this.count) {
+          var randomIndex = Math.floor(Math.random() * this.iconTypeCount);
+          iconIndices.push(randomIndex, randomIndex);
         }
         
         // 打乱图标顺序
@@ -588,7 +1058,7 @@
             }
           }
         }
-        console.log('地图创建完成，图标数量:', count);
+        console.log('地图创建完成，图标数量:', count, '图标种类:', this.iconTypeCount);
       },
 
       disorder: function () {
@@ -614,7 +1084,7 @@
       },
 
       updateDisorderTime: function () {
-        $('.disorder').text('重排: ' + this.leftDisorderTime);
+        $('.disorder-value').text(this.leftDisorderTime);
       },
 
       renderMap: function () {
@@ -625,8 +1095,8 @@
           for (var col = 1; col < this.cols - 1; col++) {
             var picture = this.pictures[row][col];
             var emptyClass = picture.isEmpty ? 'empty' : '';
-            // 修改这里：使用img标签显示图片
-            html += `<td><div class="pic-box ${emptyClass}" data-row="${row}" data-col="${col}" data-index="${picture.index}"><img src="${picture.pic}" alt="图标"></div></td>`;
+            // 直接显示emoji
+            html += `<td><div class="pic-box ${emptyClass}" data-row="${row}" data-col="${col}" data-index="${picture.index}">${picture.pic}</div></td>`;
           }
           html += '</tr>';
         }
@@ -677,11 +1147,10 @@
           return;
         }
         
-        // 检查是否可以连接
+        // 检查是否可以连接 - 现在允许无限拐角
         console.log('检查连接:', {pre: [preCol, preRow], cur: [curCol, curRow]});
         if (this.canCleanup(preCol, preRow, curCol, curRow)) {
           console.log('可以连接');
-          // 移除连线相关的代码
           this.updateStatus(preRow, preCol, curRow, curCol, preIndex, curIndex);
         } else {
           console.log('无法连接');
@@ -755,7 +1224,7 @@
       },
 
       domUpdateScore: function () {
-        $('.scoring').text(this.score);
+        $('.score-value').text(this.score);
       },
 
       // 移除drawLine函数
@@ -810,73 +1279,93 @@
         return true;
       },
 
+      // 修复连接检查函数
       canCleanup: function (x1, y1, x2, y2) {
         console.log('检查连接路径:', x1, y1, '->', x2, y2);
-        this.points = [];
         
-        // 直接相邻
-        if ((x1 === x2 && Math.abs(y1 - y2) === 1) || (y1 === y2 && Math.abs(x1 - x2) === 1)) {
-          this.points = [[x1, y1], [x2, y2]];
-          console.log('直接相邻');
-          return true;
+        // 如果起点或终点为空，直接返回false
+        if (this.pictures[y1][x1].isEmpty || this.pictures[y2][x2].isEmpty) {
+          return false;
         }
         
-        // 直线连接（水平）
-        if (y1 === y2 && this.isRowEmpty(x1, y1, x2, y2)) {
-          this.points = [[x1, y1], [x2, y2]];
-          console.log('水平直线');
-          return true;
-        }
+        // 使用改进的BFS检查任意拐角连接
+        return this.canConnectWithBFS(x1, y1, x2, y2);
+      },
+
+      // 改进的BFS算法
+      canConnectWithBFS: function(x1, y1, x2, y2) {
+        // 使用队列进行BFS
+        var queue = [];
+        var visited = {};
         
-        // 直线连接（垂直）
-        if (x1 === x2 && this.isColEmpty(x1, y1, x2, y2)) {
-          this.points = [[x1, y1], [x2, y2]];
-          console.log('垂直直线');
-          return true;
-        }
+        // 初始化队列，从起点开始
+        queue.push({
+          x: x1, 
+          y: y1, 
+          path: [[x1, y1]], 
+          direction: null,
+          turns: 0
+        });
+        visited[x1 + ',' + y1] = true;
         
-        // 一个拐点 - 先水平后垂直
-        if (this.isRowEmpty(x1, y1, x2, y1) && this.isColEmpty(x2, y1, x2, y2)) {
-          this.points = [[x1, y1], [x2, y1], [x2, y2]];
-          console.log('一个拐点 - 先水平后垂直');
-          return true;
-        }
+        // 定义四个方向：上、右、下、左
+        var directions = [
+          {dx: 0, dy: -1, name: 'up'},    // 上
+          {dx: 1, dy: 0, name: 'right'},  // 右
+          {dx: 0, dy: 1, name: 'down'},   // 下
+          {dx: -1, dy: 0, name: 'left'}   // 左
+        ];
         
-        // 一个拐点 - 先垂直后水平
-        if (this.isColEmpty(x1, y1, x1, y2) && this.isRowEmpty(x1, y2, x2, y2)) {
-          this.points = [[x1, y1], [x1, y2], [x2, y2]];
-          console.log('一个拐点 - 先垂直后水平');
-          return true;
-        }
-        
-        // 两个拐点
-        for (var i = 0; i < this.cols; i++) {
-          if (i !== x1 && i !== x2 && 
-              this.isRowEmpty(x1, y1, i, y1) && 
-              this.isColEmpty(i, y1, i, y2) && 
-              this.isRowEmpty(i, y2, x2, y2) &&
-              this.pictures[y1][i].isEmpty && 
-              this.pictures[y2][i].isEmpty) {
-            this.points = [[x1, y1], [i, y1], [i, y2], [x2, y2]];
-            console.log('两个拐点 - 通过列', i);
+        while (queue.length > 0) {
+          var current = queue.shift();
+          
+          // 检查是否到达终点
+          if (current.x === x2 && current.y === y2) {
+            this.points = current.path;
+            console.log('BFS找到路径，拐角数:', current.turns, '路径:', current.path);
             return true;
+          }
+          
+          // 尝试四个方向
+          for (var i = 0; i < directions.length; i++) {
+            var dir = directions[i];
+            var newX = current.x + dir.dx;
+            var newY = current.y + dir.dy;
+            var key = newX + ',' + newY;
+            
+            // 检查新位置是否在边界内且未被访问过
+            if (newX >= 0 && newX < this.cols && newY >= 0 && newY < this.rows) {
+              
+              // 检查该位置是否为空或者是终点
+              var isEmptyOrTarget = this.pictures[newY][newX].isEmpty || (newX === x2 && newY === y2);
+              
+              if (isEmptyOrTarget && !visited[key]) {
+                visited[key] = true;
+                
+                // 计算拐角数
+                var newTurns = current.turns;
+                if (current.direction !== null && current.direction !== dir.name) {
+                  newTurns++;
+                }
+                
+                // 创建新路径
+                var newPath = current.path.slice();
+                newPath.push([newX, newY]);
+                
+                // 将新位置加入队列
+                queue.push({
+                  x: newX,
+                  y: newY,
+                  path: newPath,
+                  direction: dir.name,
+                  turns: newTurns
+                });
+              }
+            }
           }
         }
         
-        for (var i = 0; i < this.rows; i++) {
-          if (i !== y1 && i !== y2 && 
-              this.isColEmpty(x1, y1, x1, i) && 
-              this.isRowEmpty(x1, i, x2, i) && 
-              this.isColEmpty(x2, i, x2, y2) &&
-              this.pictures[i][x1].isEmpty && 
-              this.pictures[i][x2].isEmpty) {
-            this.points = [[x1, y1], [x1, i], [x2, i], [x2, y2]];
-            console.log('两个拐点 - 通过行', i);
-            return true;
-          }
-        }
-        
-        console.log('无法连接');
+        console.log('BFS未找到路径');
         return false;
       },
 
@@ -897,7 +1386,7 @@
           }
         });
         
-        $('.disorder').on('click', function () {
+        $('#disorderBtn').on('click', function () {
           if (self.leftDisorderTime > 0 && !self.isGameOver) {
             self.leftDisorderTime--;
             self.disorder();
@@ -905,6 +1394,14 @@
         });
         
         $('.replay-btn').on('click', function () {
+          self.score = 0;
+          self.level = 0;
+          self.leftDisorderTime = 5;
+          $('.game-over').addClass('hidden');
+          self.reset();
+        });
+        
+        $('#newGameBtn').on('click', function () {
           self.score = 0;
           self.level = 0;
           self.leftDisorderTime = 5;
@@ -921,11 +1418,7 @@
         console.log('开始游戏点击');
         $('.init-box').addClass('hidden');
         $('.game-box').removeClass('hidden');
-        var gameConfig = {
-          rows: 6,
-          cols: 8,
-          level: 0,
-        };
+        var gameConfig = getGameConfig();
         var game = new LinkGame(gameConfig);
         game.init();
       });

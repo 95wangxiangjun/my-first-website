@@ -167,6 +167,11 @@
             background: transparent;
             transform: none;
         }
+
+        .puzzle-tile.completed {
+            cursor: default !important;
+            pointer-events: none !important;
+        }
         
         /* 数字样式 */
         .tile-number {
@@ -356,7 +361,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="index.html#mountains" class="btn">返回</a></li>
+                <li><a href="index.html#regions" class="btn">返回</a></li>
             </ul>
         </nav>
     </header>
@@ -416,6 +421,7 @@
         let slidingPuzzle = [];
         let emptyTile = { row: 3, col: 3 }; // 空格位置
         let moveCount = 0;
+        let isGameCompleted = false; // 游戏完成状态
         
         // DOM元素
         const puzzleBoard = document.getElementById('puzzleBoard');
@@ -431,6 +437,7 @@
             moveCount = 0;
             moveCountElement.textContent = '0';
             slidingPuzzleResult.innerHTML = '';
+            isGameCompleted = false; // 重置完成状态
             
             // 初始化拼图数组 (1-15 + 空位)
             slidingPuzzle = [];
@@ -536,7 +543,10 @@
                         numberText.style.textShadow = '1px 1px 2px rgba(0,0,0,0.8)';
                         tile.appendChild(numberText);
                         
-                        tile.addEventListener('click', () => moveTile(row, col));
+                        // 只有在游戏未完成时才添加点击事件
+                        if (!isGameCompleted) {
+                            tile.addEventListener('click', () => moveTile(row, col));
+                        }
                     }
                     board.appendChild(tile);
                 }
@@ -548,6 +558,11 @@
         
         // 移动拼图块
         function moveTile(row, col) {
+            // 检查游戏是否已完成，如果已完成则阻止移动
+            if (isGameCompleted) {
+                return;
+            }
+            
             // 检查是否可以移动（是否与空位相邻）
             const rowDiff = Math.abs(row - emptyTile.row);
             const colDiff = Math.abs(col - emptyTile.col);
@@ -598,6 +613,9 @@
                 isComplete = false;
             }
             
+            // 设置游戏完成状态
+            isGameCompleted = isComplete;
+            
             return isComplete;
         }
         
@@ -608,7 +626,7 @@
                 resultDiv.innerHTML = `
                     <div class="success-message">
                         🎉 恭喜！你成功还原了北国风光！<br>
-                        <small>移动步数: ${moveCount}步</small>
+                        <small>移动步数: ${moveCount}步 | 游戏已完成，点击"开始新游戏"重新挑战</small>
                     </div>
                 `;
                 
@@ -618,7 +636,18 @@
                     setTimeout(() => {
                         tile.style.borderColor = '#4caf50';
                         tile.style.boxShadow = '0 0 15px rgba(76, 175, 80, 0.5)';
+                        // 移除点击事件，阻止继续移动
+                        tile.style.cursor = 'default';
+                        tile.classList.add('completed');
+                        tile.onclick = null;
                     }, index * 50);
+                });
+                
+                // 同时移除空格周围的点击事件
+                const emptyTiles = document.querySelectorAll('.puzzle-tile.empty');
+                emptyTiles.forEach(tile => {
+                    tile.style.cursor = 'default';
+                    tile.classList.add('completed');
                 });
             } else {
                 // 计算正确位置的数量
@@ -668,6 +697,16 @@
                         <small>恭喜你成功还原北国风光！移动步数: ${moveCount}步</small>
                     </div>
                 `;
+                
+                // 游戏完成时禁用所有拼图块
+                if (isComplete) {
+                    const tiles = document.querySelectorAll('.puzzle-tile');
+                    tiles.forEach(tile => {
+                        tile.style.cursor = 'default';
+                        tile.classList.add('completed');
+                        tile.onclick = null;
+                    });
+                }
             } else {
                 // 计算正确位置的数量
                 let correctCount = 0;
