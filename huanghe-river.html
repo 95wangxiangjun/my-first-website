@@ -281,6 +281,45 @@
             border-radius: 5px;
         }
         
+        /* 移动端控制按钮 */
+        .mobile-controls {
+            display: none;
+            justify-content: space-between;
+            margin: 1rem 0;
+            padding: 0 2rem;
+        }
+        
+        .mobile-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(100, 255, 218, 0.3);
+            border: 2px solid #64ffda;
+            color: white;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        
+        .mobile-btn:active {
+            background: rgba(100, 255, 218, 0.6);
+            transform: scale(0.95);
+        }
+        
+        .boost-btn {
+            background: rgba(33, 150, 243, 0.3);
+            border-color: #2196f3;
+        }
+        
+        .boost-btn:active {
+            background: rgba(33, 150, 243, 0.6);
+        }
+        
         footer {
             text-align: center;
             padding: 2rem;
@@ -308,6 +347,17 @@
                 width: 100%;
                 max-width: 500px;
             }
+            
+            /* 显示移动端控制按钮 */
+            .mobile-controls {
+                display: flex;
+            }
+            
+            .mobile-controls .mobile-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 1.8rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -329,6 +379,43 @@
             .btn {
                 width: 100%;
                 max-width: 200px;
+            }
+            
+            .mobile-controls {
+                padding: 0 1rem;
+            }
+            
+            .mobile-controls .mobile-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .page-hero {
+                padding: 2rem 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .game-container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+        }
+
+        /* 平板设备优化 */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .river-game canvas {
+                width: 100%;
+                max-width: 700px;
+            }
+            
+            .mobile-controls {
+                display: flex;
+                max-width: 500px;
+                margin: 1rem auto;
             }
         }
     </style>
@@ -384,6 +471,13 @@
                     <canvas id="riverCanvas" width="800" height="500"></canvas>
                 </div>
                 
+                <!-- 移动端控制按钮 -->
+                <div class="mobile-controls">
+                    <div class="mobile-btn left-btn">←</div>
+                    <div class="mobile-btn boost-btn">⚡</div>
+                    <div class="mobile-btn right-btn">→</div>
+                </div>
+                
                 <div class="game-controls">
                     <button class="btn" id="startGameBtn">开始漂流</button>
                     <button class="btn btn-secondary" id="pauseBtn" disabled>暂停游戏</button>
@@ -393,6 +487,9 @@
                 <div id="gameResult" class="game-result">
                     <div class="info-message">
                         使用 ← → 方向键控制船只移动，空格键加速！避开炸弹和漩涡，收集金币和风景点！
+                        <div style="margin-top: 10px; font-size: 0.9em;">
+                            手机/平板：使用屏幕下方的控制按钮
+                        </div>
                     </div>
                 </div>
             </div>
@@ -400,7 +497,10 @@
             <div class="game-instructions">
                 <h4>游戏说明 & 难度提升</h4>
                 <p>🎯 <strong>游戏目标：</strong>在黄河上尽可能漂流更远距离，收集更多风景金币</p>
-                <p>🎮 <strong>操作方式：</strong>← → 方向键控制左右移动，空格键短暂加速</p>
+                <p>🎮 <strong>操作方式：</strong>
+                    <span style="color:#64ffda">电脑：</span>← → 方向键控制左右移动，空格键短暂加速<br>
+                    <span style="color:#64ffda">手机/平板：</span>使用屏幕下方的控制按钮
+                </p>
                 <p>⚠️ <strong>危险障碍：</strong>
                     <span style="color:#ff4444">💣 炸弹</span> - 碰到减少生命值 | 
                     <span style="color:#ff6b6b">🌀 漩涡</span> - 使船只失控 | 
@@ -466,6 +566,10 @@
         let sceneryFrequency = 2;
         let currentSpeed = 3;
         
+        // 移动端控制状态
+        let leftPressed = false;
+        let rightPressed = false;
+        
         // DOM元素
         const canvas = document.getElementById('riverCanvas');
         const ctx = canvas.getContext('2d');
@@ -478,6 +582,11 @@
         const restartBtn = document.getElementById('restartBtn');
         const gameResult = document.getElementById('gameResult');
         
+        // 移动端控制按钮
+        const leftBtn = document.querySelector('.left-btn');
+        const rightBtn = document.querySelector('.right-btn');
+        const boostBtn = document.querySelector('.boost-btn');
+
         // 初始化游戏
         function initGame() {
             // 停止之前的游戏循环
@@ -509,6 +618,10 @@
             lastSceneryTime = 0;
             lastPowerUpTime = 0;
             
+            // 重置移动端控制状态
+            leftPressed = false;
+            rightPressed = false;
+            
             updateDisplay();
             drawGame();
             
@@ -520,6 +633,9 @@
             gameResult.innerHTML = `
                 <div class="info-message">
                     准备开始黄河漂流！使用 ← → 方向键控制船只，空格键加速！
+                    <div style="margin-top: 10px; font-size: 0.9em;">
+                        手机/平板：使用屏幕下方的控制按钮
+                    </div>
                 </div>
             `;
         }
@@ -559,8 +675,19 @@
             
             gameTime += 0.016;
             
-            // 更新船只位置
-            boatX += boatVelocityX;
+            // 更新船只位置 - 优先使用键盘控制，如果没有键盘输入再使用移动端控制
+            if (boatVelocityX !== 0) {
+                // 使用键盘控制
+                boatX += boatVelocityX;
+            } else {
+                // 使用移动端控制
+                if (leftPressed) {
+                    boatX -= boatSpeed;
+                } else if (rightPressed) {
+                    boatX += boatSpeed;
+                }
+            }
+            
             boatX = Math.max(30, Math.min(canvas.width - 30, boatX));
             
             // 处理加速效果
@@ -640,9 +767,9 @@
             }
         }
         
-        // 游戏结束 - 修复这个函数
+        // 游戏结束
         function gameOver() {
-            console.log("游戏结束被调用，当前生命值:", lives); // 调试信息
+            console.log("游戏结束被调用，当前生命值:", lives);
             
             // 立即停止游戏循环
             if (gameInterval) {
@@ -651,7 +778,7 @@
             }
             
             gameActive = false;
-            lives = 0; // 确保生命值为0
+            lives = 0;
             
             // 更新按钮状态
             startGameBtn.disabled = false;
@@ -692,7 +819,7 @@
             }
         }
         
-        // 键盘控制
+        // 键盘控制（电脑端）
         document.addEventListener('keydown', (e) => {
             if (!gameActive || gamePaused) return;
             
@@ -719,13 +846,52 @@
             }
         });
         
-        // 按钮事件 - 修复开始游戏按钮逻辑
+        // 移动端触摸控制
+        function initMobileControls() {
+            // 左按钮
+            leftBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                leftPressed = true;
+            });
+            
+            leftBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                leftPressed = false;
+            });
+            
+            // 右按钮
+            rightBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                rightPressed = true;
+            });
+            
+            rightBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                rightPressed = false;
+            });
+            
+            // 加速按钮
+            boostBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (!boostActive && gameActive && !gamePaused) {
+                    boostActive = true;
+                    boostTime = 3;
+                }
+            });
+            
+            // 防止按钮的默认行为
+            [leftBtn, rightBtn, boostBtn].forEach(btn => {
+                btn.addEventListener('contextmenu', (e) => e.preventDefault());
+                btn.style.webkitUserSelect = 'none';
+                btn.style.userSelect = 'none';
+            });
+        }
+        
+        // 按钮事件
         startGameBtn.addEventListener('click', function() {
             if (lives <= 0) {
-                // 如果生命值为0，重新初始化游戏
                 initGame();
             } else {
-                // 否则开始新游戏
                 startGame();
             }
         });
@@ -803,37 +969,6 @@
             });
         }
         
-        // 更新障碍物
-        function updateObstacles() {
-            for (let i = obstacles.length - 1; i >= 0; i--) {
-                const obstacle = obstacles[i];
-                obstacle.y += obstacle.speed;
-                obstacle.rotation += obstacle.rotationSpeed;
-                
-                // 碰撞检测
-                const distance = Math.sqrt(
-                    Math.pow(boatX - obstacle.x, 2) + Math.pow(boatY - obstacle.y, 2)
-                );
-                
-                if (distance < 30 + obstacle.radius) {
-                    lives -= obstacle.damage;
-                    createExplosion(obstacle.x, obstacle.y, obstacle.color);
-                    obstacles.splice(i, 1);
-                    
-                    if (lives <= 0) {
-                        gameOver();
-                        return;
-                    }
-                    continue;
-                }
-                
-                // 移除超出屏幕的障碍物
-                if (obstacle.y > canvas.height + 50) {
-                    obstacles.splice(i, 1);
-                }
-            }
-        }
-        
         // 更新风景点
         function updateScenery() {
             for (let i = scenery.length - 1; i >= 0; i--) {
@@ -896,10 +1031,9 @@
                     break;
                 case 'boost':
                     boostActive = true;
-                    boostTime = 3; // 3秒加速
+                    boostTime = 3;
                     break;
                 case 'shield':
-                    // 护盾效果 - 暂时免疫伤害
                     createShieldEffect();
                     break;
             }
@@ -967,53 +1101,34 @@
         
         // 更新难度
         function updateDifficulty() {
-            // 根据距离增加难度
             difficultyLevel = Math.floor(distance / 500) + 1;
             currentSpeed = 3 + difficultyLevel * 0.5;
             obstacleFrequency = Math.max(0.5, 1.5 - difficultyLevel * 0.1);
             
-            // 更新难度显示
             const difficultyNames = ['简单', '普通', '困难', '专家', '大师'];
             difficultyElement.textContent = difficultyNames[Math.min(difficultyLevel - 1, 4)] || '极限';
         }
         
         // 绘制游戏
         function drawGame() {
-            // 清空画布
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // 绘制背景 - 黄河
             drawRiverBackground();
-            
-            // 绘制粒子效果
             drawParticles();
-            
-            // 绘制障碍物
             drawObstacles();
-            
-            // 绘制风景点
             drawScenery();
-            
-            // 绘制能量道具
             drawPowerUps();
-            
-            // 绘制船只
             drawBoat();
-            
-            // 绘制UI信息
             drawUI();
         }
         
         // 绘制黄河背景
         function drawRiverBackground() {
-            // 天空
             const skyGradient = ctx.createLinearGradient(0, 0, 0, 150);
             skyGradient.addColorStop(0, '#1a5276');
             skyGradient.addColorStop(1, '#2980b9');
             ctx.fillStyle = skyGradient;
             ctx.fillRect(0, 0, canvas.width, 150);
             
-            // 黄河
             const riverGradient = ctx.createLinearGradient(0, 150, 0, canvas.height);
             riverGradient.addColorStop(0, '#2980b9');
             riverGradient.addColorStop(0.6, '#5499c7');
@@ -1021,7 +1136,6 @@
             ctx.fillStyle = riverGradient;
             ctx.fillRect(0, 150, canvas.width, canvas.height - 150);
             
-            // 黄河波纹
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
             ctx.lineWidth = 1.5;
             const time = Date.now() * 0.002;
@@ -1033,7 +1147,6 @@
                 ctx.stroke();
             }
             
-            // 两岸景色
             ctx.fillStyle = '#8B4513';
             ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
             ctx.fillStyle = '#228B22';
@@ -1059,13 +1172,10 @@
                 ctx.save();
                 ctx.translate(obstacle.x, obstacle.y);
                 ctx.rotate(obstacle.rotation);
-                
-                // 绘制emoji障碍物
                 ctx.font = `${obstacle.radius * 1.5}px Arial`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(obstacle.emoji, 0, 0);
-                
                 ctx.restore();
             });
         }
@@ -1074,17 +1184,13 @@
         function drawScenery() {
             scenery.forEach(item => {
                 if (item.collected) return;
-                
                 ctx.save();
                 ctx.translate(item.x, item.y);
                 ctx.rotate(item.rotation);
-                
-                // 绘制emoji风景点
                 ctx.font = `${item.radius * 1.5}px Arial`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(item.emoji, 0, 0);
-                
                 ctx.restore();
             });
         }
@@ -1093,17 +1199,13 @@
         function drawPowerUps() {
             powerUps.forEach(powerUp => {
                 if (powerUp.collected) return;
-                
                 ctx.save();
                 ctx.translate(powerUp.x, powerUp.y);
                 ctx.rotate(powerUp.rotation);
-                
-                // 绘制emoji能量道具
                 ctx.font = `${powerUp.radius * 1.5}px Arial`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(powerUp.emoji, 0, 0);
-                
                 ctx.restore();
             });
         }
@@ -1113,17 +1215,14 @@
             ctx.save();
             ctx.translate(boatX, boatY);
             
-            // 船体
             ctx.fillStyle = '#8B4513';
             ctx.beginPath();
             ctx.ellipse(0, 0, 25, 12, 0, 0, Math.PI * 2);
             ctx.fill();
             
-            // 船舱
             ctx.fillStyle = '#A52A2A';
             ctx.fillRect(-15, -15, 30, 10);
             
-            // 船帆 - 根据加速状态改变颜色
             ctx.fillStyle = boostActive ? '#ff6b6b' : '#FFFFFF';
             ctx.beginPath();
             ctx.moveTo(0, -15);
@@ -1132,7 +1231,6 @@
             ctx.closePath();
             ctx.fill();
             
-            // 船帆条纹
             ctx.strokeStyle = boostActive ? '#ffffff' : '#FF4444';
             ctx.lineWidth = 1;
             ctx.beginPath();
@@ -1142,7 +1240,6 @@
             ctx.lineTo(10, -32);
             ctx.stroke();
             
-            // 加速效果
             if (boostActive) {
                 ctx.fillStyle = 'rgba(255, 107, 107, 0.6)';
                 ctx.beginPath();
@@ -1165,7 +1262,6 @@
             ctx.fillText(`距离: ${Math.floor(distance)}m`, 10, 75);
             ctx.fillText(`难度: ${difficultyElement.textContent}`, 10, 100);
             
-            // 绘制生命值图标
             for (let i = 0; i < lives; i++) {
                 ctx.fillStyle = '#ff4444';
                 ctx.beginPath();
@@ -1173,7 +1269,6 @@
                 ctx.fill();
             }
             
-            // 绘制加速条
             if (boostActive) {
                 ctx.fillStyle = '#2196f3';
                 ctx.fillRect(canvas.width - 120, 20, 100 * (boostTime / 3), 15);
@@ -1189,73 +1284,8 @@
             distanceElement.textContent = `${Math.floor(distance)}m`;
         }
         
-        // 游戏结束
-        function gameOver() {
-            gameActive = false;
-            clearInterval(gameInterval);
-            startGameBtn.disabled = false;
-            pauseBtn.disabled = true;
-            
-            gameResult.innerHTML = `
-                <div class="warning-message">
-                    💥 漂流结束！<br>
-                    最终分数: ${score} | 漂流距离: ${Math.floor(distance)}m | 难度: ${difficultyElement.textContent}<br>
-                    <small>点击"开始漂流"再次挑战黄河！</small>
-                </div>
-            `;
-        }
-        
-        // 暂停游戏
-        function pauseGame() {
-            gamePaused = !gamePaused;
-            pauseBtn.textContent = gamePaused ? '继续游戏' : '暂停游戏';
-            
-            if (gamePaused) {
-                gameResult.innerHTML = `
-                    <div class="info-message">
-                        游戏已暂停
-                    </div>
-                `;
-            } else {
-                gameResult.innerHTML = `
-                    <div class="info-message">
-                        游戏继续！
-                    </div>
-                `;
-            }
-        }
-        
-        // 键盘控制
-        document.addEventListener('keydown', (e) => {
-            if (!gameActive || gamePaused) return;
-            
-            switch(e.key) {
-                case 'ArrowLeft':
-                    boatVelocityX = -boatSpeed;
-                    break;
-                case 'ArrowRight':
-                    boatVelocityX = boatSpeed;
-                    break;
-                case ' ':
-                case 'Spacebar':
-                    if (!boostActive) {
-                        boostActive = true;
-                        boostTime = 3;
-                    }
-                    break;
-            }
-        });
-        
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                boatVelocityX = 0;
-            }
-        });
-        
-        // 按钮事件
-        startGameBtn.addEventListener('click', startGame);
-        pauseBtn.addEventListener('click', pauseGame);
-        restartBtn.addEventListener('click', initGame);
+        // 初始化移动端控制
+        initMobileControls();
         
         // 初始化游戏
         initGame();
