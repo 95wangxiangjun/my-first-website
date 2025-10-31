@@ -447,112 +447,72 @@
       /* 平板保持和桌面一样的设置 */
     }
     
-    /* 手机端 (768px 及以下) */
-    @media (max-width: 768px) {
-      .link-game-container {
-        width: 400px;    /* 手机游戏区域宽度 */
-        height: 400px;   /* 手机游戏区域高度 */
-      }
-      
-      .game-area table#game .game-row td {
-        width: 40px;     /* 手机方块宽度 */
-        height: 40px;    /* 手机方块高度 */
-      }
-      
-      .game-area table#game .game-row td .pic-box {
-        width: 40px;     /* 手机方块容器宽度 */
-        height: 40px;    /* 手机方块容器高度 */
-        font-size: 15px; /* 手机图标字体大小 */
-      }
-      
-      .game-area table#game .game-row td .pic-box.active {
-        width: 40px;
-        height: 40px;
-      }
-      
-      /* 手机端游戏结束提示变小 */
-      .game-over {
-        width: 400px;
-        height: 400px;
-      }
-      
-      .game-over h2 {
-        font-size: 40px;
-        margin-bottom: 20px;
-      }
-      
-      .game-over .current-score {
-        font-size: 32px;
-        margin: 15px 0;
-      }
-      
-      .game-over .history-score {
-        font-size: 18px;
-        margin: 8px 0;
-      }
-      
-      .replay-btn {
-        width: 160px;
-        height: 50px;
-        font-size: 20px;
-        margin: 20px auto;
-      }
-      
-      /* 调整游戏信息栏在手机端的显示 */
-      .game-info-bar {
-        flex-direction: column;
-        gap: 0.8rem;
-        padding: 0.8rem;
-      }
-      
-      .game-stats {
-        gap: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      
-      .stat-item {
-        min-width: 40px;
-      }
-    }
-    
-    /* 小手机端 (480px 及以下) */
-    @media (max-width: 480px) {
-      .link-game-container {
-        width: 95vw;
-        height: 85vh;
-        max-width: 400px;
-        max-height: 400px;
-      }
-      
-      .game-info-bar {
-        padding: 0.6rem;
-      }
-      
-      .game-stats {
-        gap: 0.5rem;
-      }
-      
-      .stat-label {
-        font-size: 0.8rem;
-      }
-      
-      .stat-value {
-        font-size: 1.2rem;
-      }
-    }
-    /* 修复表格行间距问题 */
-.game-area table#game {
-  border: 0 !important;
-  border-spacing: 0 !important;
-  border-collapse: collapse !important;
+    /* 手机端只修改尺寸，其他样式保持和电脑端相同 */
+@media (max-width: 768px) {
+  .link-game-container {
+    width: 400px;
+    height: 400px;
+  }
+  
+  .game-area table#game .game-row {
+    height: 40px;
+  }
+  
+  .game-area table#game .game-row td {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .game-area table#game .game-row td .pic-box {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+  
+  .game-area table#game .game-row td .pic-box.active {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .game-area #canvas {
+    width: 400px;
+    height: 400px;
+  }
+  
+  .game-over {
+    width: 400px;
+    height: 400px;
+  }
+  
+  /* 保持其他所有样式不变，只调整字体大小以适应较小屏幕 */
+  .game-over h2 {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+  
+  .game-over .current-score {
+    font-size: 32px;
+  }
+  
+  .game-over .history-score {
+    font-size: 18px;
+  }
+  
+  .replay-btn {
+    width: 160px;
+    height: 50px;
+    font-size: 20px;
+  }
 }
 
-.game-area table#game tr,
-.game-area table#game td {
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0;
+/* 小手机端调整 */
+@media (max-width: 480px) {
+  .link-game-container {
+    width: 95vw;
+    height: 95vw;
+    max-width: 400px;
+    max-height: 400px;
+  }
 }
   </style>
 </head>
