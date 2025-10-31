@@ -2161,6 +2161,39 @@ canvas {
     font-size: 11px;
     white-space: nowrap;
 }
+@media (max-width: 768px) {
+    .marker-dot {
+        font-size: 20px; /* 缩小图标 */
+    }
+
+    .marker-label {
+        font-size: 10px; /* 缩小文字 */
+        top: 22px; /* 调整位置适配小图标 */
+        padding: 1px 6px; /* 减小内边距 */
+    }
+}
+
+/* 手机设备适配 */
+@media (max-width: 480px) {
+    .marker-dot {
+        font-size: 15px; /* 进一步缩小图标 */
+    }
+
+    .marker-label {
+        font-size: 7px; /* 进一步缩小文字 */
+        top: 18px;
+        padding: 1px 5px;
+    }
+
+    /* 可选：在极小屏幕上点击区域保持足够大 */
+    .location-marker {
+        transform-origin: center;
+    }
+
+        .location-marker:hover {
+            transform: translate(-50%, -50%) scale(1.4); /* 悬停时放大更明显 */
+        }
+}
 
 .location-detail {
     margin-top: 30px;
@@ -3007,4 +3040,63 @@ canvas {
 
 [data-theme="light"] .stat-item {
     background: rgba(0,0,0,0.03);
+}
+/* 响应式调整详情展示框中的图片 */
+.carousel-slide {
+    background-size: cover;
+    background-position: center;
+}
+
+/* 针对不同屏幕尺寸优化图片显示 */
+@media (max-width: 768px) {
+    .carousel-container {
+        height: 220px;
+        /* 增加轮播容器内边距为0，避免图片与容器边框有间距 */
+        padding: 0;
+    }
+
+    .location-detail {
+        /* 进一步减小详情框内边距（原10px → 5px） */
+        padding: 5px;
+        /* 进一步减小子元素间距（原10px → 5px） */
+        gap: 5px;
+        /* 可选：移除边框与内容的额外距离 */
+        margin: 0;
+    }
+
+    .detail-content {
+        /* 内容区域内边距进一步缩减（原0 3px → 0 2px） */
+        padding: 0 2px;
+        /* 可选：移除内容块的外部间距 */
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-container {
+        height: 180px;
+        padding: 0; /* 保持轮播容器无内边距 */
+    }
+
+    .location-detail.active {
+        max-height: 500px;
+        /* 超小屏幕下进一步缩减内边距 */
+        padding: 3px;
+        gap: 3px;
+    }
+
+    .detail-content {
+        /* 超小屏幕下内容内边距减至最小 */
+        padding: 0 1px;
+    }
+
+        /* 可选：针对详情内容中的标题/段落进一步缩减间距 */
+        .detail-content h3 {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .detail-content p {
+            margin: 5px 0;
+        }
 }
