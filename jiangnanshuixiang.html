@@ -40,6 +40,7 @@
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid white;
+      background: #64ffda; /* 备用背景色 */
     }
 
     .logo-text {
@@ -48,6 +49,7 @@
       background: linear-gradient(45deg, #64ffda, #4fd3c4);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     
@@ -82,6 +84,7 @@
       background: linear-gradient(45deg, #64ffda, #4fd3c4);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
     .hero-content p {
@@ -92,7 +95,7 @@
     }
     
     .game-container {
-      max-width: 1200px;
+      max-width: 800px;
       margin: 2rem auto;
       padding: 2rem;
       background: rgba(0, 0, 0, 0.3);
@@ -166,14 +169,12 @@
       color: #64ffda;
     }
     
-    /* 连连看游戏容器 */
+    /* 连连看游戏样式 */
     .link-game-container {
       margin: 1.5rem auto;
-      width: 100%;
-      max-width: 720px;
-      height: auto;
-      aspect-ratio: 720/600;
-      background: url('images/jiangnanshuixiang/1.jpg') center/cover;
+      width: 720px;
+      height: 600px;
+      background: #1a2a6c;
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       overflow: hidden;
@@ -191,31 +192,30 @@
       background: rgba(0, 0, 0, 0.7);
       color: white;
       text-align: center;
-      padding: 2rem;
     }
     
     .init-box h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      margin-bottom: 1.5rem;
+      font-size: 48px;
+      margin-bottom: 30px;
       text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
     
     .init-box p {
-      font-size: clamp(1rem, 3vw, 1.2rem);
-      margin-bottom: 2rem;
-      max-width: 90%;
+      font-size: 18px;
+      margin-bottom: 30px;
+      max-width: 80%;
     }
     
     .start-btn {
-      width: clamp(180px, 50vw, 200px);
-      height: clamp(50px, 8vh, 60px);
+      width: 200px;
+      height: 60px;
       margin: 20px auto;
       background: linear-gradient(to right, #64ffda, #4fd3c4);
       border-radius: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      font-size: 24px;
       font-weight: bold;
       cursor: pointer;
       transition: transform 0.3s;
@@ -239,7 +239,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 1rem;
+      padding: 10px;
     }
     
     .game-area table#game {
@@ -247,38 +247,37 @@
       border-collapse: collapse;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 8px;
-      padding: 0.5rem;
-      width: 100%;
-      height: 100%;
-      max-width: 100%;
-      max-height: 100%;
+      padding: 5px;
     }
     
     .game-area table#game .game-row {
-      height: auto;
+      height: 60px;
     }
     
     .game-area table#game .game-row td {
+      width: 60px;
+      height: 60px;
       text-align: center;
       vertical-align: middle;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      position: relative;
     }
     
     .game-area table#game .game-row td .pic-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      line-height: 50px;
+      display: inline-block;
+      width: 60px;
+      height: 60px;
       cursor: pointer;
       background: rgba(255, 255, 255, 0.98);
       border-radius: 6px;
       transition: all 0.2s;
+      font-size: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       padding: 0;
       border: 2px solid rgba(0, 0, 0, 0.2);
       box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      height: 100%;
-      font-size: clamp(1rem, 3vw, 1.5rem);
     }
     
     .game-area table#game .game-row td .pic-box:hover {
@@ -288,66 +287,65 @@
     }
     
     .game-area table#game .game-row td .pic-box.active {
+      width: 54px;
+      height: 54px;
       border-radius: 10px; 
       background: rgba(255, 215, 0, 0.98);
       box-shadow: 0 0 15px gold, inset 0 0 12px rgba(255, 200, 0, 0.6);
       border: 2px solid gold;
-      transform: scale(0.95);
     }
     
     .game-area #canvas {
       position: absolute;
       left: 0;
       top: 0;
-      width: 100%;
-      height: 100%;
+      width: 720px;
+      height: 600px;
       pointer-events: none;
     }
     
     .game-over {
       position: absolute;
       top: 0;
-      width: 100%;
-      height: 100%;
+      width: 720px;
+      height: 600px;
       background: rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       color: white;
-      padding: 2rem;
-      text-align: center;
     }
     
     .game-over h2 {
-      font-size: clamp(2rem, 6vw, 3rem);
-      margin-bottom: 1.5rem;
+      font-size: 60px;
+      margin-bottom: 30px;
       color: #64ffda;
       text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
     }
     
     .game-over .current-score {
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      margin: 1rem 0;
+      font-size: 48px;
+      margin: 20px 0;
       color: #ffcc00;
     }
     
     .game-over .history-score {
-      font-size: clamp(1rem, 3vw, 1.2rem); 
-      margin: 0.5rem 0;
+      font-size: 24px; 
+      margin: 10px 0;
       color: #aaa;
     }
     
     .replay-btn {
-      width: clamp(180px, 50vw, 200px);
-      height: clamp(50px, 8vh, 60px);
-      margin: 1.5rem auto;
+      width: 200px;
+      height: 60px;
+      margin: 30px auto;
       background: linear-gradient(to right, #64ffda, #4fd3c4);
       border-radius: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: clamp(1.2rem, 4vw, 1.5rem);
+      font-size: 24px;
       font-weight: bold;
       cursor: pointer;
       transition: transform 0.3s;
@@ -378,21 +376,18 @@
     .game-controls {
       display: flex;
       gap: 1rem;
-      flex-wrap: wrap;
-      justify-content: center;
     }
     
     .btn {
       background: #64ffda;
       color: #0a192f;
       border: none;
-      padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 3vw, 1.5rem);
+      padding: 12px 24px;
       border-radius: 5px;
       cursor: pointer;
       font-weight: bold;
       transition: all 0.3s ease;
-      font-size: clamp(0.9rem, 2.5vw, 1rem);
-      min-width: 120px;
+      font-size: 1rem;
     }
     
     .btn:hover {
@@ -423,13 +418,11 @@
     .game-instructions h4 {
       color: #64ffda;
       margin-bottom: 1rem;
-      font-size: clamp(1.2rem, 3vw, 1.5rem);
     }
     
     .game-instructions p {
       color: #a8b2d1;
       margin-bottom: 0.5rem;
-      font-size: clamp(0.9rem, 2.5vw, 1rem);
     }
     
     footer {
@@ -445,238 +438,49 @@
     }
     
     /* 响应式设计 */
-    @media (max-width: 1024px) {
-      .game-container {
-        padding: 1.5rem;
-        margin: 1rem auto;
-      }
-      
-      .page-hero {
-        padding: 3rem 1.5rem;
-      }
-      
-      .hero-content h1 {
-        font-size: 2.5rem;
-      }
-    }
-    
     @media (max-width: 768px) {
-      header {
-        padding: 1rem;
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .logo-text {
-        font-size: 1.5rem;
-      }
-      
-      .logo-image {
-        width: 50px;
-        height: 50px;
-      }
-      
-      .page-hero {
-        padding: 2rem 1rem;
-      }
-      
-      .hero-content h1 {
-        font-size: 2rem;
-      }
-      
-      .game-container {
-        padding: 1rem;
-        margin: 0.5rem auto;
+      .link-game-container {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 720/600;
       }
       
       .game-info-bar {
         flex-direction: column;
         gap: 1rem;
-        padding: 1rem;
       }
       
       .game-stats {
         gap: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
       }
       
-      .stat-item {
-        min-width: 80px;
-      }
-      
-      .stat-label {
-        font-size: 0.8rem;
-      }
-      
-      .stat-value {
-        font-size: 1.2rem;
-      }
-      
-      .game-controls {
-        width: 100%;
-      }
-      
-      .btn {
-        flex: 1;
-        min-width: 140px;
-      }
-      
-      .init-box h1 {
-        font-size: 1.8rem;
-      }
-      
-      .init-box p {
-        font-size: 1rem;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .logo-text {
-        font-size: 1.2rem;
-      }
-      
-      nav ul {
-        gap: 0.5rem;
-      }
-      
-      nav a {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.9rem;
-      }
-      
-      .page-hero {
-        padding: 1.5rem 1rem;
-      }
-      
-      .hero-content h1 {
-        font-size: 1.5rem;
-      }
-      
-      .hero-content p {
-        font-size: 1rem;
-      }
-      
-      .game-section h3 {
-        font-size: 1.4rem;
-      }
-      
-      .game-stats {
-        gap: 0.5rem;
-      }
-      
-      .stat-item {
-        min-width: 70px;
-      }
-      
-      .stat-label {
-        font-size: 0.7rem;
-      }
-      
-      .stat-value {
-        font-size: 1rem;
-      }
-      
-      .game-controls {
-        flex-direction: column;
-        width: 100%;
-      }
-      
-      .btn {
-        width: 100%;
-        margin-bottom: 0.5rem;
-      }
-      
-      .game-area {
-        padding: 0.5rem;
-      }
-      
-      .game-area table#game {
-        padding: 0.25rem;
+      .game-area table#game .game-row td {
+        width: 40px;
+        height: 40px;
       }
       
       .game-area table#game .game-row td .pic-box {
-        font-size: 1rem;
-      }
-    }
-    
-    @media (max-width: 360px) {
-      .logo {
-        flex-direction: column;
-        gap: 0.5rem;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
       }
       
-      .game-stats {
-        gap: 0.3rem;
-      }
-      
-      .stat-item {
-        min-width: 60px;
-      }
-      
-      .stat-label {
-        font-size: 0.6rem;
-      }
-      
-      .stat-value {
-        font-size: 0.9rem;
-      }
-    }
-    
-    /* 横屏优化 */
-    @media (max-height: 600px) and (orientation: landscape) {
-      .page-hero {
-        padding: 1rem;
-      }
-      
-      .hero-content h1 {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-      }
-      
-      .game-container {
-        padding: 1rem;
-        margin: 0.5rem auto;
-      }
-      
-      .link-game-container {
-        max-height: 70vh;
-      }
-    }
-    
-    /* 防止文本选择 */
-    .no-select {
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-    
-    /* 触摸设备优化 */
-    @media (hover: none) and (pointer: coarse) {
-      .pic-box:hover {
-        transform: none !important;
-      }
-      
-      .btn:hover {
-        transform: none !important;
-      }
-      
-      .start-btn:hover, .replay-btn:hover {
-        transform: none !important;
+      .game-area table#game .game-row td .pic-box.active {
+        width: 36px;
+        height: 36px;
       }
     }
   </style>
 </head>
-<body class="no-select">
+<body>
   <header>
     <div class="logo">
-      <img src="images/item/item.jpg" alt="方寸屏间，万里河山" class="logo-image">
+      <div class="logo-image"></div>
       <span class="logo-text">方寸屏间，万里河山</span>
     </div>
     <nav>
       <ul>
-        <li><a href="index.html#mountains" class="btn">返回</a></li>
+        <li><a href="#" class="btn">返回</a></li>
       </ul>
     </nav>
   </header>
@@ -698,7 +502,7 @@
         <div class="game-stats">
           <div class="stat-item">
             <div class="stat-label">时间</div>
-            <div class="stat-value time-value">180</div>
+            <div class="stat-value time-value">240</div>
           </div>
           <div class="stat-item">
             <div class="stat-label">关卡</div>
@@ -752,132 +556,63 @@
   
   <footer>
     <p>方寸屏间，万里河山</p>
-    <p>2025武汉大学参赛作品 | <a href="message-board.html">分享你的山河故事</a></p>
+    <p>2025武汉大学参赛作品 | <a href="#">分享你的山河故事</a></p>
   </footer>
 
   <script>
-    // 检测设备类型
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const isTablet = /iPad|Android|Tablet/i.test(navigator.userAgent);
-    
-    // 根据设备类型调整游戏参数
-    function getGameConfig() {
-      if (isMobile) {
-        return {
-          rows: 8,   // 手机端减少行数
-          cols: 8,   // 手机端减少列数
-          level: 0,
-        };
-      } else if (isTablet) {
-        return {
-          rows: 10,  // 平板端适中
-          cols: 10,
-          level: 0,
-        };
-      } else {
-        return {
-          rows: 12,  // 桌面端保持原样
-          cols: 12,
-          level: 0,
-        };
-      }
-    }
-
     // 简化的DOM操作函数
     const $ = (selector) => {
-      if (typeof selector === 'string') {
-        const elements = document.querySelectorAll(selector);
-        return {
-          html: (content) => {
-            elements.forEach(el => {
-              if (content === undefined) return el.innerHTML;
-              el.innerHTML = content;
-            });
-            return elements[0];
-          },
-          text: (content) => {
-            elements.forEach(el => {
-              if (content === undefined) return el.textContent;
-              el.textContent = content;
-            });
-            return elements[0];
-          },
-          addClass: (className) => {
-            elements.forEach(el => el.classList.add(className));
-            return elements[0];
-          },
-          removeClass: (className) => {
-            elements.forEach(el => el.classList.remove(className));
-            return elements[0];
-          },
-          on: (event, handler) => {
-            elements.forEach(el => el.addEventListener(event, handler));
-            return elements[0];
-          },
-          eq: (index) => {
-            if (elements[index]) {
-              return $(elements[index]);
-            }
-            return $('');
-          },
-          click: (handler) => {
-            elements.forEach(el => el.addEventListener('click', handler));
-            return elements[0];
-          },
-          append: (content) => {
-            elements.forEach(el => {
-              if (typeof content === 'string') {
-                el.innerHTML += content;
-              } else {
-                el.appendChild(content);
-              }
-            });
-            return elements[0];
-          },
-          length: elements.length,
-          [0]: elements[0],
-          forEach: (callback) => elements.forEach(callback)
-        };
-      } else if (selector) {
-        // 如果是单个元素
-        return {
-          html: (content) => {
-            if (content === undefined) return selector.innerHTML;
-            selector.innerHTML = content;
-            return selector;
-          },
-          text: (content) => {
-            if (content === undefined) return selector.textContent;
-            selector.textContent = content;
-            return selector;
-          },
-          addClass: (className) => {
-            selector.classList.add(className);
-            return selector;
-          },
-          removeClass: (className) => {
-            selector.classList.remove(className);
-            return selector;
-          },
-          on: (event, handler) => {
-            selector.addEventListener(event, handler);
-            return selector;
-          },
-          click: (handler) => {
-            selector.addEventListener('click', handler);
-            return selector;
-          }
-        };
-      }
+      const elements = document.querySelectorAll(selector);
       return {
-        html: () => '',
-        text: () => '',
-        addClass: () => {},
-        removeClass: () => {},
-        on: () => {},
-        click: () => {},
-        eq: () => $(''),
-        append: () => {}
+        html: (content) => {
+          elements.forEach(el => {
+            if (content === undefined) return el.innerHTML;
+            el.innerHTML = content;
+          });
+          return elements[0];
+        },
+        text: (content) => {
+          elements.forEach(el => {
+            if (content === undefined) return el.textContent;
+            el.textContent = content;
+          });
+          return elements[0];
+        },
+        addClass: (className) => {
+          elements.forEach(el => el.classList.add(className));
+          return elements[0];
+        },
+        removeClass: (className) => {
+          elements.forEach(el => el.classList.remove(className));
+          return elements[0];
+        },
+        on: (event, handler) => {
+          elements.forEach(el => el.addEventListener(event, handler));
+          return elements[0];
+        },
+        eq: (index) => {
+          if (elements[index]) {
+            return $(elements[index]);
+          }
+          return null;
+        },
+        click: (handler) => {
+          elements.forEach(el => el.addEventListener('click', handler));
+          return elements[0];
+        },
+        append: (content) => {
+          elements.forEach(el => {
+            if (typeof content === 'string') {
+              el.innerHTML += content;
+            } else {
+              el.appendChild(content);
+            }
+          });
+          return elements[0];
+        },
+        length: elements.length,
+        [0]: elements[0],
+        forEach: (callback) => elements.forEach(callback)
       };
     };
 
@@ -916,7 +651,7 @@
         this.pictures = [];
         this.linkPictures = [];
         this.preClickInfo = null;
-        this.leftTime = 180; // 修改为3分钟（180秒）
+        this.leftTime = 240; // 修改为4分钟（240秒）
         this.points = [];
         this.isGameOver = false;
         
@@ -944,7 +679,7 @@
       nextLevel: function () {
         clearInterval(this.timmer);
         this.level++;
-        this.leftTime = 180 + this.level * 10; // 修改为3分钟（180秒）
+        this.leftTime = 240 + this.level * 10; // 修改为4分钟（240秒）
         this.reset();
       },
 
@@ -971,13 +706,13 @@
       },
 
       getHistoryScore: function () {
-        return window.localStorage.getItem('highestScore') || 0;
+        return parseInt(window.localStorage.getItem('highestScore')) || 0;
       },
 
       setHistoryScore: function (score) {
         var highestScore = this.getHistoryScore('highestScore');
         if (score > highestScore) {
-          window.localStorage.setItem('highestScore', score);
+          window.localStorage.setItem('highestScore', score.toString());
         }
       },
 
@@ -1374,8 +1109,8 @@
         
         // 使用事件委托处理图标点击
         $('#game').on('click', function (e) {
-          var target = e.target.closest('.pic-box');
-          if (target && !target.classList.contains('empty')) {
+          var target = e.target;
+          if (target.classList.contains('pic-box') && !target.classList.contains('empty')) {
             var data = {
               row: target.dataset.row,
               col: target.dataset.col,
@@ -1418,7 +1153,11 @@
         console.log('开始游戏点击');
         $('.init-box').addClass('hidden');
         $('.game-box').removeClass('hidden');
-        var gameConfig = getGameConfig();
+        var gameConfig = {
+          rows: 12,
+          cols: 12,
+          level: 0,
+        };
         var game = new LinkGame(gameConfig);
         game.init();
       });
