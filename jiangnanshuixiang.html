@@ -225,9 +225,12 @@
       transition: transform 0.3s;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
       color: #0a192f;
+      /* 添加触摸反馈 */
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     
-    .start-btn:hover {
+    .start-btn:hover, .start-btn:active {
       transform: scale(1.05);
     }
     
@@ -282,9 +285,13 @@
       padding: 0;
       border: 2px solid rgba(0, 0, 0, 0.2);
       box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+      /* 添加触摸优化 */
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     
-    .game-area table#game .game-row td .pic-box:hover {
+    .game-area table#game .game-row td .pic-box:hover, 
+    .game-area table#game .game-row td .pic-box:active {
       background: rgba(255, 255, 255, 1);
       transform: scale(1.05);
       box-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
@@ -354,9 +361,12 @@
       cursor: pointer;
       transition: transform 0.3s;
       color: #0a192f;
+      /* 添加触摸优化 */
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     
-    .replay-btn:hover {
+    .replay-btn:hover, .replay-btn:active {
       transform: scale(1.05);
     }
     
@@ -392,9 +402,12 @@
       font-weight: bold;
       transition: all 0.3s ease;
       font-size: 1rem;
+      /* 添加触摸优化 */
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     
-    .btn:hover {
+    .btn:hover, .btn:active {
       background: #4fd3c4;
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
@@ -406,7 +419,7 @@
       border: 1px solid #64ffda;
     }
     
-    .btn-secondary:hover {
+    .btn-secondary:hover, .btn-secondary:active {
       background: rgba(100, 255, 218, 0.1);
     }
     
@@ -1407,21 +1420,55 @@
     // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', function() {
       console.log('页面加载完成');
-      $('.start-btn').on('click touchstart', function (e) {
-        if (e.type === 'touchstart') {
+      
+      // 修复开始游戏按钮的触摸事件
+      const startBtn = document.querySelector('.start-btn');
+      if (startBtn) {
+        // 添加点击事件
+        startBtn.addEventListener('click', function(e) {
+          console.log('开始游戏点击');
+          document.querySelector('.init-box').classList.add('hidden');
+          document.querySelector('.game-box').classList.remove('hidden');
+          var gameConfig = {
+            rows: 12,
+            cols: 12,
+            level: 0,
+          };
+          var game = new LinkGame(gameConfig);
+          game.init();
+        });
+        
+        // 添加触摸事件
+        startBtn.addEventListener('touchstart', function(e) {
           e.preventDefault();
-        }
-        console.log('开始游戏点击');
-        $('.init-box').addClass('hidden');
-        $('.game-box').removeClass('hidden');
-        var gameConfig = {
-          rows: 12,
-          cols: 12,
-          level: 0,
-        };
-        var game = new LinkGame(gameConfig);
-        game.init();
-      });
+          console.log('开始游戏触摸');
+          document.querySelector('.init-box').classList.add('hidden');
+          document.querySelector('.game-box').classList.remove('hidden');
+          var gameConfig = {
+            rows: 12,
+            cols: 12,
+            level: 0,
+          };
+          var game = new LinkGame(gameConfig);
+          game.init();
+        });
+      }
+      
+      // 修复其他按钮的触摸事件
+      const newGameBtn = document.getElementById('newGameBtn');
+      if (newGameBtn) {
+        newGameBtn.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          document.querySelector('.game-over').classList.add('hidden');
+          var gameConfig = {
+            rows: 12,
+            cols: 12,
+            level: 0,
+          };
+          var game = new LinkGame(gameConfig);
+          game.init();
+        });
+      }
     });
   </script>
 </body>
