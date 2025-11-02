@@ -270,6 +270,7 @@ nav a:hover::after {
         transform: translateX(0);
     }
 }
+
 /* 确保文字内容清晰突出 */
 .hero-content {
     position: relative;
@@ -313,25 +314,11 @@ nav a:hover::after {
     letter-spacing: normal !important;
 }
 
-
-/* 响应式设计 */
-@media (max-width: 1200px) {
+/* 平板适配 (768px - 1024px) */
+@media (max-width: 1024px) {
     .hero-carousel-image {
-        width: 450px;
-        height: 270px;
-    }
-    
-    @keyframes heroScroll {
-        100% {
-            transform: translateX(calc(-450px - 30px));
-        }
-    }
-}
-
-@media (max-width: 992px) {
-    .hero-carousel-image {
-        width: 400px;
-        height: 240px;
+        width: 600px;
+        height: 450px;
     }
     
     .hero-carousel {
@@ -341,19 +328,20 @@ nav a:hover::after {
     
     @keyframes heroScroll {
         100% {
-            transform: translateX(calc(-400px - 25px));
+            transform: translateX(calc(-600px * 7 - 25px * 7));
         }
     }
     
     .hero-content h1 {
-        font-size: 3.5rem !important;
+        font-size: 3.2rem !important;
     }
 }
 
+/* 小平板适配 (600px - 768px) */
 @media (max-width: 768px) {
     .hero-carousel-image {
-        width: 350px;
-        height: 210px;
+        width: 450px;
+        height: 337px;
     }
     
     .hero-carousel {
@@ -363,26 +351,27 @@ nav a:hover::after {
     
     @keyframes heroScroll {
         100% {
-            transform: translateX(calc(-350px - 20px));
+            transform: translateX(calc(-450px * 7 - 20px * 7));
         }
     }
     
     .hero-content h1 {
-        font-size: 3rem !important;
+        font-size: 2.8rem !important;
+        margin-bottom: 1.5rem;
     }
     
-    .hero-controls {
-        bottom: 20px;
-        right: 20px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
+    .hero-content {
+        padding: 0 1.5rem;
     }
 }
 
-@media (max-width: 576px) {
+/* 手机适配 (425px - 600px) */
+@media (max-width: 600px) {
     .hero-carousel-image {
-        width: 300px;
-        height: 180px;
+        width: 320px;
+        height: 240px;
+        border-radius: 15px;
+        border-width: 3px;
     }
     
     .hero-carousel {
@@ -392,12 +381,49 @@ nav a:hover::after {
     
     @keyframes heroScroll {
         100% {
-            transform: translateX(calc(-300px - 15px));
+            transform: translateX(calc(-320px * 7 - 15px * 7));
         }
     }
     
     .hero-content h1 {
-        font-size: 2.5rem !important;
+        font-size: 2.2rem !important;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-content {
+        padding: 0 1rem;
+        max-width: 90%;
+    }
+}
+
+/* 小手机适配 (小于425px) */
+@media (max-width: 425px) {
+    .hero-carousel-image {
+        width: 280px;
+        height: 210px;
+        border-radius: 12px;
+        border-width: 2px;
+    }
+    
+    .hero-carousel {
+        gap: 12px;
+        padding: 0 12px;
+    }
+    
+    @keyframes heroScroll {
+        100% {
+            transform: translateX(calc(-280px * 7 - 12px * 7));
+        }
+    }
+    
+    .hero-content h1 {
+        font-size: 1.8rem !important;
+        margin-bottom: 0.8rem;
+    }
+    
+    .hero-content {
+        padding: 0 0.8rem;
+        max-width: 95%;
     }
 }
 
@@ -412,7 +438,6 @@ nav a:hover::after {
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
     z-index: 1;
 }
-
 .btn {
     display: inline-block;
     padding: 1rem 2.5rem;
