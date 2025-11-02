@@ -1,3 +1,146 @@
+// 搜索功能
+function initRiversSearch() {
+    const searchInput = document.getElementById('riversSearch');
+    const searchResults = document.getElementById('riversResults');
+    const riversGrid = document.getElementById('riversGrid');
+    
+    if (!searchInput || !riversGrid) {
+        console.log('搜索元素未找到，等待重新初始化...');
+        setTimeout(initRiversSearch, 100);
+        return;
+    }
+    
+    // 创建无结果提示
+    const noResults = document.createElement('div');
+    noResults.className = 'no-results';
+    noResults.textContent = '未找到匹配的水域';
+    noResults.style.display = 'none';
+    riversGrid.parentNode.appendChild(noResults);
+
+    // 保存原始内容
+    const originalContents = {};
+    
+    // 初始化原始内容
+    function initOriginalContents() {
+        const cards = document.querySelectorAll('.river-card');
+        console.log('初始化水域卡片数量:', cards.length);
+        
+        cards.forEach((card, index) => {
+            const nameElement = card.querySelector('.river-name');
+            if (nameElement) {
+                originalContents[index] = nameElement.innerHTML;
+            }
+        });
+    }
+
+    // 高亮文本函数
+    function highlightText(text, searchTerm) {
+        if (!searchTerm) return text;
+        const regex = new RegExp(searchTerm, 'gi');
+        return text.replace(regex, match => `<span class="highlight">${match}</span>`);
+    }
+
+    // 执行搜索
+    function performSearch(searchTerm) {
+        searchTerm = searchTerm.toLowerCase().trim();
+        let matchCount = 0;
+        
+        // 重置所有内容
+        resetAllContent();
+        
+        if (!searchTerm) {
+            searchResults.textContent = '';
+            noResults.style.display = 'none';
+            return;
+        }
+
+        // 搜索水域
+        const cards = document.querySelectorAll('.river-card');
+        
+        cards.forEach((card, index) => {
+            const river = riversData[index];
+            if (!river) return;
+
+            const nameElement = card.querySelector('.river-name');
+            if (!nameElement) return;
+
+            // 检查是否匹配
+            const matches = river.name.toLowerCase().includes(searchTerm) ||
+                           river.location.toLowerCase().includes(searchTerm) ||
+                           river.description.toLowerCase().includes(searchTerm) ||
+                           (river.features && river.features.some(feature => feature.toLowerCase().includes(searchTerm))) ||
+                           river.type.toLowerCase().includes(searchTerm);
+
+            if (matches) {
+                card.style.display = 'block';
+                card.style.opacity = '1';
+                
+                // 高亮匹配文本
+                nameElement.innerHTML = highlightText(river.name, searchTerm);
+                
+                matchCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // 显示搜索结果
+        if (matchCount > 0) {
+            searchResults.textContent = `找到 ${matchCount} 个匹配的水域`;
+            noResults.style.display = 'none';
+            
+            // 滚动到第一个匹配项
+            scrollToFirstMatch();
+        } else {
+            searchResults.textContent = '';
+            noResults.style.display = 'block';
+        }
+    }
+
+    // 重置所有内容
+    function resetAllContent() {
+        const cards = document.querySelectorAll('.river-card');
+        cards.forEach((card, index) => {
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            
+            const nameElement = card.querySelector('.river-name');
+            if (nameElement && originalContents[index]) {
+                nameElement.innerHTML = originalContents[index];
+            }
+        });
+    }
+
+    // 滚动到第一个匹配项
+    function scrollToFirstMatch() {
+        const firstMatch = document.querySelector('.river-card[style*="display: block"]');
+        if (firstMatch) {
+            firstMatch.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+    }
+
+    // 事件监听
+    searchInput.addEventListener('input', function() {
+        performSearch(this.value);
+    });
+
+    // 点击搜索图标也触发搜索
+    const searchIcon = document.querySelector('.search-icon');
+    if (searchIcon) {
+        searchIcon.addEventListener('click', function() {
+            performSearch(searchInput.value);
+        });
+    }
+
+    // 初始化原始内容 - 等待卡片生成完成
+    setTimeout(() => {
+        initOriginalContents();
+        console.log('水域搜索功能初始化完成');
+    }, 500);
+}
 // 水域数据 - 12个水域景点，每个包含多张照片
 const riversData = [
     {
@@ -390,8 +533,18 @@ let carouselState = {
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('开始初始化水域页面...');
+    
+    // 先初始化网格
     initRiversGrid();
+    
+    // 然后初始化详情展示
     initDetailShowcase();
+    
+    // 最后初始化搜索功能
+    setTimeout(() => {
+        initRiversSearch();
+    }, 300);
     
     // 导航栏滚动效果
     window.addEventListener('scroll', function() {

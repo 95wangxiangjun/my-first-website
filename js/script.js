@@ -1,3 +1,57 @@
+// 分类标签功能
+function initCategoryTags() {
+    const categoryTags = document.querySelectorAll('.category-tag');
+    
+    categoryTags.forEach(tag => {
+        tag.addEventListener('click', function() {
+            const category = this.getAttribute('data-category');
+            navigateToCategory(category);
+        });
+        
+        // 添加键盘支持
+        tag.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                const category = this.getAttribute('data-category');
+                navigateToCategory(category);
+            }
+        });
+        
+        // 设置可访问性
+        tag.setAttribute('tabindex', '0');
+        tag.setAttribute('role', 'button');
+        tag.setAttribute('aria-label', `查看${getCategoryName(category)}详情`);
+    });
+}
+
+// 跳转到分类页面
+function navigateToCategory(category) {
+    const pageMap = {
+        'mountains': 'mountains.html?from=category-tags',
+        'rivers': 'rivers.html?from=category-tags',
+        'regions': 'regions.html?from=category-tags'
+    };
+    
+    const page = pageMap[category];
+    if (page) {
+        // 添加点击反馈
+        const tag = document.querySelector(`[data-category="${category}"]`);
+        tag.style.transform = 'scale(0.95)';
+        
+        setTimeout(() => {
+            window.location.href = page;
+        }, 150);
+    }
+}
+
+// 获取分类名称
+function getCategoryName(category) {
+    const names = {
+        'mountains': '名山峻岭',
+        'rivers': '江河湖海',
+        'regions': '区域特色'
+    };
+    return names[category] || category;
+}
 // 主题切换功能 - 修复版本
 function initTheme() {
     const themeSwitch = document.getElementById('theme-checkbox');
@@ -69,7 +123,7 @@ const locationData = {
         },
         3: {
             title: "珠穆朗玛峰",
-            image: "images/zumulangma/1.jpg",
+            image: "images/zumulangma/8.jpg",
             description: "珠穆朗玛峰是世界海拔最高的山峰，被誉为'地球之巅'。",
             details: `
                 <h3>详细信息</h3>
@@ -729,6 +783,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('quiz')) {
         new MountainRiverQuiz();
     }
+    initCategoryTags();
     initTheme();
     // 模态框功能
     const modal = document.getElementById('infoModal');
@@ -3320,5 +3375,249 @@ function initScrollProgress() {
         const docHeight = document.documentElement.scrollHeight - winHeight;
         const scrolled = (window.scrollY / docHeight) * 100;
         progressBar.style.width = scrolled + '%';
+    });
+}
+// 增强版平滑滚动（包含分类标签）
+function initEnhancedSmoothScroll() {
+    // 为所有锚点链接添加平滑滚动（包括开始探索按钮）
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                
+                const targetId = href;
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    // 计算目标位置（考虑导航栏高度）
+                    const navHeight = document.querySelector('header').offsetHeight;
+                    let targetPosition;
+                    
+                    // 如果是分类标签，稍微向上偏移以显示完整区域
+                    if (targetId === '#category-tags') {
+                        targetPosition = targetElement.offsetTop - navHeight - 40;
+                    } else {
+                        targetPosition = targetElement.offsetTop - navHeight - 20;
+                    }
+                    
+                    // 平滑滚动
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 更新 URL
+                    history.pushState(null, null, targetId);
+                    
+                    // 添加视觉反馈（如果是导航链接）
+                    if (this.closest('nav')) {
+                        highlightActiveNavLink(targetId);
+                    }
+                }
+            }
+        });
+    });
+    
+    // 高亮当前活动的导航链接
+    function highlightActiveNavLink(activeId) {
+        document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        const activeLink = document.querySelector(`nav a[href="${activeId}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    }
+    
+    // 监听滚动，更新活动链接
+    window.addEventListener('scroll', function() {
+        const sections = document.querySelectorAll('section[id]');
+        const navHeight = document.querySelector('header').offsetHeight;
+        
+        let currentSection = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - navHeight - 100;
+            const sectionHeight = section.clientHeight;
+            
+            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                currentSection = '#' + section.getAttribute('id');
+            }
+        });
+        
+        highlightActiveNavLink(currentSection);
+    });
+}
+
+// 在页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    initEnhancedSmoothScroll();
+    initCategoryTags(); // 确保分类标签功能也初始化
+    // 其他初始化代码...
+});
+// 英雄区域轮播控制
+class HeroCarousel {
+    constructor() {
+        this.carousel = document.getElementById('heroCarousel');
+        this.pauseBtn = document.getElementById('pauseBtn');
+        this.speedBtns = document.querySelectorAll('.speed-btn[data-speed]');
+        this.isPlaying = true;
+        this.currentSpeed = 'normal';
+        
+        this.initControls();
+        this.addHoverEffects();
+    }
+    
+    initControls() {
+        // 暂停/播放按钮
+        this.pauseBtn.addEventListener('click', () => {
+            this.togglePlay();
+        });
+        
+        // 速度控制按钮
+        this.speedBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const speed = e.target.getAttribute('data-speed');
+                this.setSpeed(speed);
+                
+                // 更新按钮状态
+                this.speedBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+            });
+        });
+        
+        // 鼠标悬停暂停
+        this.carousel.addEventListener('mouseenter', () => {
+            this.pause();
+        });
+        
+        this.carousel.addEventListener('mouseleave', () => {
+            if (this.isPlaying) {
+                this.play();
+            }
+        });
+    }
+    
+    addHoverEffects() {
+        // 触摸设备支持
+        this.carousel.addEventListener('touchstart', () => {
+            this.pause();
+        });
+        
+        this.carousel.addEventListener('touchend', () => {
+            if (this.isPlaying) {
+                setTimeout(() => this.play(), 2000);
+            }
+        });
+    }
+    
+    pause() {
+        this.carousel.classList.add('hero-carousel-paused');
+        this.isPlaying = false;
+        this.pauseBtn.textContent = '播放';
+    }
+    
+    play() {
+        this.carousel.classList.remove('hero-carousel-paused');
+        this.isPlaying = true;
+        this.pauseBtn.textContent = '暂停';
+    }
+    
+    setSpeed(speed) {
+        // 移除所有速度类
+        this.carousel.classList.remove('hero-carousel-slow', 'hero-carousel-fast');
+        
+        switch(speed) {
+            case 'slow':
+                this.carousel.classList.add('hero-carousel-slow');
+                break;
+            case 'fast':
+                this.carousel.classList.add('hero-carousel-fast');
+                break;
+        }
+        this.currentSpeed = speed;
+    }
+    
+    togglePlay() {
+        if (this.isPlaying) {
+            this.pause();
+        } else {
+            this.play();
+        }
+    }
+}
+
+// 初始化英雄区域轮播
+document.addEventListener('DOMContentLoaded', function() {
+    const heroCarousel = new HeroCarousel();
+    
+    // 键盘控制
+    document.addEventListener('keydown', function(e) {
+        if (e.code === 'Space') {
+            e.preventDefault();
+            heroCarousel.togglePlay();
+        }
+    });
+});
+
+// 添加速度控制按钮（可选功能）
+function addSpeedControls(heroCarousel) {
+    const controlsHtml = `
+        <div class="hero-controls" style="
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        ">
+            <button class="speed-btn" data-speed="slow" style="
+                background: rgba(255,255,255,0.2);
+                border: 1px solid rgba(255,255,255,0.5);
+                color: white;
+                padding: 5px 10px;
+                border-radius: 15px;
+                cursor: pointer;
+                backdrop-filter: blur(10px);
+            ">慢速</button>
+            <button class="speed-btn" data-speed="normal" style="
+                background: rgba(255,255,255,0.2);
+                border: 1px solid rgba(255,255,255,0.5);
+                color: white;
+                padding: 5px 10px;
+                border-radius: 15px;
+                cursor: pointer;
+                backdrop-filter: blur(10px);
+            ">正常</button>
+            <button class="speed-btn" data-speed="fast" style="
+                background: rgba(255,255,255,0.2);
+                border: 1px solid rgba(255,255,255,0.5);
+                color: white;
+                padding: 5px 10px;
+                border-radius: 15px;
+                cursor: pointer;
+                backdrop-filter: blur(10px);
+            ">快速</button>
+        </div>
+    `;
+    
+    const heroSection = document.querySelector('.hero');
+    heroSection.insertAdjacentHTML('beforeend', controlsHtml);
+    
+    // 添加速度控制事件
+    document.querySelectorAll('.speed-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const speed = this.getAttribute('data-speed');
+            heroCarousel.setSpeed(speed);
+            
+            // 更新按钮状态
+            document.querySelectorAll('.speed-btn').forEach(b => {
+                b.style.background = 'rgba(255,255,255,0.2)';
+            });
+            this.style.background = 'rgba(255,255,255,0.4)';
+        });
     });
 }

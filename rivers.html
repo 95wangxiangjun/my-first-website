@@ -14,7 +14,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="index.html#rivers" class="btn">返回</a></li>
+                <li><a href="#" id="returnBtn" class="btn">返回</a></li>  <!-- 改成带id的 -->
             </ul>
         </nav>
     </header>
@@ -28,10 +28,17 @@
     </section>
     
     <main class="rivers-grid-container">
-        <div class="rivers-grid" id="riversGrid">
-            <!-- 水域卡片将通过JavaScript动态生成 -->
-        </div>
-    </main>
+    <!-- 搜索功能 -->
+    <div class="search-container">
+        <input type="text" id="riversSearch" placeholder="搜索水域...">
+        <div class="search-icon">🔍</div>
+        <div class="search-results" id="riversResults"></div>
+    </div>
+    
+    <div class="rivers-grid" id="riversGrid">
+        <!-- 水域卡片将通过JavaScript动态生成 -->
+    </div>
+</main>
     
     <footer>
         <p>方寸屏间，万里河山</p>
@@ -39,5 +46,22 @@
     </footer>
 
     <script src="js/rivers.js"></script>
+    
+    <!-- 添加返回链接设置代码 -->
+    <script>
+    // 从URL参数获取来源
+    const urlParams = new URLSearchParams(window.location.search);
+    const from = urlParams.get('from') || 'category-tags';
+
+    // 根据来源设置不同的返回位置
+    let returnSection = 'category-tags';
+    if (from.startsWith('more-')) {
+        returnSection = from.replace('more-', ''); // more-rivers → rivers
+    } else if (from === 'category-tags') {
+        returnSection = 'category-tags';
+    }
+
+    document.getElementById('returnBtn').href = `index.html#${returnSection}`;
+    </script>
 </body>
 </html>

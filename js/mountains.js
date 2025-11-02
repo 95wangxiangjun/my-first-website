@@ -1,4 +1,151 @@
 // 名山数据 - 12个山脉景点，每个包含多张照片
+// 搜索功能
+function initMountainsSearch() {
+    const searchInput = document.getElementById('mountainsSearch');
+    const searchResults = document.getElementById('mountainsResults');
+    const mountainsGrid = document.getElementById('mountainsGrid');
+    
+    // 创建无结果提示
+    const noResults = document.createElement('div');
+    noResults.className = 'no-results';
+    noResults.textContent = '未找到匹配的名山';
+    noResults.style.display = 'none';
+    mountainsGrid.parentNode.appendChild(noResults);
+
+    // 保存原始内容
+    const originalContents = {};
+    
+    // 初始化原始内容
+    function initOriginalContents() {
+        const cards = document.querySelectorAll('.mountain-card');
+        cards.forEach((card, index) => {
+            const nameElement = card.querySelector('.mountain-name');
+            if (nameElement) {
+                originalContents[index] = nameElement.innerHTML;
+            }
+        });
+    }
+
+    // 高亮文本函数
+    function highlightText(text, searchTerm) {
+        if (!searchTerm) return text;
+        const regex = new RegExp(searchTerm, 'gi');
+        return text.replace(regex, match => `<span class="highlight">${match}</span>`);
+    }
+
+    // 执行搜索
+    function performSearch(searchTerm) {
+        searchTerm = searchTerm.toLowerCase().trim();
+        let matchCount = 0;
+        
+        // 重置所有内容
+        resetAllContent();
+        
+        if (!searchTerm) {
+            searchResults.textContent = '';
+            noResults.style.display = 'none';
+            return;
+        }
+
+        // 搜索名山
+        const cards = document.querySelectorAll('.mountain-card');
+        cards.forEach((card, index) => {
+            const mountain = mountainsData[index];
+            if (!mountain) return;
+
+            const nameElement = card.querySelector('.mountain-name');
+            if (!nameElement) return;
+
+            // 检查是否匹配
+            const matches = mountain.name.toLowerCase().includes(searchTerm) ||
+                           mountain.location.toLowerCase().includes(searchTerm) ||
+                           mountain.description.toLowerCase().includes(searchTerm) ||
+                           mountain.features.some(feature => feature.toLowerCase().includes(searchTerm)) ||
+                           mountain.type.toLowerCase().includes(searchTerm);
+
+            if (matches) {
+                card.style.display = 'block';
+                card.style.opacity = '1';
+                
+                // 高亮匹配文本
+                nameElement.innerHTML = highlightText(mountain.name, searchTerm);
+                
+                matchCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // 显示搜索结果
+        if (matchCount > 0) {
+            searchResults.textContent = `找到 ${matchCount} 个匹配的名山`;
+            noResults.style.display = 'none';
+            
+            // 滚动到第一个匹配项
+            scrollToFirstMatch();
+        } else {
+            searchResults.textContent = '';
+            noResults.style.display = 'block';
+        }
+    }
+
+    // 重置所有内容
+    function resetAllContent() {
+        const cards = document.querySelectorAll('.mountain-card');
+        cards.forEach((card, index) => {
+            card.style.display = 'block';
+            card.style.opacity = '1';
+            
+            const nameElement = card.querySelector('.mountain-name');
+            if (nameElement && originalContents[index]) {
+                nameElement.innerHTML = originalContents[index];
+            }
+        });
+    }
+
+    // 滚动到第一个匹配项
+    function scrollToFirstMatch() {
+        const firstMatch = document.querySelector('.mountain-card[style*="display: block"]');
+        if (firstMatch) {
+            firstMatch.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+    }
+
+    // 事件监听
+    searchInput.addEventListener('input', function() {
+        performSearch(this.value);
+    });
+
+    // 点击搜索图标也触发搜索
+    document.querySelector('.search-icon').addEventListener('click', function() {
+        performSearch(searchInput.value);
+    });
+
+    // 初始化原始内容
+    setTimeout(initOriginalContents, 100);
+}
+
+// 修改页面加载完成事件，添加搜索初始化
+document.addEventListener('DOMContentLoaded', function() {
+    initMountainsGrid();
+    initDetailShowcase();
+    initMountainsSearch(); // 新增搜索初始化
+    
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+        const header = document.querySelector('header');
+        if(window.scrollY > 50) {
+            header.style.background = 'rgba(10, 25, 47, 0.95)';
+            header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+        } else {
+            header.style.background = 'rgba(10, 25, 47, 0.9)';
+            header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
+        }
+    });
+});
 const mountainsData = [
     {
         id: 1,
@@ -354,7 +501,7 @@ let carouselState = {
     currentImageIndex: 0,
     isPlaying: true,
     intervalId: null,
-    intervalTime: 3000 // 3秒切换一张照片
+    intervalTime: 2000 // 3秒切换一张照片
 };
 
 // 页面加载完成后初始化

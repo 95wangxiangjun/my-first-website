@@ -69,16 +69,49 @@
     </nav>
 </header>
     
-    <section class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-content">
-            <h1>方寸屏间，万里河山</h1>
-            <p>晨光漫过黄山之巅，劲松破石耸立；云海翻上岱宗山顶，奇峰凌绝天下。黄河劈开黄土秦关，浊浪拍打着千百年的岩壁；长江绕出古蜀三峡，波涛晕染出水墨色的江南。</p>
-            <a href="#panorama-gallery" class="btn">开始探索</a>
+   <section class="hero">
+    <div class="hero-bg">
+        <div class="hero-carousel" id="heroCarousel">
+            <img src="images/huangshan/1.jpg" alt="黄山云海" class="hero-carousel-image">
+            <img src="images/taishan/1.jpg" alt="泰山日出" class="hero-carousel-image">
+            <img src="images/changjiang/1.jpg" alt="长江三峡" class="hero-carousel-image">
+            <img src="images/huanghe/1.jpg" alt="黄河壶口" class="hero-carousel-image">
+            <img src="images/zumulangma/11.jpg" alt="珠穆朗玛峰" class="hero-carousel-image">
+            <img src="images/nanhai/1.jpg" alt="南海风光" class="hero-carousel-image">
+            <img src="images/jiangnanshuixiang/1.jpg" alt="江南水乡" class="hero-carousel-image">
+            <img src="images/xibugaoyuan/2.jpg" alt="西部高原" class="hero-carousel-image">
+            <img src="images/huangshan/1.jpg" alt="黄山云海" class="hero-carousel-image">
         </div>
-    </section>
+    </div>
+    <div class="hero-content">
+        <h1>方寸屏间，万里河山</h1>
+        <p>晨光漫过黄山之巅，劲松破石耸立；云海翻上岱宗山顶，奇峰凌绝天下。黄河劈开黄土秦关，浊浪拍打着千百年的岩壁；长江绕出古蜀三峡，波涛晕染出水墨色的江南。</p>
+        <a href="#category-tags" class="btn">开始探索</a>
+    </div>
+</section>
     
     <main>
+    <!-- 分类标签 -->
+    <section class="category-tags" id="category-tags">
+        <h3>快速分类查找</h3>
+        <div class="tags-container">
+            <div class="category-tag" data-category="mountains" onclick="navigateToCategory('mountains')">
+    <span class="tag-icon">🏔️</span>
+    <span class="tag-text">名山峻岭</span>
+    <span class="tag-count">12座</span>
+</div>
+<div class="category-tag" data-category="rivers" onclick="navigateToCategory('rivers')">
+    <span class="tag-icon">🌊</span>
+    <span class="tag-text">江河湖海</span>
+    <span class="tag-count">14个</span>
+</div>
+<div class="category-tag" data-category="regions" onclick="navigateToCategory('regions')">
+    <span class="tag-icon">🗺️</span>
+    <span class="tag-text">区域特色</span>
+    <span class="tag-count">12个</span>
+</div>
+        </div>
+    </section>
         <section id="panorama-gallery">
             <h2>山河分布</h2>
             <p class="map-hint">(请点击地图上的标记查看详情)</p>
@@ -295,7 +328,7 @@
                     </div>
 
                     <div class="mountain-card">
-                        <div class="mountain-img" style="background-image: url('images/zumulangma/1.jpg');"></div>
+                        <div class="mountain-img" style="background-image: url('images/zumulangma/11.jpg');"></div>
                         <div class="mountain-content">
                             <h3>珠穆朗玛峰</h3>
                             <p>珠穆朗玛峰位于中国与尼泊尔边界，是世界海拔最高的山峰，被誉为"地球之巅"，是无数登山者向往的圣地。</p>
@@ -314,7 +347,7 @@
                         <div class="mountain-content">
                             <h3>更多名山</h3>
                             <p>探索中国更多壮丽的山峰，包括五岳、佛教名山、道教圣地等，感受中国山脉的多样魅力。</p>
-                            <a href="mountains.html" class="btn">查看全部</a>
+                            <a href="mountains.html?from=more-mountains" class="btn">查看全部</a>
                         </div>
                     </div>
                 </div>
@@ -362,7 +395,7 @@
                         <div class="river-content">
                             <h3>更多水域</h3>
                             <p>探索中国更多壮丽的水域景观，包括大江大河、湖泊海洋等，感受中国水系的丰富多样。</p>
-                            <a href="rivers.html" class="btn">查看全部</a>
+                            <a href="rivers.html?from=more-rivers" class="btn">查看全部</a>
                         </div>
                     </div>
                 </div>
@@ -410,7 +443,7 @@
                         <div class="region-content">
                             <h3>更多区域</h3>
                             <p>探索中国更多特色地理区域，包括不同气候带、地形地貌和文化区域，感受中国的广袤与多元。</p>
-                            <a href="regions.html" class="btn">查看全部</a>
+                            <a href="regions.html?from=more-regions" class="btn">查看全部</a>
                         </div>
                     </div>
                 </div>
