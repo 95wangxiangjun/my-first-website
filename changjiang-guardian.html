@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>长江守护者 - 方寸屏间，万里河山</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a192f, #112240, #1a2a6c);
+            color: white;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: rgba(10, 25, 47, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        .page-hero {
+            position: relative;
+            padding: 2rem 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #a8b2d1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 1rem auto;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        /* 游戏画布容器 */
+        .game-canvas-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            border: 3px solid rgba(100, 255, 218, 0.3);
+            cursor: pointer;
+        }
+        
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+        
+        /* 游戏信息栏 */
+        .game-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            z-index: 5;
+        }
+        
+        /* 氧气条 */
+        .oxygen-bar-container {
+            position: absolute;
+            top: 70px;
+            left: 10px;
+            width: 200px;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            z-index: 5;
+        }
+        
+        .oxygen-bar {
+            height: 16px;
+            background-color: #4169E1;
+            border-radius: 8px;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .oxygen-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            line-height: 20px;
+            color: white;
+        }
+        
+        /* 游戏覆盖层 */
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 15px;
+        }
+        
+        .game-overlay h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #64ffda;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .game-overlay p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #a8b2d1;
+            text-align: center;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: #64ffda;
+            color: #0a192f;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #4fd3c4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+        
+        /* 移动端虚拟控制按钮 */
+        .mobile-controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            height: 160px;
+            display: none;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .control-area {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .control-pad {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            pointer-events: all;
+        }
+        
+        .control-button {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            pointer-events: all;
+        }
+        
+        .move-area {
+            left: 20px;
+            bottom: 0;
+        }
+        
+        .fire-area {
+            right: 20px;
+            bottom: 0;
+        }
+        
+        .fire-button {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(255, 100, 100, 0.3);
+            border: 2px solid rgba(255, 150, 150, 0.5);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: all;
+        }
+        
+        .control-button:active, .fire-button:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .up-button { top: 5px; }
+        .down-button { bottom: 5px; }
+        .left-button { left: 5px; }
+        .right-button { right: 5px; }
+        
+        /* 游戏说明 */
+        .game-instructions {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+        
+        .game-instructions h4 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+        }
+        
+        .game-instructions p {
+            color: #a8b2d1;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(10, 25, 47, 0.9);
+            margin-top: 2rem;
+        }
+        
+        footer a {
+            color: #64ffda;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            header {
+                padding: 0.8rem 1rem;
+            }
+            
+            .logo-text {
+                font-size: 20px;
+            }
+            
+            .page-hero {
+                padding: 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            .game-container {
+                padding: 0.5rem;
+                margin: 0.5rem;
+            }
+            
+            .game-canvas-container {
+                height: 50vh;
+            }
+            
+            .game-info {
+                font-size: 14px;
+                padding: 8px;
+            }
+            
+            .oxygen-bar-container {
+                width: 150px;
+                top: 60px;
+            }
+            
+            .game-overlay h1 {
+                font-size: 2rem;
+            }
+            
+            .game-overlay p {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .mobile-controls {
+                display: block;
+            }
+            
+            .game-instructions {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header>
+        <div class="logo">
+            <img src="images/item/item.jpg" alt="方寸屏间，万里河山" class="logo-image">
+            <span class="logo-text">方寸屏间，万里河山</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html#rivers" class="btn">返回</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- 页面英雄区域 -->
+    <section class="page-hero">
+        <div class="hero-content">
+            <h1>长江守护者</h1>
+            <p>保护长江生态环境，清理污染物，守护江南水乡的美丽</p>
+        </div>
+    </section>
+    
+    <!-- 游戏主容器 -->
+    <main class="game-container">
+        <div class="game-section">
+            <h3 style="color: #64ffda; text-align: center; margin-bottom: 1rem;">长江生态保卫战</h3>
+            <p style="color: #a8b2d1; text-align: center; margin-bottom: 1rem;">驾驶江南小船，清理长江污染物，保护水乡生态环境</p>
+            
+            <!-- 游戏画布区域 -->
+            <div class="game-canvas-container">
+                <canvas id="gameCanvas" width="800" height="600"></canvas>
+                
+                <!-- 游戏信息显示 -->
+                <div class="game-info">
+                    <div>生命值: <span id="health">100</span></div>
+                    <div>得分: <span id="score">0</span></div>
+                    <div>子弹: <span id="ammo">30</span></div>
+                </div>
+                
+                <!-- 氧气条 -->
+                <div class="oxygen-bar-container">
+                    <div id="oxygenBar" class="oxygen-bar" style="width: 100%;"></div>
+                    <div class="oxygen-text">氧气: <span id="oxygen">100</span>%</div>
+                </div>
+                
+                <!-- 开始游戏界面 -->
+                <div id="startScreen" class="game-overlay">
+                    <h1>长江守护者</h1>
+                    <p>使用 WASD 移动，鼠标瞄准射击</p>
+                    <p>消灭污染者，收集垃圾，补充氧气！</p>
+                    <button id="startBtn" class="btn">开始游戏</button>
+                </div>
+                
+                <!-- 游戏结束界面 -->
+                <div id="gameOver" class="game-overlay" style="display: none;">
+                    <h1>游戏结束</h1>
+                    <p>最终得分: <span id="finalScore">0</span></p>
+                    <button id="restartBtn" class="btn">重新开始</button>
+                </div>
+                
+                <!-- 移动端控制按钮 -->
+                <div class="mobile-controls">
+                    <!-- 移动控制区域 -->
+                    <div class="control-area move-area">
+                        <div class="control-pad">
+                            <div class="control-button up-button" id="mobileUp">↑</div>
+                            <div class="control-button down-button" id="mobileDown">↓</div>
+                            <div class="control-button left-button" id="mobileLeft">←</div>
+                            <div class="control-button right-button" id="mobileRight">→</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 射击控制区域 -->
+                    <div class="control-area fire-area">
+                        <button class="fire-button" id="mobileFire">射击</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 游戏说明 -->
+            <div class="game-instructions">
+                <h4>游戏说明</h4>
+                <p>🎯 <strong>游戏目标：</strong>保护长江生态环境，清理污染物，获得高分</p>
+                <p>🎮 <strong>操作方式：</strong>使用WASD键移动，鼠标瞄准射击，收集氧气罐补充氧气</p>
+                <p>🌊 <strong>长江特色：</strong>体验江南水乡美景，保护长江生态平衡</p>
+                <p>💡 <strong>小技巧：</strong>优先清理污染物，及时补充氧气，避免与污染船碰撞</p>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 页面底部 -->
+    <footer>
+        <p>方寸屏间，万里河山</p>
+        <p>2025武汉大学参赛作品 | <a href="message-board.html">分享你的山河故事</a></p>
+    </footer>
+
+    <script>
+        // ===============================
+        // 长江守护者游戏 - JavaScript代码
+        // 游戏功能：保护长江生态环境的射击游戏
+        // 作者：武汉大学参赛团队
+        // 版本：1.0
+        // ===============================
+
+        // 获取DOM元素
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const healthText = document.getElementById('health');
+        const scoreText = document.getElementById('score');
+        const ammoText = document.getElementById('ammo');
+        const oxygenText = document.getElementById('oxygen');
+        const oxygenBarElement = document.getElementById('oxygenBar');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOver');
+        const finalScoreElement = document.getElementById('finalScore');
+        const startBtn = document.getElementById('startBtn');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // 游戏状态对象
+        let gameState = {
+            isRunning: false,           // 游戏是否运行中
+            score: 0,                   // 当前得分
+            health: 100,                // 玩家生命值
+            oxygen: 100,                // 氧气值
+            ammo: 30,                   // 子弹数量
+            lastSpawnTime: 0,           // 上次生成敌人的时间
+            spawnInterval: 1500,        // 生成敌人的间隔
+            animationFrame: 0,          // 动画帧计数器
+            touchControlled: false      // 是否使用触摸控制
+        };
+        
+        // 触摸目标位置（用于移动瞄准）
+        const touchTarget = { x: 0, y: 0 };
+        
+        // 设置响应式画布尺寸
+        function resizeCanvas() {
+            // 获取容器尺寸
+            const container = canvas.parentElement;
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            // 保持宽高比
+            const aspectRatio = 800 / 600;
+            let newWidth = containerWidth;
+            let newHeight = containerWidth / aspectRatio;
+            
+            if (newHeight > containerHeight) {
+                newHeight = containerHeight;
+                newWidth = containerHeight * aspectRatio;
+            }
+            
+            // 设置画布尺寸
+            canvas.style.width = `${newWidth}px`;
+            canvas.style.height = `${newHeight}px`;
+        }
+        
+        // 初始化时调用一次
+        resizeCanvas();
+        
+        // 监听窗口大小变化
+        window.addEventListener('resize', resizeCanvas);
+        
+        // 设备类型检测
+        function detectMobileDevice() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            return isMobile;
+        }
+        
+        // 计算触摸位置相对于画布的坐标
+        function getTouchPos(canvas, touchEvent) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            return {
+                x: (touchEvent.clientX - rect.left) * scaleX,
+                y: (touchEvent.clientY - rect.top) * scaleY
+            };
+        }
+
+        // 游戏对象数组
+        const bullets = [];     // 子弹数组
+        const enemies = [];     // 敌人数组
+        const items = [];       // 补给品数组
+        const effects = [];     // 特效数组
+        const gameObjects = []; // 长江游戏元素（垃圾、氧气罐等）
+        
+        // 鼠标位置
+        const mousePos = { x: 0, y: 0 };
+        
+        // 按键状态
+        const keys = {};
+
+        // 玩家对象 - 结合江南小船和长江潜水员特点
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            width: 50,
+            height: 60,
+            speed: 4,
+            health: 100,
+            ammo: 30,
+            direction: 0,
+            fireRate: 500,
+            lastFire: 0,
+            
+            // 更新玩家状态
+            update(keys, mousePos) {
+                // 计算玩家朝向鼠标的角度
+                const dx = mousePos.x - this.x;
+                const dy = mousePos.y - this.y;
+                this.direction = Math.atan2(dy, dx);
+                
+                // 移动控制
+                if (keys['w'] || keys['W']) this.y -= this.speed;
+                if (keys['s'] || keys['S']) this.y += this.speed;
+                if (keys['a'] || keys['A']) this.x -= this.speed;
+                if (keys['d'] || keys['D']) this.x += this.speed;
+                
+                // 边界检查
+                if (this.x < this.width / 2) this.x = this.width / 2;
+                if (this.x > canvas.width - this.width / 2) this.x = canvas.width - this.width / 2;
+                if (this.y < this.height / 2) this.y = this.height / 2;
+                if (this.y > canvas.height - this.height / 2) this.y = canvas.height - this.height / 2;
+                
+                // 移动设备上限制移动速度，使控制更精确
+                if (detectMobileDevice()) {
+                    // 简单的加速度控制，使移动更平滑
+                    if ((keys['w'] || keys['W']) && (keys['a'] || keys['A']) || 
+                        (keys['w'] || keys['W']) && (keys['d'] || keys['D']) || 
+                        (keys['s'] || keys['S']) && (keys['a'] || keys['A']) || 
+                        (keys['s'] || keys['S']) && (keys['d'] || keys['D'])) {
+                        // 对角线移动时稍微减速，保持控制感
+                        this.speed = 3.5;
+                    } else {
+                        this.speed = 5;
+                    }
+                }
+            },
+            
+            // 绘制玩家
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.direction);
+                
+                // 绘制结合了潜水员元素的小船
+                // 船身（江南风格）
+                ctx.fillStyle = '#8B4513';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.width / 2, this.height / 4, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 小型船帆（江南风格）
+                ctx.fillStyle = '#FFF8DC';
+                ctx.beginPath();
+                ctx.moveTo(0, -this.height / 2 + 10);
+                ctx.lineTo(this.width / 5, 0);
+                ctx.lineTo(-this.width / 5, 0);
+                ctx.closePath();
+                ctx.fill();
+                
+                // 桅杆
+                ctx.fillStyle = '#654321';
+                ctx.fillRect(-2, -this.height / 2 + 10, 4, this.height / 2 - 10);
+                
+                // 潜水员头盔（长江风格元素）
+                ctx.fillStyle = '#3498db';
+                ctx.beginPath();
+                ctx.arc(0, -5, 12, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 头盔玻璃罩
+                ctx.fillStyle = 'rgba(135, 206, 235, 0.6)';
+                ctx.beginPath();
+                ctx.arc(0, -5, 10, 0, Math.PI, true);
+                ctx.fill();
+                
+                // 小船装饰
+                ctx.strokeStyle = '#654321';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.width / 2 - 2, this.height / 4 - 2, 0, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // 氧气罐（长江风格元素）
+                ctx.fillStyle = '#2c3e50';
+                ctx.fillRect(this.width / 3, -15, 8, 25);
+                
+                // 船桨
+                ctx.fillStyle = '#5C4033';
+                ctx.fillRect(-this.width / 2, 0, this.width / 8, 4);
+                ctx.fillRect(this.width / 2 - this.width / 8, 0, this.width / 8, 4);
+                
+                ctx.restore();
+                
+                // 绘制生命条
+                ctx.fillStyle = '#333';
+                ctx.fillRect(this.x - 30, this.y - 40, 60, 6);
+                ctx.fillStyle = this.health > 50 ? '#00FF00' : this.health > 25 ? '#FFA500' : '#FF0000';
+                ctx.fillRect(this.x - 30, this.y - 40, 60 * (this.health / 100), 6);
+                
+                // 绘制气泡动画（长江游戏风格）
+                const bubblePhase = gameState.animationFrame % 120;
+                if (bubblePhase < 60) {
+                    const bubble1Y = this.y - 35 - bubblePhase * 0.3;
+                    const bubble1Size = 4 - bubblePhase * 0.03;
+                    
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, bubble1Y, bubble1Size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            },
+            
+            // 发射子弹
+            fire(mousePos) {
+                if (Date.now() - this.lastFire > this.fireRate && this.ammo > 0) {
+                    const dx = mousePos.x - this.x;
+                    const dy = mousePos.y - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const vx = (dx / dist) * 8;
+                    const vy = (dy / dist) * 8;
+                    
+                    bullets.push({
+                        x: this.x,
+                        y: this.y,
+                        vx: vx,
+                        vy: vy,
+                        width: 8,
+                        height: 8,
+                        damage: 20,
+                        update() {
+                            this.x += this.vx;
+                            this.y += this.vy;
+                        },
+                        draw() {
+                            ctx.fillStyle = '#FFD700';
+                            ctx.beginPath();
+                            ctx.arc(this.x, this.y, this.width / 2, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            // 子弹尾迹
+                            ctx.globalAlpha = 0.5;
+                            ctx.beginPath();
+                            ctx.arc(this.x - this.vx, this.y - this.vy, this.width / 3, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.globalAlpha = 1;
+                        }
+                    });
+                    
+                    this.ammo--;
+                    this.lastFire = Date.now();
+                    
+                    // 更新UI
+                    ammoText.textContent = this.ammo;
+                }
+            }
+        };
+
+        // 加载事件监听器
+        function setupEventListeners() {
+            // 键盘事件
+            window.addEventListener('keydown', (e) => {
+                keys[e.key] = true;
+            });
+            
+            window.addEventListener('keyup', (e) => {
+                keys[e.key] = false;
+            });
+            
+            // 鼠标事件
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                mousePos.x = (e.clientX - rect.left) * scaleX;
+                mousePos.y = (e.clientY - rect.top) * scaleY;
+            });
+            
+            canvas.addEventListener('mousedown', () => {
+                if (gameState.isRunning) {
+                    player.fire(mousePos);
+                }
+            });
+            
+            canvas.addEventListener('mouseup', () => {
+                // 可以添加停止射击逻辑
+            });
+            
+            // 触摸事件 - 移动瞄准
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                if (!gameState.isRunning) return;
+                
+                const touch = e.touches[0];
+                const touchPos = getTouchPos(canvas, touch);
+                
+                // 更新鼠标位置以用于瞄准
+                mousePos.x = touchPos.x;
+                mousePos.y = touchPos.y;
+                
+                gameState.touchControlled = true;
+            });
+            
+            canvas.addEventListener('touchend', (e) => {
+                // 触摸结束时可以添加额外逻辑
+            });
+            
+            // 移动端虚拟按钮事件
+            const mobileUp = document.getElementById('mobileUp');
+            const mobileDown = document.getElementById('mobileDown');
+            const mobileLeft = document.getElementById('mobileLeft');
+            const mobileRight = document.getElementById('mobileRight');
+            const mobileFire = document.getElementById('mobileFire');
+            
+            // 移动控制按钮事件
+            mobileUp.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                keys['w'] = true;
+                keys['W'] = true;
+            });
+            mobileUp.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                keys['w'] = false;
+                keys['W'] = false;
+            });
+            
+            mobileDown.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                keys['s'] = true;
+                keys['S'] = true;
+            });
+            mobileDown.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                keys['s'] = false;
+                keys['S'] = false;
+            });
+            
+            mobileLeft.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                keys['a'] = true;
+                keys['A'] = true;
+            });
+            mobileLeft.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                keys['a'] = false;
+                keys['A'] = false;
+            });
+            
+            mobileRight.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                keys['d'] = true;
+                keys['D'] = true;
+            });
+            mobileRight.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                keys['d'] = false;
+                keys['D'] = false;
+            });
+            
+            // 射击按钮事件
+            mobileFire.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (gameState.isRunning) {
+                    player.fire(mousePos);
+                    // 自动连续射击
+                    if (!mobileFire.isFiring) {
+                        mobileFire.isFiring = true;
+                        mobileFire.interval = setInterval(() => {
+                            if (gameState.isRunning) {
+                                player.fire(mousePos);
+                            } else {
+                                clearInterval(mobileFire.interval);
+                                mobileFire.isFiring = false;
+                            }
+                        }, 200);
+                    }
+                }
+            });
+            
+            mobileFire.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                if (mobileFire.isFiring) {
+                    clearInterval(mobileFire.interval);
+                    mobileFire.isFiring = false;
+                }
+            });
+            
+            // 按钮事件 - 添加触摸支持
+            startBtn.addEventListener('click', startGame);
+            startBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                startGame();
+            });
+            
+            restartBtn.addEventListener('click', startGame);
+            restartBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                startGame();
+            });
+            
+            // 初始化检测是否为移动设备并做相应调整
+            if (detectMobileDevice()) {
+                // 移动设备上调整游戏参数
+                player.speed = 5; // 稍微增加移动速度
+                player.fireRate = 400; // 稍微提高射速
+                gameState.spawnInterval = 1200; // 稍微降低生成间隔，使游戏更紧凑
+            }
+        }
+
+        // 开始游戏
+        function startGame() {
+            gameState.isRunning = true;
+            gameState.score = 0;
+            gameState.health = 100;
+            gameState.oxygen = 100;
+            gameState.ammo = 30;
+            gameState.lastSpawnTime = 0;
+            gameState.animationFrame = 0;
+            
+            // 重置玩家状态
+            player.x = canvas.width / 2;
+            player.y = canvas.height / 2;
+            player.health = 100;
+            player.ammo = 30;
+            
+            // 清空游戏对象
+            bullets.length = 0;
+            enemies.length = 0;
+            items.length = 0;
+            effects.length = 0;
+            gameObjects.length = 0;
+            
+            // 更新UI
+            healthText.textContent = '100';
+            scoreText.textContent = '0';
+            ammoText.textContent = '30';
+            oxygenText.textContent = '100';
+            updateOxygenBar();
+            
+            // 隐藏开始和结束画面
+            startScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            
+            // 开始游戏循环
+            requestAnimationFrame(gameLoop);
+        }
+
+        // 结束游戏
+        function endGame() {
+            gameState.isRunning = false;
+            finalScoreElement.textContent = gameState.score;
+            gameOverScreen.style.display = 'flex';
+        }
+
+        // 更新氧气条
+        function updateOxygenBar() {
+            oxygenBarElement.style.width = `${gameState.oxygen}%`;
+            
+            // 根据氧气量改变颜色
+            if (gameState.oxygen > 60) {
+                oxygenBarElement.style.backgroundColor = '#4169E1'; // 蓝色
+            } else if (gameState.oxygen > 30) {
+                oxygenBarElement.style.backgroundColor = '#FFA500'; // 橙色
+            } else {
+                oxygenBarElement.style.backgroundColor = '#FF0000'; // 红色
+            }
+        }
+
+        // 生成游戏对象（敌人和补给）
+        function createGameObject(timestamp) {
+            if (timestamp - gameState.lastSpawnTime > gameState.spawnInterval) {
+                const rand = Math.random();
+                
+                if (rand < 0.6) {
+                    // 生成敌人（污染船）
+                    const x = Math.random() < 0.5 ? -50 : canvas.width + 50;
+                    const y = Math.random() * canvas.height;
+                    const enemy = {
+                        x: x,
+                        y: y,
+                        width: 40,
+                        height: 50,
+                        health: 50,
+                        speed: 1.5 + Math.random() * 1,
+                        damage: 10,
+                        
+                        update() {
+                            // 敌人向玩家移动
+                            const dx = player.x - this.x;
+                            const dy = player.y - this.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            if (dist > 0) {
+                                this.x += (dx / dist) * this.speed;
+                                this.y += (dy / dist) * this.speed;
+                            }
+                        },
+                        
+                        draw() {
+                            ctx.save();
+                            ctx.translate(this.x, this.y);
+                            
+                            // 绘制污染船（敌人）
+                            // 船身
+                            ctx.fillStyle = '#444';
+                            ctx.beginPath();
+                            ctx.ellipse(0, 0, this.width / 2, this.height / 4, 0, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            // 黑烟囱
+                            ctx.fillStyle = '#222';
+                            ctx.fillRect(-5, -this.height / 2, 10, this.height / 3);
+                            
+                            // 冒黑烟
+                            ctx.fillStyle = 'rgba(50, 50, 50, 0.7)';
+                            ctx.beginPath();
+                            ctx.arc(0, -this.height / 2 - 10, 8, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.beginPath();
+                            ctx.arc(5, -this.height / 2 - 15, 6, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            // 污染物
+                            ctx.fillStyle = '#8B0000';
+                            ctx.beginPath();
+                            ctx.arc(0, this.height / 4, this.width / 4, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            // 生命条
+                            ctx.fillStyle = '#333';
+                            ctx.fillRect(-25, -35, 50, 5);
+                            ctx.fillStyle = this.health > 25 ? '#FF0000' : '#8B0000';
+                            ctx.fillRect(-25, -35, 50 * (this.health / 50), 5);
+                            
+                            ctx.restore();
+                        }
+                    };
+                    enemies.push(enemy);
+                } else if (rand < 0.85) {
+                    // 生成补给品
+                    const x = Math.random() * canvas.width;
+                    const y = Math.random() * canvas.height;
+                    const itemType = Math.random() < 0.5 ? 'ammo' : 'health';
+                    
+                    const item = {
+                        x: x,
+                        y: y,
+                        width: 25,
+                        height: 25,
+                        type: itemType,
+                        value: itemType === 'ammo' ? 20 : 30,
+                        blink: 0,
+                        
+                        update() {
+                            // 闪烁效果
+                            this.blink = 0.5 + Math.sin(gameState.animationFrame * 0.05) * 0.5;
+                        },
+                        
+                        draw() {
+                            ctx.save();
+                            ctx.translate(this.x, this.y);
+                            
+                            if (this.type === 'ammo') {
+                                // 绘制子弹补给
+                                ctx.fillStyle = `rgba(255, 165, 0, ${0.7 + this.blink * 0.3})`;
+                                ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
+                                
+                                // 子弹图形
+                                ctx.fillStyle = '#FFF';
+                                ctx.fillRect(-8, -4, 16, 8);
+                                ctx.fillRect(-6, -8, 12, 4);
+                                ctx.fillRect(-6, 4, 12, 4);
+                            } else {
+                                // 绘制生命补给
+                                ctx.fillStyle = `rgba(255, 0, 0, ${0.7 + this.blink * 0.3})`;
+                                ctx.beginPath();
+                                ctx.arc(0, 0, this.width / 2, 0, Math.PI * 2);
+                                ctx.fill();
+                                
+                                // 十字标志
+                                ctx.fillStyle = '#FFF';
+                                ctx.fillRect(-5, -15, 10, 30);
+                                ctx.fillRect(-15, -5, 30, 10);
+                            }
+                            
+                            ctx.restore();
+                        }
+                    };
+                    items.push(item);
+                } else {
+                    // 生成特殊敌人（更难）
+                    const x = Math.random() < 0.5 ? -50 : canvas.width + 50;
+                    const y = Math.random() * canvas.height;
+                    const boss = {
+                        x: x,
+                        y: y,
+                        width: 60,
+                        height: 70,
+                        health: 100,
+                        speed: 1.2,
+                        damage: 15,
+                        
+                        update() {
+                            // 特殊敌人移动模式（绕行）
+                            const dx = player.x - this.x;
+                            const dy = player.y - this.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            if (dist > 0) {
+                                // 添加绕行效果
+                                const perpX = -dy / dist;
+                                const perpY = dx / dist;
+                                const moveDir = Math.sin(gameState.animationFrame * 0.01) * 0.3;
+                                
+                                this.x += ((dx / dist) * this.speed) + (perpX * moveDir);
+                                this.y += ((dy / dist) * this.speed) + (perpY * moveDir);
+                            }
+                        },
+                        
+                        draw() {
+                            ctx.save();
+                            ctx.translate(this.x, this.y);
+                            
+                            // 绘制大型污染船（特殊敌人）
+                            // 船身
+                            ctx.fillStyle = '#333';
+                            ctx.beginPath();
+                            ctx.ellipse(0, 0, this.width / 2, this.height / 4, 0, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            // 两个烟囱
+                            ctx.fillStyle = '#222';
+                            ctx.fillRect(-15, -this.height / 2, 10, this.height / 3);
+                            ctx.fillRect(5, -this.height / 2, 10, this.height / 3);
+                            
+                            // 冒浓烟
+                            for (let i = 0; i < 3; i++) {
+                                ctx.fillStyle = `rgba(30, 30, 30, ${0.7 - i * 0.2})`;
+                                ctx.beginPath();
+                                ctx.arc(-10, -this.height / 2 - 15 - i * 10, 10 - i * 3, 0, Math.PI * 2);
+                                ctx.fill();
+                                ctx.beginPath();
+                                ctx.arc(10, -this.height / 2 - 15 - i * 10, 10 - i * 3, 0, Math.PI * 2);
+                                ctx.fill();
+                            }
+                            
+                            // 大量污染物
+                            ctx.fillStyle = '#8B0000';
+                            ctx.beginPath();
+                            ctx.arc(0, this.height / 4, this.width / 3, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.beginPath();
+                            ctx.arc(-this.width / 4, this.height / 4, this.width / 6, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.beginPath();
+                            ctx.arc(this.width / 4, this.height / 4, this.width / 6, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            // 生命条
+                            ctx.fillStyle = '#333';
+                            ctx.fillRect(-35, -45, 70, 6);
+                            ctx.fillStyle = this.health > 50 ? '#FF0000' : '#8B0000';
+                            ctx.fillRect(-35, -45, 70 * (this.health / 100), 6);
+                            
+                            // 标记特殊敌人
+                            ctx.fillStyle = '#FFD700';
+                            ctx.font = 'bold 12px Arial';
+                            ctx.textAlign = 'center';
+                            ctx.fillText('污染者', 0, -30);
+                            
+                            ctx.restore();
+                        }
+                    };
+                    enemies.push(boss);
+                }
+                
+                // 更新生成时间
+                gameState.lastSpawnTime = timestamp;
+                gameState.spawnInterval = 1000 + Math.random() * 2000;
+            }
+        }
+
+        // 创建长江游戏元素（垃圾和氧气罐）
+        function createYangtzeObject() {
+            // 创建加权类型数组
+            const weightedTypes = [
+                { type: 'trash', width: 30, height: 30, color: '#808080', value: 10 }, // 垃圾
+                { type: 'trash', width: 30, height: 30, color: '#808080', value: 10 }, // 垃圾
+                { type: 'oxygen', width: 20, height: 40, color: '#4169E1', value: 30 }  // 氧气罐
+            ];
+            
+            // 随机选择对象类型
+            const objType = weightedTypes[Math.floor(Math.random() * weightedTypes.length)];
+            const x = Math.random() < 0.5 ? -50 : canvas.width + 50;
+            const y = 50 + Math.random() * (canvas.height - 150);
+            const direction = x < 0 ? 1 : -1;
+            const speed = 2 + Math.random() * 2;
+            
+            // 添加动画相关属性
+            gameObjects.push({
+                x: x,
+                y: y,
+                width: objType.width,
+                height: objType.height,
+                color: objType.color,
+                type: objType.type,
+                value: objType.value,
+                speedX: direction * speed,
+                speedY: (Math.random() - 0.5) * 0.5,
+                rotation: 0,
+                rotationSpeed: (Math.random() - 0.5) * 0.05,
+                floatOffset: 0,
+                floatSpeed: (Math.random() * 0.02) + 0.01,
+                floatPhase: Math.random() * Math.PI * 2,
+                blinkState: 1,
+                blinkSpeed: Math.random() * 0.05 + 0.02
+            });
+        }
+
+        // 绘制长江游戏元素
+        function drawGameObjects() {
+            gameObjects.forEach(obj => {
+                ctx.save();
+                
+                // 计算浮动动画
+                obj.floatPhase += obj.floatSpeed;
+                obj.floatOffset = Math.sin(obj.floatPhase) * 5;
+                
+                // 计算实际Y位置
+                const drawY = obj.y + obj.floatOffset;
+                
+                // 移动到对象中心
+                ctx.translate(obj.x, drawY);
+                
+                if (obj.type === 'oxygen') {
+                    // 氧气罐动画：闪烁和轻微旋转
+                    obj.rotation += obj.rotationSpeed * 0.5;
+                    ctx.rotate(obj.rotation);
+                    
+                    // 闪烁效果
+                    obj.blinkState = 0.5 + Math.sin(gameState.animationFrame * obj.blinkSpeed) * 0.5;
+                    
+                    // 绘制氧气罐（圆柱体）
+                    ctx.fillStyle = `rgba(65, 105, 225, ${0.7 + obj.blinkState * 0.3})`;
+                    
+                    // 主体
+                    ctx.fillRect(-obj.width/2, -obj.height/2, obj.width, obj.height);
+                    
+                    // 顶部圆形
+                    ctx.beginPath();
+                    ctx.arc(0, -obj.height/2, obj.width/2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // 底部圆形
+                    ctx.beginPath();
+                    ctx.arc(0, obj.height/2, obj.width/2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // 氧气罐刻度
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    for (let i = 0; i < 3; i++) {
+                        const yPos = -obj.height/2 + (obj.height/3) * (i + 1);
+                        ctx.moveTo(-obj.width/2, yPos);
+                        ctx.lineTo(-obj.width/4, yPos);
+                        ctx.moveTo(obj.width/4, yPos);
+                        ctx.lineTo(obj.width/2, yPos);
+                    }
+                    ctx.stroke();
+                    
+                    // 氧气文字
+                    ctx.rotate(-obj.rotation); // 文字保持水平
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.font = 'bold 14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('O₂', 0, 0);
+                    
+                    // 绘制气泡效果
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                    const bubbleSize = 3 + Math.sin(gameState.animationFrame * 0.05) * 1;
+                    ctx.beginPath();
+                    ctx.arc(-obj.width/2 - 5, -obj.height/4, bubbleSize, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                } else if (obj.type === 'trash') {
+                    // 垃圾动画：摇摆
+                    const swayAngle = Math.sin(gameState.animationFrame * 0.03 + obj.floatPhase) * 0.2;
+                    ctx.rotate(swayAngle);
+                    
+                    // 绘制不同颜色的垃圾
+                    const trashColors = ['#8B4513', '#696969', '#A9A9A9', '#663399'];
+                    const randomColor = trashColors[Math.floor(Math.random() * trashColors.length)];
+                    ctx.fillStyle = randomColor;
+                    
+                    // 绘制不规则垃圾形状
+                    ctx.beginPath();
+                    ctx.moveTo(0, -obj.height/2);
+                    ctx.lineTo(obj.width/2, -obj.height/4);
+                    ctx.lineTo(obj.width/2 + 3, obj.height/4);
+                    ctx.lineTo(0, obj.height/2);
+                    ctx.lineTo(-obj.width/2 - 3, obj.height/4);
+                    ctx.lineTo(-obj.width/2, -obj.height/4);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // 添加边框
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    
+                    // 文字标签
+                    ctx.rotate(-swayAngle); // 文字保持水平
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('垃圾', 0, 4);
+                }
+                
+                ctx.restore();
+            });
+        }
+
+        // 更新长江游戏元素
+        function updateGameObjects() {
+            gameObjects.forEach(obj => {
+                obj.x += obj.speedX;
+                obj.y += obj.speedY;
+            });
+            
+            // 移除屏幕外的对象
+            for (let i = gameObjects.length - 1; i >= 0; i--) {
+                const obj = gameObjects[i];
+                if ((obj.x + obj.width/2 < 0 && obj.speedX < 0) || 
+                    (obj.x - obj.width/2 > canvas.width && obj.speedX > 0)) {
+                    gameObjects.splice(i, 1);
+                }
+            }
+        }
+
+        // 检查长江游戏元素的碰撞
+        function checkYangtzeCollisions() {
+            for (let i = gameObjects.length - 1; i >= 0; i--) {
+                const obj = gameObjects[i];
+                
+                // 简单的矩形碰撞检测
+                if (player.x - player.width/2 < obj.x + obj.width/2 &&
+                    player.x + player.width/2 > obj.x - obj.width/2 &&
+                    player.y - player.height/2 < obj.y + obj.height/2 &&
+                    player.y + player.height/2 > obj.y - obj.height/2) {
+                    
+                    // 处理碰撞
+                    if (obj.type === 'trash') {
+                        gameState.score += obj.value;
+                        createCollectEffect(obj.x, obj.y, '垃圾');
+                    } else if (obj.type === 'oxygen') {
+                        // 立即补充满氧气
+                        gameState.oxygen = 100;
+                        gameState.score += 20;
+                        createOxygenBurst(obj.x, obj.y);
+                    }
+                    
+                    // 移除对象
+                    gameObjects.splice(i, 1);
+                    
+                    // 更新UI
+                    scoreText.textContent = gameState.score;
+                    oxygenText.textContent = Math.floor(gameState.oxygen);
+                    updateOxygenBar();
+                }
+            }
+        }
+
+        // 创建氧气补充时的视觉爆发效果
+        function createOxygenBurst(x, y) {
+            // 创建爆发粒子
+            for (let i = 0; i < 8; i++) {
+                const angle = (Math.PI * 2 / 8) * i;
+                const speed = 3 + Math.random() * 2;
+                
+                // 添加视觉反馈粒子
+                const particle = {
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: 5 + Math.random() * 3,
+                    alpha: 1.0,
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+                        this.vy += 0.1; // 轻微重力
+                        this.alpha -= 0.05;
+                    },
+                    draw() {
+                        ctx.save();
+                        ctx.globalAlpha = this.alpha;
+                        ctx.fillStyle = '#4169E1';
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                };
+                
+                // 将粒子添加到游戏对象中
+                effects.push(particle);
+            }
+        }
+
+        // 创建收集效果
+        function createCollectEffect(x, y, type) {
+            const colors = {
+                '垃圾': '#8B4513',
+                '氧气': '#4169E1'
+            };
+            
+            const color = colors[type] || '#FFFFFF';
+            
+            // 创建文字效果
+            effects.push({
+                x: x,
+                y: y,
+                alpha: 1.0,
+                text: `+${type === '垃圾' ? '10' : '20'}`,
+                color: color,
+                update() {
+                    this.y -= 1;
+                    this.alpha -= 0.02;
+                },
+                draw() {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.fillStyle = this.color;
+                    ctx.font = 'bold 16px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(this.text, this.x, this.y);
+                    ctx.restore();
+                }
+            });
+        }
+
+        // 绘制背景 - 结合江南水乡和长江元素
+        function drawBackground() {
+            // 天空
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.3);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#4169E1');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height * 0.3);
+            
+            // 水面（长江元素）
+            const waterGradient = ctx.createLinearGradient(0, canvas.height * 0.3, 0, canvas.height);
+            waterGradient.addColorStop(0, '#4682B4');
+            waterGradient.addColorStop(1, '#1E90FF');
+            ctx.fillStyle = waterGradient;
+            ctx.fillRect(0, canvas.height * 0.3, canvas.width, canvas.height * 0.7);
+            
+            // 水波纹效果
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 5; i++) {
+                const offset = gameState.animationFrame * 0.05 + i * 2;
+                const y = canvas.height * 0.3 + i * 30;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                for (let x = 0; x < canvas.width; x += 20) {
+                    const waveY = y + Math.sin(x * 0.02 + offset) * 5;
+                    ctx.lineTo(x, waveY);
+                }
+                ctx.stroke();
+            }
+        }
+
+        // 创建爆炸效果
+        function createExplosion(x, y) {
+            for (let i = 0; i < 15; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 2 + Math.random() * 3;
+                const particle = {
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: 5 + Math.random() * 5,
+                    alpha: 1.0,
+                    color: `hsl(${Math.random() * 60}, 100%, 50%)`, // 橙色到黄色的爆炸效果
+                    
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+                        this.vy += 0.1; // 重力效果
+                        this.size -= 0.1;
+                        this.alpha -= 0.05;
+                    },
+                    
+                    draw() {
+                        if (this.alpha <= 0) return;
+                        
+                        ctx.save();
+                        ctx.globalAlpha = this.alpha;
+                        ctx.fillStyle = this.color;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                };
+                
+                effects.push(particle);
+            }
+        }
+
+        // 碰撞检测
+        function checkCollisions() {
+            // 子弹和敌人的碰撞
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                const bullet = bullets[i];
+                let bulletHit = false;
+                
+                for (let j = enemies.length - 1; j >= 0; j--) {
+                    const enemy = enemies[j];
+                    
+                    if (bullet.x + bullet.width > enemy.x - enemy.width / 2 &&
+                        bullet.x - bullet.width < enemy.x + enemy.width / 2 &&
+                        bullet.y + bullet.height > enemy.y - enemy.height / 2 &&
+                        bullet.y - bullet.height < enemy.y + enemy.height / 2) {
+                        
+                        // 敌人受伤
+                        enemy.health -= bullet.damage;
+                        
+                        // 如果敌人死亡
+                        if (enemy.health <= 0) {
+                            // 创建爆炸效果
+                            createExplosion(enemy.x, enemy.y);
+                            
+                            // 移除敌人并加分
+                            enemies.splice(j, 1);
+                            gameState.score += enemy.width > 50 ? 50 : 20; // 大敌人加分更多
+                            scoreText.textContent = gameState.score;
+                        }
+                        
+                        // 移除子弹
+                        bullets.splice(i, 1);
+                        bulletHit = true;
+                        break;
+                    }
+                }
+                
+                // 如果子弹没有击中敌人且超出屏幕，也移除
+                if (!bulletHit && (bullet.x < 0 || bullet.x > canvas.width || bullet.y < 0 || bullet.y > canvas.height)) {
+                    bullets.splice(i, 1);
+                }
+            }
+            
+            // 玩家和敌人的碰撞
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                const enemy = enemies[i];
+                
+                if (player.x + player.width / 2 > enemy.x - enemy.width / 2 &&
+                    player.x - player.width / 2 < enemy.x + enemy.width / 2 &&
+                    player.y + player.height / 2 > enemy.y - enemy.height / 2 &&
+                    player.y - player.height / 2 < enemy.y + enemy.height / 2) {
+                    
+                    // 玩家受伤
+                    player.health -= enemy.damage;
+                    if (player.health < 0) player.health = 0;
+                    healthText.textContent = Math.floor(player.health);
+                    
+                    // 敌人死亡
+                    createExplosion(enemy.x, enemy.y);
+                    enemies.splice(i, 1);
+                    
+                    // 检查游戏结束
+                    if (player.health <= 0) {
+                        endGame();
+                    }
+                }
+            }
+            
+            // 玩家和补给品的碰撞
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i];
+                
+                if (player.x + player.width / 2 > item.x - item.width / 2 &&
+                    player.x - player.width / 2 < item.x + item.width / 2 &&
+                    player.y + player.height / 2 > item.y - item.height / 2 &&
+                    player.y - player.height / 2 < item.y + item.height / 2) {
+                    
+                    // 应用补给效果
+                    if (item.type === 'ammo') {
+                        player.ammo += item.value;
+                        if (player.ammo > 100) player.ammo = 100;
+                        ammoText.textContent = player.ammo;
+                    } else if (item.type === 'health') {
+                        player.health += item.value;
+                        if (player.health > 100) player.health = 100;
+                        healthText.textContent = Math.floor(player.health);
+                    }
+                    
+                    // 移除补给品
+                    items.splice(i, 1);
+                }
+            }
+            
+            // 更新效果粒子
+            for (let i = effects.length - 1; i >= 0; i--) {
+                const effect = effects[i];
+                effect.update();
+                
+                // 移除消失的效果
+                if (effect.alpha <= 0) {
+                    effects.splice(i, 1);
+                }
+            }
+        }
+
+        // 游戏主循环
+        function gameLoop(timestamp) {
+            if (!gameState.isRunning) return;
+            
+            // 更新动画帧计数器
+            gameState.animationFrame++;
+            
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制背景
+            drawBackground();
+            
+            // 创建游戏对象（敌人和补给）
+            createGameObject(timestamp);
+            
+            // 定期创建长江游戏元素
+            if (Math.random() < 0.02) { // 控制生成频率
+                createYangtzeObject();
+            }
+            
+            // 更新和绘制玩家
+            player.update(keys, mousePos);
+            player.draw();
+            
+            // 更新和绘制子弹
+            for (let i = 0; i < bullets.length; i++) {
+                bullets[i].update();
+                bullets[i].draw();
+            }
+            
+            // 更新和绘制敌人
+            for (let i = 0; i < enemies.length; i++) {
+                enemies[i].update();
+                enemies[i].draw();
+            }
+            
+            // 更新和绘制补给品
+            for (let i = 0; i < items.length; i++) {
+                items[i].update();
+                items[i].draw();
+            }
+            
+            // 更新和绘制长江游戏元素
+            updateGameObjects();
+            drawGameObjects();
+            
+            // 绘制效果
+            for (let i = 0; i < effects.length; i++) {
+                effects[i].draw();
+            }
+            
+            // 检查碰撞
+            checkCollisions();
+            checkYangtzeCollisions();
+            
+            // 氧气消耗（长江游戏机制）
+            gameState.oxygen -= 0.03;
+            if (gameState.oxygen < 0) gameState.oxygen = 0;
+            if (gameState.oxygen > 100) gameState.oxygen = 100;
+            
+            // 更新氧气显示
+            oxygenText.textContent = Math.floor(gameState.oxygen);
+            updateOxygenBar();
+            
+            // 检查游戏结束条件
+            if (gameState.oxygen <= 0) {
+                endGame();
+                return;
+            }
+            
+            // 继续游戏循环
+            requestAnimationFrame(gameLoop);
+        }
+
+        // 初始化游戏
+        function initGame() {
+            setupEventListeners();
+            // 预先绘制一次背景在开始屏幕上
+            drawBackground();
+        }
+
+        // 启动游戏初始化
+        window.addEventListener('load', initGame);
+    </script>
+</body>
+</html>

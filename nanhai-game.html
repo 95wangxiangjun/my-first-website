@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南海 - 方寸屏间，万里河山</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a192f, #112240, #1a2a6c);
+            color: white;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: rgba(10, 25, 47, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        .page-hero {
+            position: relative;
+            padding: 4rem 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #a8b2d1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .game-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-section {
+            text-align: center;
+        }
+        
+        .game-section h3 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .game-section p {
+            color: #a8b2d1;
+            margin-bottom: 2rem;
+        }
+        
+        /* 游戏画布样式 */
+        .game-canvas-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            border: 2px solid rgba(100, 255, 218, 0.3);
+        }
+        
+        #gameCanvas {
+            width: 100%;
+            height: 100%;
+            cursor: none;
+        }
+        
+        /* 游戏控制按钮 */
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: #64ffda;
+            color: #0a192f;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background: #4fd3c4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #64ffda;
+            border: 1px solid #64ffda;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        /* 游戏状态显示 */
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffdd57;
+        }
+        
+        .stat-label {
+            color: #a8b2d1;
+            font-size: 0.9rem;
+        }
+        
+        /* 游戏说明 */
+        .game-instructions {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+        
+        .game-instructions h4 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+        }
+        
+        .game-instructions p {
+            color: #a8b2d1;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 游戏覆盖层 */
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border-radius: 10px;
+        }
+        
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+        
+        .game-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            max-width: 500px;
+            color: #a8b2d1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(10, 25, 47, 0.9);
+            margin-top: 3rem;
+        }
+        
+        footer a {
+            color: #64ffda;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .game-canvas-container {
+                height: 400px;
+            }
+            
+            .game-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .game-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/item/item.jpg" alt="方寸屏间，万里河山" class="logo-image">
+            <span class="logo-text">方寸屏间，万里河山</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html#rivers" class="btn">返回</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section class="page-hero">
+        <div class="hero-content">
+            <h1>南海 - 大鱼吃小鱼</h1>
+            <p>在南海的深海中，你是一条小鱼，需要不断成长，躲避大鱼，吃掉小鱼和虾蟹！</p>
+        </div>
+    </section>
+    
+    <main class="game-container">
+        <div class="game-section">
+            <h3>深海生存挑战</h3>
+            <p>在南海的深海中生存，吃掉比你小的鱼类，躲避比你大的鱼类，不断成长壮大！</p>
+            
+            <div class="game-canvas-container">
+                <canvas id="gameCanvas"></canvas>
+                
+                <div id="startScreen" class="game-overlay">
+                    <h2 class="game-title">大鱼吃小鱼</h2>
+                    <p class="game-subtitle">在南海的深海中，你是一条小鱼，需要不断成长，躲避大鱼，吃掉小鱼和虾蟹！</p>
+                    <button class="btn" id="startButton">开始游戏</button>
+                </div>
+                
+                <div id="gameOverScreen" class="game-overlay" style="display: none;">
+                    <h2 class="game-title">游戏结束</h2>
+                    <div class="game-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="finalScore">0</div>
+                            <div class="stat-label">最终得分</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="finalSize">小</div>
+                            <div class="stat-label">最大体型</div>
+                        </div>
+                    </div>
+                    <button class="btn" id="restartButton">再来一次</button>
+                </div>
+                
+                <div id="pauseScreen" class="game-overlay" style="display: none;">
+                    <h2 class="game-title">游戏暂停</h2>
+                    <button class="btn" id="resumeButton">继续游戏</button>
+                    <button class="btn btn-secondary" style="margin-top: 20px;" id="exitButton">退出游戏</button>
+                </div>
+            </div>
+            
+            <div class="game-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="scoreDisplay">0</div>
+                    <div class="stat-label">得分</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="livesDisplay">3</div>
+                    <div class="stat-label">生命</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="sizeDisplay">小</div>
+                    <div class="stat-label">体型</div>
+                </div>
+            </div>
+            
+            <div class="game-controls">
+                <button class="btn" id="newGameBtn">新游戏</button>
+                <button class="btn btn-secondary" id="pauseBtn">暂停</button>
+            </div>
+            
+            <div class="game-instructions">
+                <h4>游戏说明</h4>
+                <p>🎯 <strong>游戏目标：</strong>吃掉比你小的鱼类，躲避比你大的鱼类，不断成长壮大</p>
+                <p>🎮 <strong>控制方式：</strong>使用键盘WASD键或鼠标移动你的鱼</p>
+                <p>🐟 <strong>鱼类种类：</strong>游戏中有多种不同的海洋生物，每种都有不同的分数和特性</p>
+                <p>💡 <strong>小技巧：</strong>从小鱼开始吃起，逐步挑战更大的鱼类</p>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>方寸屏间，万里河山</p>
+        <p>2025武汉大学参赛作品 | <a href="message-board.html">分享你的山河故事</a></p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const livesDisplay = document.getElementById('livesDisplay');
+            const sizeDisplay = document.getElementById('sizeDisplay');
+            const startScreen = document.getElementById('startScreen');
+            const gameOverScreen = document.getElementById('gameOverScreen');
+            const pauseScreen = document.getElementById('pauseScreen');
+            const startButton = document.getElementById('startButton');
+            const restartButton = document.getElementById('restartButton');
+            const resumeButton = document.getElementById('resumeButton');
+            const exitButton = document.getElementById('exitButton');
+            const newGameBtn = document.getElementById('newGameBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const finalScore = document.getElementById('finalScore');
+            const finalSize = document.getElementById('finalSize');
+            
+            // 设置画布大小
+            function resizeCanvas() {
+                canvas.width = canvas.clientWidth;
+                canvas.height = canvas.clientHeight;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // 游戏配置
+            const config = {
+                playerInitialSize: 20,
+                playerSpeed: 3,
+                playerMaxSpeed: 8,
+                maxSizeLevel: 10, // 增加最大体型等级
+                spawnRate: 0.01
+            };
+            
+            // 游戏状态
+            const gameState = {
+                score: 0,
+                lives: 3,
+                sizeLevel: 0,
+                playerSize: 25,
+                playerSpeed: config.playerSpeed,
+                creatures: [],
+                isRunning: false,
+                isPaused: false,
+                spawnRate: config.spawnRate,
+                gameLoopId: null,
+                keys: { w: false, s: false, a: false, d: false }
+            };
+            
+            // 玩家角色
+            const player = {
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                size: 25,
+                color: '#FF0000',
+                invincible: false,
+                lastAngle: 0,
+                draw: function() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    
+                    let angle = this.lastAngle;
+                    if (gameState.keys.d) angle = 0;
+                    if (gameState.keys.w) angle = -Math.PI / 2;
+                    if (gameState.keys.s) angle = Math.PI / 2;
+                    if (gameState.keys.a) angle = Math.PI;
+                    if (gameState.keys.d && gameState.keys.w) angle = -Math.PI / 4;
+                    if (gameState.keys.d && gameState.keys.s) angle = Math.PI / 4;
+                    if (gameState.keys.a && gameState.keys.w) angle = -3 * Math.PI / 4;
+                    if (gameState.keys.a && gameState.keys.s) angle = 3 * Math.PI / 4;
+                    this.lastAngle = angle;
+                    
+                    ctx.rotate(angle);
+                    
+                    // 绘制玩家鱼
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    
+                    // 绘制尾巴
+                    ctx.beginPath();
+                    ctx.moveTo(-this.size, 0);
+                    ctx.lineTo(-this.size - this.size / 2, -this.size);
+                    ctx.lineTo(-this.size - this.size / 2, this.size);
+                    ctx.closePath();
+                    ctx.fillStyle = '#000000';
+                    ctx.fill();
+                    
+                    // 绘制眼睛
+                    ctx.beginPath();
+                    ctx.arc(this.size / 2, -this.size / 4, this.size / 6, 0, Math.PI * 2);
+                    ctx.fillStyle = 'white';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(this.size / 2 + 3, -this.size / 4, this.size / 12, 0, Math.PI * 2);
+                    ctx.fillStyle = 'black';
+                    ctx.fill();
+                    
+                    ctx.restore();
+                },
+                update: function() {
+                    if (gameState.keys.w) this.y -= gameState.playerSpeed;
+                    if (gameState.keys.s) this.y += gameState.playerSpeed;
+                    if (gameState.keys.a) this.x -= gameState.playerSpeed;
+                    if (gameState.keys.d) this.x += gameState.playerSpeed;
+                    
+                    this.x = Math.max(this.size, Math.min(canvas.width - this.size, this.x));
+                    this.y = Math.max(this.size, Math.min(canvas.height - this.size, this.y));
+                }
+            };
+            
+            // 创建海洋生物
+            function createCreature() {
+                const creatureType = Math.random();
+                let size, speed, points, color, type;
+                
+                if (creatureType < 0.08) { // 8% 虾米
+                    type = 'shrimp';
+                    size = 10;
+                    speed = 2;
+                    points = 5;
+                    color = '#FFA07A';
+                } else if (creatureType < 0.15) { // 7% 螃蟹
+                    type = 'crab';
+                    size = 12;
+                    speed = 1;
+                    points = 8;
+                    color = '#CD5C5C';
+                } else if (creatureType < 0.25) { // 10% 小鱼
+                    type = 'smallfish';
+                    size = 15;
+                    speed = 1.5;
+                    points = 10;
+                    color = '#FF5722';
+                } else if (creatureType < 0.35) { // 10% 热带鱼
+                    type = 'tropicalfish';
+                    size = 18;
+                    speed = 2;
+                    points = 15;
+                    color = '#FFD700';
+                } else if (creatureType < 0.45) { // 10% 中鱼
+                    type = 'mediumfish';
+                    size = 30;
+                    speed = 2.5;
+                    points = 25;
+                    color = '#2196F3';
+                } else if (creatureType < 0.55) { // 10% 大鱼
+                    type = 'largefish';
+                    size = 50;
+                    speed = 4;
+                    points = 50;
+                    color = '#F44336';
+                } else if (creatureType < 0.62) { // 7% 鲨鱼
+                    type = 'shark';
+                    size = 70;
+                    speed = 3;
+                    points = 100;
+                    color = '#555555';
+                } else if (creatureType < 0.68) { // 6% 小丑鱼
+                    type = 'clownfish';
+                    size = 16;
+                    speed = 1.8;
+                    points = 12;
+                    color = '#FF8C00';
+                } else if (creatureType < 0.74) { // 6% 蝴蝶鱼
+                    type = 'butterflyfish';
+                    size = 22;
+                    speed = 2.2;
+                    points = 20;
+                    color = '#4CAF50';
+                } else if (creatureType < 0.79) { // 5% 海龟
+                    type = 'turtle';
+                    size = 40;
+                    speed = 0.8;
+                    points = 40;
+                    color = '#795548';
+                } else if (creatureType < 0.83) { // 4% 鲸鱼
+                    type = 'whale';
+                    size = 100;
+                    speed = 1.2;
+                    points = 200;
+                    color = '#9E9E9E';
+                } else if (creatureType < 0.87) { // 4% 神仙鱼
+                    type = 'angelfish';
+                    size = 20;
+                    speed = 1.7;
+                    points = 18;
+                    color = '#8A2BE2';
+                } else if (creatureType < 0.91) { // 4% 刺尾鱼
+                    type = 'surgeonfish';
+                    size = 24;
+                    speed = 2.1;
+                    points = 22;
+                    color = '#FF1493';
+                } else if (creatureType < 0.95) { // 4% 蓝唐王鱼
+                    type = 'bluefish';
+                    size = 28;
+                    speed = 2.3;
+                    points = 30;
+                    color = '#00CED1';
+                } else { // 5% 狮子鱼
+                    type = 'lionfish';
+                    size = 32;
+                    speed = 1.5;
+                    points = 35;
+                    color = '#DC143C';
+                }
+                
+                const side = Math.floor(Math.random() * 4);
+                let x, y, dx, dy;
+                
+                switch (side) {
+                    case 0:
+                        x = -size;
+                        y = Math.random() * canvas.height;
+                        dx = speed;
+                        dy = (Math.random() - 0.5) * speed;
+                        break;
+                    case 1:
+                        x = canvas.width + size;
+                        y = Math.random() * canvas.height;
+                        dx = -speed;
+                        dy = (Math.random() - 0.5) * speed;
+                        break;
+                    case 2:
+                        x = Math.random() * canvas.width;
+                        y = -size;
+                        dx = (Math.random() - 0.5) * speed;
+                        dy = speed;
+                        break;
+                    case 3:
+                        x = Math.random() * canvas.width;
+                        y = canvas.height + size;
+                        dx = (Math.random() - 0.5) * speed;
+                        dy = -speed;
+                        break;
+                }
+                
+                return {
+                    x, y, dx, dy, size, points, color, type,
+                    draw: function() {
+                        ctx.save();
+                        ctx.translate(this.x, this.y);
+                        const angle = Math.atan2(this.dy, this.dx);
+                        ctx.rotate(angle);
+                        
+                        // 根据类型绘制不同的鱼
+                        // 在createCreature函数的draw方法中，替换switch语句部分：
+
+switch(this.type) {
+    case 'shrimp':
+        // 虾米
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(-this.size / 2, 0);
+        ctx.lineTo(-this.size * 1.5, -this.size / 3);
+        ctx.lineTo(-this.size * 1.5, this.size / 3);
+        ctx.closePath();
+        ctx.fill();
+        // 触须
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(this.size / 2, 0);
+        ctx.lineTo(this.size, -this.size / 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(this.size / 2, 0);
+        ctx.lineTo(this.size, this.size / 2);
+        ctx.stroke();
+        break;
+        
+    case 'crab':
+        // 螃蟹
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size * 0.8, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 蟹钳
+        ctx.fillRect(this.size, -this.size / 4, this.size / 2, this.size / 2);
+        ctx.fillRect(-this.size - this.size / 2, -this.size / 4, this.size / 2, this.size / 2);
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size / 3, -this.size / 2, 3, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(-this.size / 3, -this.size / 2, 3, 0, Math.PI * 2);
+        ctx.fill();
+        break;
+        
+    case 'tropicalfish':
+        // 热带鱼（有条纹）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 条纹
+        ctx.strokeStyle = '#FF4500';
+        ctx.lineWidth = 2;
+        for (let i = -this.size / 2; i < this.size / 2; i += this.size / 4) {
+            ctx.beginPath();
+            ctx.moveTo(i, -this.size / 2);
+            ctx.lineTo(i, this.size / 2);
+            ctx.stroke();
+        }
+        // 尾巴
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size / 2, -this.size);
+        ctx.lineTo(-this.size - this.size / 2, this.size);
+        ctx.closePath();
+        ctx.fillStyle = '#FF4500';
+        ctx.fill();
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        break;
+        
+    case 'shark':
+        // 鲨鱼（有背鳍）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 背鳍
+        ctx.beginPath();
+        ctx.moveTo(0, -this.size / 2);
+        ctx.lineTo(this.size / 3, -this.size);
+        ctx.lineTo(this.size / 2, -this.size / 2);
+        ctx.closePath();
+        ctx.fill();
+        // 尾巴
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size / 2, -this.size * 1.2);
+        ctx.lineTo(-this.size - this.size / 2, this.size * 1.2);
+        ctx.closePath();
+        ctx.fill();
+        // 牙齿
+        ctx.fillStyle = 'white';
+        for (let i = 0; i < 5; i++) {
+            ctx.fillRect(this.size / 2 + i * 5, 0, 3, 5);
+        }
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        break;
+        
+    case 'clownfish':
+        // 小丑鱼（橙白条纹）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 白色条纹
+        ctx.fillStyle = 'white';
+        ctx.fillRect(-this.size / 3, -this.size / 2, this.size / 4, this.size);
+        ctx.fillRect(this.size / 4, -this.size / 2, this.size / 8, this.size);
+        // 尾巴
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size / 2, -this.size / 2);
+        ctx.lineTo(-this.size - this.size / 2, this.size / 2);
+        ctx.closePath();
+        ctx.fillStyle = '#FF5722';
+        ctx.fill();
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        break;
+        
+    case 'butterflyfish':
+        // 蝴蝶鱼（有黑色斑点和长嘴）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 黑色斑点
+        ctx.beginPath();
+        ctx.arc(-this.size / 2, 0, this.size / 5, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        // 长嘴
+        ctx.beginPath();
+        ctx.moveTo(this.size / 2, 0);
+        ctx.lineTo(this.size * 0.8, -this.size / 8);
+        ctx.lineTo(this.size * 0.8, this.size / 8);
+        ctx.closePath();
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        // 尾巴
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size / 3, 0);
+        ctx.lineWidth = this.size / 2;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = this.color;
+        ctx.stroke();
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size / 3, -this.size / 5, this.size / 12, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.size / 3 + 2, -this.size / 5, this.size / 24, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        break;
+        
+    case 'turtle':
+        // 海龟
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size * 0.7, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#5D4037';
+        ctx.fill();
+        // 龟壳
+        ctx.beginPath();
+        ctx.ellipse(0, -this.size / 5, this.size * 0.9, this.size * 0.6, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 龟壳纹理
+        ctx.strokeStyle = '#4E342E';
+        ctx.lineWidth = 2;
+        for (let i = -this.size * 0.4; i <= this.size * 0.4; i += this.size * 0.2) {
+            ctx.beginPath();
+            ctx.moveTo(i, -this.size / 5 - this.size * 0.3);
+            ctx.lineTo(i, -this.size / 5 + this.size * 0.3);
+            ctx.stroke();
+        }
+        // 四肢
+        ctx.fillStyle = '#5D4037';
+        ctx.fillRect(this.size * 0.6, -this.size * 0.2, this.size * 0.3, this.size * 0.1);
+        ctx.fillRect(this.size * 0.6, this.size * 0.1, this.size * 0.3, this.size * 0.1);
+        ctx.fillRect(-this.size * 0.9, -this.size * 0.2, this.size * 0.3, this.size * 0.1);
+        ctx.fillRect(-this.size * 0.9, this.size * 0.1, this.size * 0.3, this.size * 0.1);
+        // 头部
+        ctx.beginPath();
+        ctx.arc(this.size * 0.7, 0, this.size * 0.2, 0, Math.PI * 2);
+        ctx.fill();
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size * 0.8, -this.size * 0.1, this.size * 0.05, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        break;
+        
+    case 'whale':
+        // 鲸鱼
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size * 0.4, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 背鳍
+        ctx.beginPath();
+        ctx.moveTo(-this.size * 0.3, -this.size * 0.4);
+        ctx.lineTo(-this.size * 0.1, -this.size * 0.8);
+        ctx.lineTo(0, -this.size * 0.4);
+        ctx.closePath();
+        ctx.fill();
+        // 尾鳍
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size * 0.3, -this.size * 0.3);
+        ctx.lineTo(-this.size - this.size * 0.3, this.size * 0.3);
+        ctx.closePath();
+        ctx.fill();
+        // 喷水孔
+        ctx.beginPath();
+        ctx.arc(this.size * 0.5, -this.size * 0.2, this.size * 0.05, 0, Math.PI * 2);
+        ctx.fillStyle = 'darkgray';
+        ctx.fill();
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size * 0.6, -this.size * 0.1, this.size * 0.05, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        break;
+        
+    case 'angelfish':
+        // 神仙鱼（有长鳍）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 长背鳍
+        ctx.beginPath();
+        ctx.moveTo(-this.size * 0.5, -this.size / 2);
+        ctx.lineTo(0, -this.size * 1.2);
+        ctx.lineTo(this.size * 0.5, -this.size / 2);
+        ctx.closePath();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 长腹鳍
+        ctx.beginPath();
+        ctx.moveTo(-this.size * 0.5, this.size / 2);
+        ctx.lineTo(0, this.size * 1.2);
+        ctx.lineTo(this.size * 0.5, this.size / 2);
+        ctx.closePath();
+        ctx.fill();
+        // 尾巴
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size / 2, -this.size / 3);
+        ctx.lineTo(-this.size - this.size / 2, this.size / 3);
+        ctx.closePath();
+        ctx.fillStyle = '#666';
+        ctx.fill();
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.size / 2 + 2, -this.size / 4, this.size / 20, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        break;
+        
+    case 'surgeonfish':
+        // 刺尾鱼（有尾刺）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 尾刺
+        ctx.beginPath();
+        ctx.moveTo(-this.size - this.size / 2, 0);
+        ctx.lineTo(-this.size - this.size, -this.size / 4);
+        ctx.lineTo(-this.size - this.size, this.size / 4);
+        ctx.closePath();
+        ctx.fillStyle = '#FF1493';
+        ctx.fill();
+        // 尾巴
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size / 2, -this.size);
+        ctx.lineTo(-this.size - this.size / 2, this.size);
+        ctx.closePath();
+        ctx.fillStyle = '#666';
+        ctx.fill();
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.size / 2 + 2, -this.size / 4, this.size / 20, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        break;
+        
+    case 'bluefish':
+        // 蓝唐王鱼（蓝色身体，黄色条纹）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 黄色条纹
+        ctx.strokeStyle = '#FFD700';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(-this.size / 2, -this.size / 3);
+        ctx.lineTo(this.size / 2, -this.size / 3);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(-this.size / 2, this.size / 3);
+        ctx.lineTo(this.size / 2, this.size / 3);
+        ctx.stroke();
+        // 尾巴
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size / 2, -this.size);
+        ctx.lineTo(-this.size - this.size / 2, this.size);
+        ctx.closePath();
+        ctx.fillStyle = '#666';
+        ctx.fill();
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.size / 2 + 2, -this.size / 4, this.size / 20, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        break;
+        
+    case 'lionfish':
+        // 狮子鱼（有毒刺）
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        // 毒刺
+        ctx.strokeStyle = '#DC143C';
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 8; i++) {
+            const angle = (i / 8) * Math.PI * 2;
+            ctx.beginPath();
+            ctx.moveTo(this.size * 0.3, 0);
+            ctx.lineTo(
+                this.size * 0.3 + Math.cos(angle) * this.size * 0.8,
+                Math.sin(angle) * this.size * 0.8
+            );
+            ctx.stroke();
+        }
+        // 条纹
+        ctx.strokeStyle = '#8B0000';
+        ctx.lineWidth = 2;
+        for (let i = -this.size / 2; i < this.size / 2; i += this.size / 3) {
+            ctx.beginPath();
+            ctx.moveTo(i, -this.size / 2);
+            ctx.lineTo(i, this.size / 2);
+            ctx.stroke();
+        }
+        // 尾巴
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size / 2, -this.size);
+        ctx.lineTo(-this.size - this.size / 2, this.size);
+        ctx.closePath();
+        ctx.fillStyle = '#666';
+        ctx.fill();
+        // 眼睛
+        ctx.beginPath();
+        ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(this.size / 2 + 2, -this.size / 4, this.size / 20, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        break;
+        
+    default:
+        // 普通鱼
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.moveTo(-this.size, 0);
+        ctx.lineTo(-this.size - this.size / 2, -this.size);
+        ctx.lineTo(-this.size - this.size / 2, this.size);
+        ctx.closePath();
+        ctx.fillStyle = '#666';
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.arc(this.size / 2 + 2, -this.size / 4, this.size / 20, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+}
+                        
+                        ctx.restore();
+                    },
+                    update: function() {
+                        this.x += this.dx;
+                        this.y += this.dy;
+                        
+                        // 随机改变方向
+                        if (Math.random() < 0.02) {
+                            this.dx += (Math.random() - 0.5) * 0.5;
+                            this.dy += (Math.random() - 0.5) * 0.5;
+                            
+                            const currentSpeed = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
+                            if (currentSpeed > 0) {
+                                this.dx = (this.dx / currentSpeed) * speed;
+                                this.dy = (this.dy / currentSpeed) * speed;
+                            }
+                        }
+                    },
+                    checkCollision: function(player) {
+                        const dx = this.x - player.x;
+                        const dy = this.y - player.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        return distance < (this.size + player.size) / 2;
+                    }
+                };
+            }
+            
+            // 绘制背景
+            function drawBackground() {
+                // 绘制渐变背景
+                const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradient.addColorStop(0, '#0a192f');
+                gradient.addColorStop(0.3, '#112240');
+                gradient.addColorStop(1, '#1a2a6c');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // 绘制网格
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < canvas.width; i += 50) {
+                    ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, canvas.height);
+                    ctx.stroke();
+                }
+                for (let i = 0; i < canvas.height; i += 50) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, i);
+                    ctx.lineTo(canvas.width, i);
+                    ctx.stroke();
+                }
+                
+                // 绘制气泡
+                for (let i = 0; i < 5; i++) {
+                    const x = Math.random() * canvas.width;
+                    const y = canvas.height + Math.sin(Date.now() * 0.001 + i) * 20;
+                    const size = Math.random() * 5 + 2;
+                    
+                    ctx.beginPath();
+                    ctx.arc(x, y, size, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                    ctx.fill();
+                }
+            }
+            
+            // 更新游戏状态
+            function updateGame() {
+                if (!gameState.isRunning || gameState.isPaused) return;
+                
+                player.update();
+                
+                for (let i = gameState.creatures.length - 1; i >= 0; i--) {
+                    const creature = gameState.creatures[i];
+                    creature.update();
+                    
+                    if (creature.checkCollision(player)) {
+                        handleCollision(creature, i);
+                    }
+                    
+                    if (creature.x < -creature.size * 2 || creature.x > canvas.width + creature.size * 2 ||
+                        creature.y < -creature.size * 2 || creature.y > canvas.height + creature.size * 2) {
+                        gameState.creatures.splice(i, 1);
+                    }
+                }
+                
+                if (Math.random() < gameState.spawnRate && gameState.creatures.length < 15) {
+                    gameState.creatures.push(createCreature());
+                }
+                
+                gameState.spawnRate += 0.00002;
+                
+                renderGame();
+                gameState.gameLoopId = requestAnimationFrame(updateGame);
+            }
+            
+            // 处理碰撞
+            function handleCollision(creature, index) {
+                if (player.size > creature.size * 0.8) {
+                    gameState.score += creature.points;
+                    scoreDisplay.textContent = gameState.score;
+                    gameState.creatures.splice(index, 1);
+                    checkSizeGrowth();
+                } else {
+                    gameState.lives--;
+                    livesDisplay.textContent = gameState.lives;
+                    gameState.creatures.splice(index, 1);
+                    
+                    if (gameState.lives <= 0) {
+                        endGame();
+                    } else {
+                        player.invincible = true;
+                        setTimeout(() => {
+                            player.invincible = false;
+                        }, 2000);
+                    }
+                }
+            }
+            
+            // 检查体型增长
+            function checkSizeGrowth() {
+                const sizeThresholds = [100, 300, 700, 1500, 3000, 5000, 8000, 12000, 18000, 25000]; // 增加更多阈值
+                
+                if (gameState.sizeLevel < config.maxSizeLevel - 1 && 
+                    gameState.score >= sizeThresholds[gameState.sizeLevel]) {
+                    gameState.sizeLevel++;
+                    
+                    const sizeIncrease = config.playerInitialSize * 0.3;
+                    player.size += sizeIncrease;
+                    gameState.playerSpeed = Math.min(config.playerMaxSpeed, config.playerSpeed + 0.5);
+                    
+                    const sizeNames = ['小', '中', '大', '巨型', '超巨型', '海王级', '霸主级', '传说级', '神话级', '终极形态'];
+                    sizeDisplay.textContent = sizeNames[gameState.sizeLevel];
+                }
+            }
+            
+            // 渲染游戏
+            function renderGame() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawBackground();
+                
+                ctx.save();
+                if (player.invincible) {
+                    ctx.globalAlpha = Math.sin(Date.now() * 0.01) * 0.5 + 0.5;
+                }
+                player.draw();
+                ctx.restore();
+                
+                gameState.creatures.forEach(creature => creature.draw());
+            }
+            
+            // 开始游戏
+            function startGame() {
+                gameState.score = 0;
+                gameState.lives = 3;
+                gameState.sizeLevel = 0;
+                gameState.playerSize = 25;
+                gameState.playerSpeed = config.playerSpeed;
+                gameState.creatures = [];
+                gameState.isRunning = true;
+                gameState.isPaused = false;
+                gameState.spawnRate = config.spawnRate;
+                
+                player.x = canvas.width / 2;
+                player.y = canvas.height / 2;
+                player.size = gameState.playerSize;
+                player.invincible = false;
+                
+                scoreDisplay.textContent = gameState.score;
+                livesDisplay.textContent = gameState.lives;
+                sizeDisplay.textContent = '小';
+                
+                startScreen.style.display = 'none';
+                gameOverScreen.style.display = 'none';
+                pauseScreen.style.display = 'none';
+                
+                updateGame();
+            }
+            
+            // 暂停游戏
+            function pauseGame() {
+                gameState.isPaused = true;
+                pauseScreen.style.display = 'flex';
+                cancelAnimationFrame(gameState.gameLoopId);
+            }
+            
+            // 继续游戏
+            function resumeGame() {
+                gameState.isPaused = false;
+                pauseScreen.style.display = 'none';
+                updateGame();
+            }
+            
+            // 结束游戏
+            function endGame() {
+                gameState.isRunning = false;
+                cancelAnimationFrame(gameState.gameLoopId);
+                
+                finalScore.textContent = gameState.score;
+                const sizeNames = ['小', '中', '大', '巨型', '超巨型', '海王级', '霸主级', '传说级', '神话级', '终极形态'];
+                finalSize.textContent = sizeNames[gameState.sizeLevel];
+                
+                gameOverScreen.style.display = 'flex';
+            }
+            
+            // 键盘控制
+            document.addEventListener('keydown', (e) => {
+                if (e.key.toLowerCase() === 'w') gameState.keys.w = true;
+                if (e.key.toLowerCase() === 's') gameState.keys.s = true;
+                if (e.key.toLowerCase() === 'a') gameState.keys.a = true;
+                if (e.key.toLowerCase() === 'd') gameState.keys.d = true;
+                
+                if (e.code === 'Space' && gameState.isRunning) {
+                    e.preventDefault();
+                    if (gameState.isPaused) {
+                        resumeGame();
+                    } else {
+                        pauseGame();
+                    }
+                }
+            });
+            
+            document.addEventListener('keyup', (e) => {
+                if (e.key.toLowerCase() === 'w') gameState.keys.w = false;
+                if (e.key.toLowerCase() === 's') gameState.keys.s = false;
+                if (e.key.toLowerCase() === 'a') gameState.keys.a = false;
+                if (e.key.toLowerCase() === 'd') gameState.keys.d = false;
+            });
+            
+            // 按钮事件
+            startButton.addEventListener('click', startGame);
+            restartButton.addEventListener('click', startGame);
+            resumeButton.addEventListener('click', resumeGame);
+            exitButton.addEventListener('click', () => {
+                gameOverScreen.style.display = 'none';
+                pauseScreen.style.display = 'none';
+                startScreen.style.display = 'flex';
+                gameState.isRunning = false;
+                cancelAnimationFrame(gameState.gameLoopId);
+            });
+            newGameBtn.addEventListener('click', startGame);
+            pauseBtn.addEventListener('click', () => {
+                if (gameState.isRunning) {
+                    if (gameState.isPaused) {
+                        resumeGame();
+                    } else {
+                        pauseGame();
+                    }
+                }
+            });
+            
+            // 鼠标控制
+            canvas.addEventListener('mousemove', (e) => {
+                if (!gameState.isRunning || gameState.isPaused) return;
+                
+                const rect = canvas.getBoundingClientRect();
+                player.x = e.clientX - rect.left;
+                player.y = e.clientY - rect.top;
+                
+                // 限制玩家在画布内
+                player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
+                player.y = Math.max(player.size, Math.min(canvas.height - player.size, player.y));
+            });
+            
+            // 触摸控制
+            canvas.addEventListener('touchmove', (e) => {
+                if (!gameState.isRunning || gameState.isPaused) return;
+                e.preventDefault();
+                
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                player.x = touch.clientX - rect.left;
+                player.y = touch.clientY - rect.top;
+                
+                // 限制玩家在画布内
+                player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
+                player.y = Math.max(player.size, Math.min(canvas.height - player.size, player.y));
+            }, { passive: false });
+        });
+    </script>
+</body>
+</html>

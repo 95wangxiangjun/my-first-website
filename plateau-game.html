@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>高原探险 - 方寸屏间，万里河山</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a192f, #112240, #1a2a6c);
+            color: white;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: rgba(10, 25, 47, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        .page-hero {
+            position: relative;
+            padding: 2rem 2rem;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #64ffda, #4fd3c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #a8b2d1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 1rem auto;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        /* 游戏画布容器 */
+        .game-canvas-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            border: 3px solid rgba(100, 255, 218, 0.3);
+            cursor: pointer;
+        }
+        
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+        
+        /* 游戏信息栏 */
+        .game-stats {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            z-index: 5;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+        
+        .stat-item {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            color: #64ffda;
+        }
+        
+        /* 控制方式说明 */
+        .game-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            color: white;
+            z-index: 5;
+        }
+        
+        .control-title {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #64ffda;
+        }
+        
+        .control-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+            color: #a8b2d1;
+        }
+        
+        .control-key {
+            background-color: rgba(100, 255, 218, 0.2);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(100, 255, 218, 0.5);
+            font-family: monospace;
+            color: #64ffda;
+        }
+        
+        /* 游戏覆盖层 */
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 10;
+            border-radius: 15px;
+        }
+        
+        .game-title {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #64ffda;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        .game-description {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #a8b2d1;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
+        .score-display {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #64ffda;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: #64ffda;
+            color: #0a192f;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #4fd3c4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+        }
+        
+        /* 移动端虚拟控制按钮 */
+        .mobile-controls {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .mobile-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: rgba(100, 255, 218, 0.8);
+            border: 2px solid rgba(100, 255, 218, 0.5);
+            font-size: 16px;
+            font-weight: bold;
+            color: #0a192f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            touch-action: manipulation;
+            pointer-events: all;
+            transition: all 0.1s ease;
+        }
+        
+        .mobile-btn:active {
+            transform: scale(0.95);
+            background-color: rgba(79, 211, 196, 0.9);
+        }
+        
+        /* 游戏说明 */
+        .game-instructions {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+        
+        .game-instructions h4 {
+            color: #64ffda;
+            margin-bottom: 1rem;
+        }
+        
+        .game-instructions p {
+            color: #a8b2d1;
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(10, 25, 47, 0.9);
+            margin-top: 2rem;
+        }
+        
+        footer a {
+            color: #64ffda;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            header {
+                padding: 0.8rem 1rem;
+            }
+            
+            .logo-text {
+                font-size: 20px;
+            }
+            
+            .page-hero {
+                padding: 1rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-content p {
+                font-size: 1rem;
+            }
+            
+            .game-container {
+                padding: 0.5rem;
+                margin: 0.5rem;
+            }
+            
+            .game-canvas-container {
+                height: 50vh;
+            }
+            
+            .game-stats {
+                font-size: 14px;
+                padding: 8px;
+            }
+            
+            .game-controls {
+                display: none;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .game-description {
+                font-size: 1rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .mobile-controls {
+                display: flex;
+            }
+            
+            .mobile-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 14px;
+            }
+            
+            .game-instructions {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .mobile-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 12px;
+            }
+            
+            .mobile-controls {
+                padding: 0 15px;
+                bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header>
+        <div class="logo">
+            <img src="images/item/item.jpg" alt="方寸屏间，万里河山" class="logo-image">
+            <span class="logo-text">方寸屏间，万里河山</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html#regions" class="btn">返回</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- 页面英雄区域 -->
+    <section class="page-hero">
+        <div class="hero-content">
+            <h1>高原牦牛骑手</h1>
+            <p>在辽阔的西部高原上，骑着牦牛穿越草原和山脉，体验高原探险的刺激</p>
+        </div>
+    </section>
+    
+    <!-- 游戏主容器 -->
+    <main class="game-container">
+        <div class="game-section">
+            <h3 style="color: #64ffda; text-align: center; margin-bottom: 1rem;">高原探险挑战</h3>
+            <p style="color: #a8b2d1; text-align: center; margin-bottom: 1rem;">驾驭牦牛穿越高原，收集经幡和酥油，避开障碍物</p>
+            
+            <!-- 游戏画布区域 -->
+            <div class="game-canvas-container">
+                <!-- 游戏统计信息 -->
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span>分数:</span>
+                        <span id="score">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>距离:</span>
+                        <span id="distance">0m</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>生命:</span>
+                        <span id="lives">3</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>速度:</span>
+                        <span id="speed">1.0x</span>
+                    </div>
+                </div>
+
+                <!-- 控制方式说明 -->
+                <div class="game-controls">
+                    <div class="control-title">控制方式</div>
+                    <div class="control-item">
+                        <span class="control-key">←</span>
+                        <span>向左移动</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">→</span>
+                        <span>向右移动</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">空格</span>
+                        <span>跳跃</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="control-key">P</span>
+                        <span>暂停游戏</span>
+                    </div>
+                </div>
+
+                <!-- 移动端控制按钮 -->
+                <div class="mobile-controls">
+                    <button class="mobile-btn" id="leftBtn">←</button>
+                    <button class="mobile-btn" id="jumpBtn">跳跃</button>
+                    <button class="mobile-btn" id="rightBtn">→</button>
+                </div>
+
+                <!-- 游戏画布 -->
+                <canvas id="gameCanvas"></canvas>
+
+                <!-- 开始界面 -->
+                <div class="game-overlay" id="startScreen">
+                    <h1 class="game-title">高原牦牛骑手</h1>
+                    <p class="game-description">在辽阔的西部高原上，骑着牦牛穿越草原和山脉，收集经幡和酥油，避开岩石和河流！随着时间推移，牦牛速度会越来越快！</p>
+                    <button class="btn" id="startBtn">开始游戏</button>
+                </div>
+
+                <!-- 游戏结束界面 -->
+                <div class="game-overlay" id="gameOverScreen" style="display: none;">
+                    <h1 class="game-title">游戏结束</h1>
+                    <div class="score-display">
+                        <p>最终得分: <span id="finalScore">0</span></p>
+                        <p>总距离: <span id="finalDistance">0</span>m</p>
+                        <p>最高速度: <span id="finalSpeed">1.0</span>x</p>
+                    </div>
+                    <button class="btn" id="restartBtn">再来一次</button>
+                </div>
+
+                <!-- 暂停界面 -->
+                <div class="game-overlay" id="pauseScreen" style="display: none;">
+                    <h1 class="game-title">游戏暂停</h1>
+                    <button class="btn" id="resumeBtn">继续游戏</button>
+                    <button class="btn" id="quitPauseBtn">退出游戏</button>
+                </div>
+            </div>
+            
+            <!-- 游戏说明 -->
+            <div class="game-instructions">
+                <h4>游戏说明</h4>
+                <p>🎯 <strong>游戏提示：</strong>刚开始牦牛速度较慢，尽量靠近障碍物再跳</p>
+                <p>🎯 <strong>游戏目标：</strong>骑着牦牛在高原上尽可能跑得更远，收集更多经幡和酥油</p>
+                <p>🎮 <strong>操作方式：</strong>使用方向键移动，空格键跳跃，避开岩石和河流</p>
+                <p>🏔️ <strong>高原特色：</strong>体验西部高原的壮丽景色，感受牦牛骑行的刺激</p>
+                <p>💡 <strong>游戏特点：</strong>随着游戏时间增加，牦牛速度会不断提升，挑战你的反应极限！</p>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 页面底部 -->
+    <footer>
+        <p>方寸屏间，万里河山</p>
+        <p>2025武汉大学参赛作品 | <a href="message-board.html">分享你的山河故事</a></p>
+    </footer>
+
+    <script>
+        // ===============================
+        // 高原牦牛骑手游戏 - JavaScript代码
+        // 游戏功能：高原探险，牦牛骑行，速度随时间增加
+        // 作者：武汉大学参赛团队
+        // 版本：1.0
+        // ===============================
+
+        // 获取画布和上下文
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // 设置画布尺寸
+        function setCanvasSize() {
+            const container = document.querySelector('.game-canvas-container');
+            const maxWidth = container.clientWidth;
+            const maxHeight = container.clientHeight;
+            
+            // 保持16:9的宽高比
+            const targetWidth = 800;
+            const targetHeight = 450;
+            const scale = Math.min(maxWidth / targetWidth, maxHeight / targetHeight);
+            
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            canvas.style.width = `${targetWidth * scale}px`;
+            canvas.style.height = `${targetHeight * scale}px`;
+        }
+
+        // 初始化画布尺寸
+        setCanvasSize();
+        window.addEventListener('resize', setCanvasSize);
+        
+        // 设备类型检测
+        function detectMobileDevice() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            return isMobile;
+        }
+        
+        // 游戏配置
+        const config = {
+            canvasWidth: canvas.width,
+            canvasHeight: canvas.height,
+            playerWidth: 60,
+            playerHeight: 70,
+            playerSpeed: 7,
+            playerJumpPower: 16,
+            gravity: 0.5,
+            initialLives: 3,
+            baseObstacleSpeed: 3, // 基础障碍物速度
+            baseCollectibleSpeed: 3, // 基础收集物速度
+            baseBackgroundSpeed: 1.5, // 基础背景速度
+            scorePerCollectible: 100,
+            scorePerMeter: 10,
+            obstacleSpawnRate: 2000,
+            collectibleSpawnRate: 2000,
+            speedIncreaseRate: 0.0002, // 速度增加速率（每帧增加的量）
+            maxSpeedMultiplier: 5.0 // 最大速度倍数
+        };
+
+        // 游戏状态
+        const gameState = {
+            isRunning: false,
+            isPaused: false,
+            score: 0,
+            distance: 0,
+            lives: config.initialLives,
+            lastObstacleSpawn: 0,
+            lastCollectibleSpawn: 0,
+            gameTime: 0, // 游戏时间（帧数）
+            currentSpeedMultiplier: 1.0, // 当前速度倍数
+            maxSpeedReached: 1.0 // 达到的最高速度
+        };
+
+        // 游戏对象
+        const player = {
+            x: canvas.width / 4,
+            y: canvas.height - 150,
+            width: config.playerWidth,
+            height: config.playerHeight,
+            speedX: 0,
+            speedY: 0,
+            isJumping: false,
+            isInvincible: false,
+            invincibleTimer: 0,
+            // 动画状态变量
+            blinkTimer: 0,
+            blinkInterval: 3000,
+            blinkDuration: 200,
+            isBlinking: false,
+            legAnimationTimer: 0,
+            headBobTimer: 0,
+            armSwingTimer: 0,
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                
+                // 如果在跳跃中，添加倾斜角度和旋转效果
+                if (this.isJumping) {
+                    const jumpRotation = Math.sin(Date.now() * 0.005) * 0.1;
+                    ctx.rotate(jumpRotation);
+                }
+                
+                // 无敌状态闪烁效果
+                if (this.isInvincible) {
+                    const blinkState = Math.floor(Date.now() / 100) % 2;
+                    ctx.globalAlpha = blinkState ? 0.4 : 0.8;
+                }
+                
+                // 更新动画计时器
+                this.updateAnimationTimers();
+                
+                // ========== 牦牛绘制 ==========
+                
+                // 牦牛身体
+                ctx.fillStyle = '#a8a29e';
+                ctx.beginPath();
+                ctx.ellipse(0, 5, 25, 30, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 牦牛身体纹理
+                ctx.fillStyle = '#9ca3af';
+                ctx.globalAlpha = 0.6;
+                for (let i = 0; i < 5; i++) {
+                    ctx.beginPath();
+                    ctx.ellipse(-20 + i * 10, 5, 8, 4, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+                
+                // 牦牛头部
+                ctx.beginPath();
+                ctx.arc(0, -25, 20, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 牛角
+                ctx.fillStyle = '#78716c';
+                
+                // 左牛角
+                ctx.beginPath();
+                ctx.moveTo(-10, -30);
+                ctx.quadraticCurveTo(-25, -45, -20, -35);
+                ctx.lineTo(-15, -35);
+                ctx.quadraticCurveTo(-20, -42, -10, -30);
+                ctx.closePath();
+                ctx.fill();
+                
+                // 右牛角
+                ctx.beginPath();
+                ctx.moveTo(10, -30);
+                ctx.quadraticCurveTo(25, -45, 20, -35);
+                ctx.lineTo(15, -35);
+                ctx.quadraticCurveTo(20, -42, 10, -30);
+                ctx.closePath();
+                ctx.fill();
+                
+                // 牦牛耳朵
+                ctx.beginPath();
+                ctx.moveTo(-18, -25);
+                ctx.quadraticCurveTo(-22, -35, -16, -32);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.moveTo(18, -25);
+                ctx.quadraticCurveTo(22, -35, 16, -32);
+                ctx.closePath();
+                ctx.fill();
+                
+                // 牦牛眼睛
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.ellipse(-8, -30, 5, 3, 0, 0, Math.PI * 2);
+                ctx.ellipse(8, -30, 5, 3, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 眼球跟随
+                const eyeOffset = Math.sin(Date.now() * 0.005) * 1;
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.arc(-8 + eyeOffset, -30, 2, 0, Math.PI * 2);
+                ctx.arc(8 + eyeOffset, -30, 2, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 牦牛鼻子和嘴巴
+                ctx.fillStyle = '#9ca3af';
+                ctx.beginPath();
+                ctx.ellipse(0, -20, 8, 5, 0, 0, Math.PI);
+                ctx.fill();
+                
+                // 鼻孔
+                ctx.fillStyle = '#6b7280';
+                ctx.beginPath();
+                ctx.arc(-3, -20, 1, 0, Math.PI * 2);
+                ctx.arc(3, -20, 1, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 动态腿部动画
+                this.drawAnimatedLegs();
+                
+                // 牦牛尾巴（摇摆动画）
+                const tailX = 25 + Math.sin(Date.now() * 0.01) * 8;
+                const tailY = 0 + Math.cos(Date.now() * 0.01) * 5;
+                
+                ctx.strokeStyle = '#78716c';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(20, 5);
+                ctx.quadraticCurveTo(25, -5, tailX, tailY);
+                ctx.stroke();
+                
+                // ========== 骑牛手绘制 ==========
+                
+                // 头部上下摆动
+                ctx.save();
+                const headBobOffset = Math.sin(this.headBobTimer) * 2;
+                ctx.translate(0, headBobOffset);
+                
+                // 骑手头部
+                ctx.fillStyle = '#f59e0b';
+                ctx.beginPath();
+                ctx.arc(0, -50, 10, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 动态眼睛（眨眼效果）
+                this.drawAnimatedEyes();
+                
+                // 嘴巴（动态表情）
+                const mouthOpen = Math.sin(Date.now() * 0.002) > 0;
+                ctx.strokeStyle = 'black';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                if (mouthOpen) {
+                    ctx.arc(0, -45, 3, 0, Math.PI, false);
+                } else {
+                    ctx.moveTo(-2, -45);
+                    ctx.lineTo(2, -45);
+                }
+                ctx.stroke();
+                
+                // 藏族帽子
+                ctx.fillStyle = '#991b1b';
+                ctx.beginPath();
+                ctx.moveTo(-12, -55);
+                ctx.lineTo(12, -55);
+                ctx.lineTo(16, -65);
+                ctx.lineTo(-16, -65);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.restore();
+                
+                // 骑手身体
+                ctx.fillStyle = '#d97706';
+                ctx.beginPath();
+                ctx.ellipse(0, -40, 15, 20, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // 动态手臂（摇摆动画）
+                this.drawAnimatedArms();
+                
+                ctx.restore();
+            },
+            
+            // 更新动画计时器
+            updateAnimationTimers() {
+                // 眨眼计时器
+                this.blinkTimer += 16;
+                if (this.blinkTimer > this.blinkInterval) {
+                    this.isBlinking = true;
+                    this.blinkTimer = 0;
+                }
+                
+                if (this.isBlinking) {
+                    if (this.blinkTimer > this.blinkDuration) {
+                        this.isBlinking = false;
+                        this.blinkTimer = this.blinkInterval - this.blinkDuration;
+                    }
+                }
+                
+                // 腿部动画计时器
+                this.legAnimationTimer += 0.1;
+                
+                // 头部摆动计时器
+                this.headBobTimer += 0.08;
+                
+                // 手臂摆动计时器
+                this.armSwingTimer += 0.1;
+            },
+            
+            // 绘制动态腿部
+            drawAnimatedLegs() {
+                ctx.fillStyle = '#78716c';
+                
+                // 前后腿交替运动
+                const legAngle1 = Math.sin(this.legAnimationTimer) * 0.3;
+                const legAngle2 = Math.sin(this.legAnimationTimer + Math.PI) * 0.3;
+                
+                // 左前腿
+                ctx.save();
+                ctx.translate(-20, 20);
+                ctx.rotate(legAngle1);
+                ctx.fillRect(-5, 0, 10, 25);
+                ctx.restore();
+                
+                // 右前腿
+                ctx.save();
+                ctx.translate(10, 20);
+                ctx.rotate(legAngle1);
+                ctx.fillStyle = '#78716c';
+                ctx.fillRect(-5, 0, 10, 25);
+                ctx.restore();
+                
+                // 左后腿
+                ctx.save();
+                ctx.translate(-15, 35);
+                ctx.rotate(legAngle2);
+                ctx.fillStyle = '#78716c';
+                ctx.fillRect(-4, 0, 8, 15);
+                ctx.restore();
+                
+                // 右后腿
+                ctx.save();
+                ctx.translate(7, 35);
+                ctx.rotate(legAngle2);
+                ctx.fillStyle = '#78716c';
+                ctx.fillRect(-4, 0, 8, 15);
+                ctx.restore();
+            },
+            
+            // 绘制动态眼睛
+            drawAnimatedEyes() {
+                ctx.fillStyle = 'white';
+                
+                if (this.isBlinking) {
+                    // 自然眨眼效果
+                    const blinkProgress = this.blinkTimer / this.blinkDuration;
+                    const eyeHeight = 3 * (1 - Math.sin(blinkProgress * Math.PI));
+                    
+                    ctx.beginPath();
+                    ctx.ellipse(-4, -52, 3, eyeHeight, 0, 0, Math.PI * 2);
+                    ctx.ellipse(4, -52, 3, eyeHeight, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    // 正常眼睛
+                    ctx.beginPath();
+                    ctx.ellipse(-4, -52, 3, 2, 0, 0, Math.PI * 2);
+                    ctx.ellipse(4, -52, 3, 2, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // 眼球
+                    ctx.fillStyle = 'black';
+                    ctx.beginPath();
+                    ctx.arc(-4, -52, 1.5, 0, Math.PI * 2);
+                    ctx.arc(4, -52, 1.5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            },
+            
+            // 绘制动态手臂
+            drawAnimatedArms() {
+                const armAngleLeft = Math.sin(this.armSwingTimer) * 0.4;
+                const armAngleRight = -Math.sin(this.armSwingTimer) * 0.4;
+                
+                // 左手臂
+                ctx.save();
+                ctx.translate(-10, -40);
+                ctx.rotate(armAngleLeft);
+                ctx.fillStyle = '#d97706';
+                ctx.fillRect(-8, -3, 16, 10);
+                ctx.restore();
+                
+                // 右手臂
+                ctx.save();
+                ctx.translate(10, -40);
+                ctx.rotate(armAngleRight);
+                ctx.fillStyle = '#d97706';
+                ctx.fillRect(-8, -3, 16, 10);
+                ctx.restore();
+            },
+            
+            update() {
+                // 应用重力
+                this.speedY += config.gravity;
+                
+                // 更新位置
+                this.x += this.speedX;
+                this.y += this.speedY;
+                
+                // 边界检测
+                if (this.x < 0) this.x = 0;
+                if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
+                
+                // 地面检测
+                if (this.y + this.height > canvas.height - 80) {
+                    this.y = canvas.height - 80 - this.height;
+                    this.speedY = 0;
+                    this.isJumping = false;
+                }
+                
+                // 更新无敌状态
+                if (this.isInvincible) {
+                    this.invincibleTimer--;
+                    if (this.invincibleTimer <= 0) {
+                        this.isInvincible = false;
+                    }
+                }
+            },
+            
+            jump() {
+                if (!this.isJumping) {
+                    this.speedY = -config.playerJumpPower;
+                    this.isJumping = true;
+                }
+            },
+            
+            moveLeft() {
+                this.speedX = -config.playerSpeed;
+            },
+            
+            moveRight() {
+                this.speedX = config.playerSpeed;
+            },
+            
+            stopMoving() {
+                this.speedX = 0;
+            },
+            
+            takeDamage() {
+                if (!this.isInvincible) {
+                    gameState.lives--;
+                    this.isInvincible = true;
+                    this.invincibleTimer = 60;
+                    document.getElementById('lives').textContent = gameState.lives;
+                    
+                    if (gameState.lives <= 0) {
+                        gameOver();
+                    }
+                }
+            }
+        };
+
+        // 障碍物数组
+        const obstacles = [];
+        
+        // 收集物数组
+        const collectibles = [];
+        
+        // 背景元素数组
+        const backgroundElements = [];
+
+        // 创建随机障碍物
+        function createObstacle() {
+            const obstacleTypes = [
+                { width: 30, height: 20, color: '#78716c', type: 'rock' },
+                { width: 40, height: 30, color: '#78716c', type: 'rock' },
+                { width: 60, height: 45, color: '#4b5563', type: 'rock' },
+                { width: 80, height: 40, color: '#3b82f6', type: 'river' },
+                { width: 100, height: 30, color: '#1d4ed8', type: 'river' }
+            ];
+            
+            const type = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+            const x = canvas.width;
+            let y;
+            if (type.type === 'rock') {
+                y = canvas.height - 40 - type.height;
+            } else {
+                y = canvas.height - 80 - type.height;
+            }
+            
+            obstacles.push({
+                x: x,
+                y: y,
+                width: type.width,
+                height: type.height,
+                color: type.color,
+                type: type.type
+            });
+        }
+
+        // 创建随机收集物
+        function createCollectible() {
+            const collectibleTypes = [
+                { width: 30, height: 40, color: '#ef4444', type: 'prayer_flag' },
+                { width: 30, height: 40, color: '#f97316', type: 'prayer_flag' },
+                { width: 30, height: 40, color: '#facc15', type: 'prayer_flag' },
+                { width: 30, height: 40, color: '#22c55e', type: 'prayer_flag' },
+                { width: 30, height: 40, color: '#3b82f6', type: 'prayer_flag' },
+                { width: 25, height: 25, color: '#fef3c7', type: 'butter' }
+            ];
+            
+            const type = collectibleTypes[Math.floor(Math.random() * collectibleTypes.length)];
+            const x = canvas.width + Math.random() * 200;
+            const y = canvas.height - 150 - type.height - Math.random() * 100;
+            
+            collectibles.push({
+                x: x,
+                y: y,
+                width: type.width,
+                height: type.height,
+                color: type.color,
+                type: type.type,
+                score: type.type === 'butter' ? 200 : 100,
+                collected: false
+            });
+        }
+
+        // 创建背景元素
+        function createBackgroundElements() {
+            for (let i = 0; i < 50; i++) {
+                const elementType = Math.random() > 0.7 ? 'mountain' : 'grass';
+                let size, speed, color;
+                
+                if (elementType === 'mountain') {
+                    size = Math.random() * 100 + 50;
+                    speed = config.baseBackgroundSpeed * 0.3;
+                    color = '#374151';
+                } else {
+                    size = Math.random() * 20 + 10;
+                    speed = config.baseBackgroundSpeed * 0.8;
+                    color = '#166534';
+                }
+                
+                backgroundElements.push({
+                    x: Math.random() * canvas.width,
+                    y: elementType === 'mountain' ? canvas.height - 200 - size : canvas.height - 80 - size,
+                    size: size,
+                    speed: speed,
+                    type: elementType,
+                    color: color
+                });
+            }
+            
+            // 添加几个蒙古包
+            for (let i = 0; i < 5; i++) {
+                backgroundElements.push({
+                    x: Math.random() * canvas.width,
+                    y: canvas.height - 150,
+                    size: Math.random() * 30 + 40,
+                    speed: config.baseBackgroundSpeed * 0.5,
+                    type: 'tent',
+                    color: '#92400e'
+                });
+            }
+        }
+
+        // 更新障碍物
+        function updateObstacles() {
+            const currentObstacleSpeed = config.baseObstacleSpeed * gameState.currentSpeedMultiplier;
+            
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obstacle = obstacles[i];
+                obstacle.x -= currentObstacleSpeed;
+                
+                // 移除超出屏幕的障碍物
+                if (obstacle.x + obstacle.width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+        }
+
+        // 更新收集物
+        function updateCollectibles() {
+            const currentCollectibleSpeed = config.baseCollectibleSpeed * gameState.currentSpeedMultiplier;
+            
+            for (let i = collectibles.length - 1; i >= 0; i--) {
+                const collectible = collectibles[i];
+                collectible.x -= currentCollectibleSpeed;
+                
+                // 移除超出屏幕的收集物
+                if (collectible.x + collectible.width < 0) {
+                    collectibles.splice(i, 1);
+                }
+            }
+        }
+
+        // 更新背景元素
+        function updateBackgroundElements() {
+            for (let i = backgroundElements.length - 1; i >= 0; i--) {
+                const element = backgroundElements[i];
+                element.x -= element.speed * gameState.currentSpeedMultiplier;
+                
+                // 当元素移出屏幕左侧时，重新放置到右侧
+                if (element.x < -element.size) {
+                    element.x = canvas.width + element.size + Math.random() * 200;
+                    
+                    if (element.type !== 'tent') {
+                        if (element.type === 'mountain') {
+                            element.y = canvas.height - 200 - element.size;
+                        } else {
+                            element.y = canvas.height - 80 - element.size;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 绘制背景
+        function drawBackground() {
+            // 天空渐变
+            const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.6);
+            skyGradient.addColorStop(0, '#7dd3fc');
+            skyGradient.addColorStop(1, '#0ea5e9');
+            ctx.fillStyle = skyGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 地面
+            ctx.fillStyle = '#22c55e';
+            ctx.fillRect(0, canvas.height - 80, canvas.width, 80);
+            
+            // 绘制远处的山脉轮廓
+            ctx.fillStyle = '#1e293b';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 200);
+            ctx.lineTo(canvas.width / 5, canvas.height - 250);
+            ctx.lineTo(canvas.width * 2 / 5, canvas.height - 220);
+            ctx.lineTo(canvas.width * 3 / 5, canvas.height - 280);
+            ctx.lineTo(canvas.width * 4 / 5, canvas.height - 240);
+            ctx.lineTo(canvas.width, canvas.height - 260);
+            ctx.lineTo(canvas.width, canvas.height);
+            ctx.lineTo(0, canvas.height);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // 绘制背景元素
+        function drawBackgroundElements() {
+            for (const element of backgroundElements) {
+                ctx.save();
+                ctx.translate(element.x, element.y);
+                
+                if (element.type === 'mountain') {
+                    ctx.fillStyle = element.color;
+                    ctx.beginPath();
+                    ctx.moveTo(-element.size, 0);
+                    ctx.lineTo(0, -element.size);
+                    ctx.lineTo(element.size, 0);
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (element.type === 'grass') {
+                    ctx.fillStyle = element.color;
+                    ctx.beginPath();
+                    for (let i = 0; i < 5; i++) {
+                        ctx.moveTo(-element.size / 2 + i * element.size / 4, 0);
+                        ctx.quadraticCurveTo(
+                            -element.size / 2 + i * element.size / 4 - element.size / 8,
+                            -element.size * 0.8,
+                            -element.size / 2 + i * element.size / 4,
+                            -element.size
+                        );
+                        ctx.quadraticCurveTo(
+                            -element.size / 2 + i * element.size / 4 + element.size / 8,
+                            -element.size * 0.8,
+                            -element.size / 2 + i * element.size / 4,
+                            0
+                        );
+                    }
+                    ctx.fill();
+                } else if (element.type === 'tent') {
+                    ctx.fillStyle = element.color;
+                    ctx.beginPath();
+                    ctx.moveTo(-element.size / 2, 0);
+                    ctx.lineTo(0, -element.size);
+                    ctx.lineTo(element.size / 2, 0);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                
+                ctx.restore();
+            }
+        }
+
+        // 绘制障碍物
+        function drawObstacles() {
+            for (const obstacle of obstacles) {
+                ctx.save();
+                ctx.translate(obstacle.x, obstacle.y);
+                
+                if (obstacle.type === 'rock') {
+                    ctx.fillStyle = obstacle.color;
+                    ctx.beginPath();
+                    ctx.moveTo(-obstacle.width / 2, 0);
+                    ctx.bezierCurveTo(
+                        -obstacle.width / 2, -obstacle.height * 0.3,
+                        -obstacle.width / 4, -obstacle.height,
+                        0, -obstacle.height
+                    );
+                    ctx.bezierCurveTo(
+                        obstacle.width / 4, -obstacle.height,
+                        obstacle.width / 2, -obstacle.height * 0.3,
+                        obstacle.width / 2, 0
+                    );
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (obstacle.type === 'river') {
+                    const waterGradient = ctx.createLinearGradient(-obstacle.width / 2, 0, obstacle.width / 2, 0);
+                    waterGradient.addColorStop(0, obstacle.color);
+                    waterGradient.addColorStop(0.5, '#60a5fa');
+                    waterGradient.addColorStop(1, obstacle.color);
+                    ctx.fillStyle = waterGradient;
+                    
+                    ctx.beginPath();
+                    for (let x = -obstacle.width / 2; x <= obstacle.width / 2; x += 5) {
+                        const y = Math.sin(x * 0.2 + Date.now() * 0.002) * 5;
+                        if (x === -obstacle.width / 2) {
+                            ctx.moveTo(x, y);
+                        } else {
+                            ctx.lineTo(x, y);
+                        }
+                    }
+                    ctx.lineTo(obstacle.width / 2, obstacle.height);
+                    ctx.lineTo(-obstacle.width / 2, obstacle.height);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                
+                ctx.restore();
+            }
+        }
+
+        // 绘制收集物
+        function drawCollectibles() {
+            for (const collectible of collectibles) {
+                ctx.save();
+                ctx.translate(collectible.x, collectible.y);
+                
+                if (collectible.type === 'prayer_flag') {
+                    // 旗杆
+                    ctx.fillStyle = '#78716c';
+                    ctx.fillRect(-2, 0, 4, collectible.height);
+                    
+                    // 旗帜
+                    ctx.fillStyle = collectible.color;
+                    ctx.beginPath();
+                    ctx.moveTo(-collectible.width / 2, 0);
+                    ctx.lineTo(collectible.width / 2, collectible.height * 0.2);
+                    ctx.lineTo(collectible.width / 2, collectible.height * 0.4);
+                    ctx.lineTo(-collectible.width / 2, collectible.height * 0.2);
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (collectible.type === 'butter') {
+                    ctx.fillStyle = collectible.color;
+                    ctx.beginPath();
+                    ctx.arc(0, collectible.height / 2, collectible.width / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                ctx.restore();
+            }
+        }
+
+        // 碰撞检测
+        function checkCollisions() {
+            // 障碍物碰撞检测
+            if (!player.isInvincible) {
+                for (const obstacle of obstacles) {
+                    if (player.x < obstacle.x + obstacle.width &&
+                        player.x + player.width > obstacle.x &&
+                        player.y < obstacle.y + obstacle.height &&
+                        player.y + player.height > obstacle.y) {
+                        player.takeDamage();
+                        break;
+                    }
+                }
+            }
+            
+            // 收集物碰撞检测
+            for (let i = collectibles.length - 1; i >= 0; i--) {
+                const collectible = collectibles[i];
+                if (!collectible.collected &&
+                    player.x < collectible.x + collectible.width &&
+                    player.x + player.width > collectible.x &&
+                    player.y < collectible.y + collectible.height &&
+                    player.y + player.height > collectible.y) {
+                    
+                    collectible.collected = true;
+                    gameState.score += collectible.score;
+                    document.getElementById('score').textContent = gameState.score;
+                    collectibles.splice(i, 1);
+                }
+            }
+        }
+
+        // 更新游戏统计
+        function updateStats() {
+            // 更新距离
+            const distanceGained = Math.floor(config.baseObstacleSpeed * gameState.currentSpeedMultiplier);
+            gameState.distance += distanceGained;
+            document.getElementById('distance').textContent = `${gameState.distance}m`;
+            
+            // 根据距离增加分数
+            if (gameState.distance % 100 === 0) {
+                gameState.score += config.scorePerMeter;
+                document.getElementById('score').textContent = gameState.score;
+            }
+        }
+
+        // 增加游戏速度
+        function increaseGameSpeed() {
+            // 每帧增加速度
+            if (gameState.currentSpeedMultiplier < config.maxSpeedMultiplier) {
+                gameState.currentSpeedMultiplier += config.speedIncreaseRate;
+                if (gameState.currentSpeedMultiplier > gameState.maxSpeedReached) {
+                    gameState.maxSpeedReached = gameState.currentSpeedMultiplier;
+                }
+                
+                // 更新速度显示
+                document.getElementById('speed').textContent = gameState.currentSpeedMultiplier.toFixed(1) + 'x';
+            }
+        }
+
+        // 游戏主循环
+        function gameLoop(timestamp) {
+            if (!gameState.isRunning || gameState.isPaused) return;
+            
+            // 增加游戏时间
+            gameState.gameTime++;
+            
+            // 增加游戏速度
+            increaseGameSpeed();
+            
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制背景
+            drawBackground();
+            drawBackgroundElements();
+            
+            // 更新背景元素
+            updateBackgroundElements();
+            
+            // 生成新障碍物
+            const obstacleSpawnRate = config.obstacleSpawnRate / gameState.currentSpeedMultiplier;
+            if (timestamp - gameState.lastObstacleSpawn > obstacleSpawnRate) {
+                createObstacle();
+                gameState.lastObstacleSpawn = timestamp;
+            }
+            
+            // 生成新收集物
+            const collectibleSpawnRate = config.collectibleSpawnRate / gameState.currentSpeedMultiplier;
+            if (timestamp - gameState.lastCollectibleSpawn > collectibleSpawnRate) {
+                createCollectible();
+                gameState.lastCollectibleSpawn = timestamp;
+            }
+            
+            // 更新障碍物和收集物
+            updateObstacles();
+            updateCollectibles();
+            
+            // 绘制障碍物和收集物
+            drawObstacles();
+            drawCollectibles();
+            
+            // 更新玩家
+            player.update();
+            player.draw();
+            
+            // 碰撞检测
+            checkCollisions();
+            
+            // 更新统计
+            updateStats();
+            
+            // 继续游戏循环
+            requestAnimationFrame(gameLoop);
+        }
+
+        // 开始游戏
+        function startGame() {
+            // 重置游戏状态
+            gameState.isRunning = true;
+            gameState.isPaused = false;
+            gameState.score = 0;
+            gameState.distance = 0;
+            gameState.lives = config.initialLives;
+            gameState.lastObstacleSpawn = 0;
+            gameState.lastCollectibleSpawn = 0;
+            gameState.gameTime = 0;
+            gameState.currentSpeedMultiplier = 1.0;
+            gameState.maxSpeedReached = 1.0;
+            
+            // 清空障碍物和收集物
+            obstacles.length = 0;
+            collectibles.length = 0;
+            
+            // 重置玩家位置
+            player.x = canvas.width / 4;
+            player.y = canvas.height - 150;
+            player.speedX = 0;
+            player.speedY = 0;
+            player.isJumping = false;
+            player.isInvincible = false;
+            
+            // 更新统计显示
+            document.getElementById('score').textContent = gameState.score;
+            document.getElementById('distance').textContent = `${gameState.distance}m`;
+            document.getElementById('lives').textContent = gameState.lives;
+            document.getElementById('speed').textContent = '1.0x';
+            
+            // 隐藏开始屏幕
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameOverScreen').style.display = 'none';
+            document.getElementById('pauseScreen').style.display = 'none';
+            
+            // 开始游戏循环
+            requestAnimationFrame(gameLoop);
+        }
+
+        // 暂停游戏
+        function pauseGame() {
+            gameState.isPaused = true;
+            document.getElementById('pauseScreen').style.display = 'flex';
+        }
+
+        // 继续游戏
+        function resumeGame() {
+            gameState.isPaused = false;
+            document.getElementById('pauseScreen').style.display = 'none';
+            requestAnimationFrame(gameLoop);
+        }
+
+        // 游戏结束
+        function gameOver() {
+            gameState.isRunning = false;
+            document.getElementById('finalScore').textContent = gameState.score;
+            document.getElementById('finalDistance').textContent = gameState.distance;
+            document.getElementById('finalSpeed').textContent = gameState.maxSpeedReached.toFixed(1);
+            document.getElementById('gameOverScreen').style.display = 'flex';
+        }
+
+        // 退出游戏
+        function quitGame() {
+            gameState.isRunning = false;
+            document.getElementById('startScreen').style.display = 'flex';
+            document.getElementById('pauseScreen').style.display = 'none';
+            document.getElementById('gameOverScreen').style.display = 'none';
+        }
+
+        // 按键状态
+        const keys = {
+            left: false,
+            right: false
+        };
+
+        // 键盘事件监听
+        document.addEventListener('keydown', (e) => {
+            if (!gameState.isRunning) return;
+            if (e.key === ' ') {
+        e.preventDefault();
+    }
+            
+            switch (e.key) {
+                case 'ArrowLeft':
+                    keys.left = true;
+                    player.moveLeft();
+                    break;
+                case 'ArrowRight':
+                    keys.right = true;
+                    player.moveRight();
+                    break;
+                case ' ':
+                    player.jump();
+                    break;
+                case 'p':
+                case 'P':
+                    if (!gameState.isPaused) {
+                        pauseGame();
+                    } else {
+                        resumeGame();
+                    }
+                    break;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            switch (e.key) {
+                case 'ArrowLeft':
+                    keys.left = false;
+                    if (!keys.right) {
+                        player.stopMoving();
+                    } else {
+                        player.moveRight();
+                    }
+                    break;
+                case 'ArrowRight':
+                    keys.right = false;
+                    if (!keys.left) {
+                        player.stopMoving();
+                    } else {
+                        player.moveLeft();
+                    }
+                    break;
+            }
+        });
+
+        // 移动端控制按钮事件
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const jumpBtn = document.getElementById('jumpBtn');
+        
+        // 左移按钮
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameState.isRunning && !gameState.isPaused) {
+                keys.left = true;
+                keys.right = false;
+                player.moveLeft();
+            }
+        });
+
+        leftBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keys.left = false;
+            if (!keys.right) {
+                player.stopMoving();
+            }
+        });
+
+        // 右移按钮
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameState.isRunning && !gameState.isPaused) {
+                keys.right = true;
+                keys.left = false;
+                player.moveRight();
+            }
+        });
+
+        rightBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keys.right = false;
+            if (!keys.left) {
+                player.stopMoving();
+            }
+        });
+
+        // 跳跃按钮
+        jumpBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameState.isRunning && !gameState.isPaused) {
+                player.jump();
+            }
+        });
+
+        // 按钮事件绑定
+        const startBtn = document.getElementById('startBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const resumeBtn = document.getElementById('resumeBtn');
+        const quitPauseBtn = document.getElementById('quitPauseBtn');
+        
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+        resumeBtn.addEventListener('click', resumeGame);
+        quitPauseBtn.addEventListener('click', quitGame);
+
+        // 初始化背景元素
+        createBackgroundElements();
+        
+        // 移动设备适配
+        if (detectMobileDevice()) {
+            config.playerSpeed = 8;
+            config.playerJumpPower = 17;
+            config.gravity = 0.45;
+            config.baseObstacleSpeed = 2.8;
+        }
+    </script>
+</body>
+</html>
