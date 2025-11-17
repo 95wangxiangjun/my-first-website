@@ -118,7 +118,7 @@
       margin-bottom: 2rem;
     }
     
-    /* 游戏信息和控制栏 */
+    
     .game-info-bar {
       display: flex;
       justify-content: space-between;
@@ -169,7 +169,7 @@
       color: #64ffda;
     }
     
-    /* 连连看游戏样式 */
+    
     .link-game-container {
       margin: 1.5rem auto;
       width: 720px;
@@ -240,7 +240,7 @@
       justify-content: center;
       align-items: center;
       padding: 10px;
-      /* 添加江南水乡背景 */
+      
       background-image: url('images/jiangnanshuixiang/2.jpg');
       background-size: cover;
       background-position: center;
@@ -377,7 +377,7 @@
       background-size: contain;
     }
     
-    /* 游戏控制按钮 */
+    
     .game-controls {
       display: flex;
       gap: 1rem;
@@ -411,7 +411,7 @@
       background: rgba(100, 255, 218, 0.1);
     }
     
-    /* 游戏说明 */
+    
     .game-instructions {
       margin-top: 2rem;
       padding: 1.5rem;
@@ -442,12 +442,12 @@
       text-decoration: none;
     }
     
-    /* 平板端 (1440×900 及以下) - 保持原样 */
+    
     @media (max-width: 1440px) {
-      /* 平板保持和桌面一样的设置 */
+      
     }
     
-    /* 手机端只修改尺寸，其他样式保持和电脑端相同 */
+    
 @media (max-width: 768px) {
   .link-game-container {
     width: 320px;
@@ -484,7 +484,7 @@
     height: 320px;
   }
   
-  /* 保持其他所有样式不变，只调整字体大小以适应较小屏幕 */
+  
   .game-over h2 {
     font-size: 40px;
     margin-bottom: 20px;
@@ -505,7 +505,7 @@
   }
 }
 
-/* 小手机端调整 */
+
 @media (max-width: 480px) {
   .link-game-container {
     width: 95vw;
@@ -541,7 +541,7 @@
       <h3>江南水乡连连看</h3>
       <p>连接相同的江南元素图标，体验"方寸屏间，万里河山"的意境</p>
       
-      <!-- 游戏信息和控制栏 -->
+      
       <div class="game-info-bar">
         <div class="game-stats">
           <div class="stat-item">
@@ -604,7 +604,7 @@
   </footer>
 
   <script>
-    // 简化的DOM操作函数
+
     const $ = (selector) => {
       const elements = document.querySelectorAll(selector);
       return {
@@ -670,7 +670,7 @@
       this.rows = (config.rows || 12) + 2;
       this.level = config.level || 0;
       this.leftDisorderTime = 1;
-      // 使用20个不同的自然元素emoji
+
       this.gifts = [
         '🌿', '🏞️', '🌅', '🏔️', '🌳', '🌲', '🌴', '🍃', '🍂', '🌸',
         '🌺', '🌻', '💧', '☀️', '🌙', '⭐', '🌈', '🍁', '🌱', '🍀'
@@ -684,10 +684,10 @@
         console.log('初始化游戏');
         var self = this;
         this.stack = [];
-        // 关键修改：确保每次使用所有20种图标
+
         this.iconTypeCount = 20; // 固定使用20种图标
         this.count = (this.rows - 2) * (this.cols - 2);
-        // 确保count是偶数
+
         if (this.count % 2 !== 0) {
           this.count--;
         }
@@ -699,7 +699,7 @@
         this.points = [];
         this.isGameOver = false;
         
-        // 清除之前的计时器
+
         if (this.timmer) {
           clearInterval(this.timmer);
         }
@@ -788,23 +788,23 @@
       createMap: function () {
         console.log('创建地图:', this.rows, 'x', this.cols);
         var count = 0;
-        // 创建成对的图标索引 - 确保使用所有20种图标
+
         var iconIndices = [];
         var pairsNeeded = this.count / 2;
         
-        // 关键修改：确保每种图标都出现
+
         for (var i = 0; i < pairsNeeded; i++) {
           var iconIndex = i % this.iconTypeCount;
           iconIndices.push(iconIndex, iconIndex);
         }
         
-        // 如果图标数量不够，补充随机图标
+
         while (iconIndices.length < this.count) {
           var randomIndex = Math.floor(Math.random() * this.iconTypeCount);
           iconIndices.push(randomIndex, randomIndex);
         }
         
-        // 打乱图标顺序
+
         for (var i = iconIndices.length - 1; i > 0; i--) {
           var j = Math.floor(Math.random() * (i + 1));
           var temp = iconIndices[i];
@@ -816,7 +816,7 @@
           this.pictures.push([]);
           for (var col = 0; col < this.cols; col++) {
             if (row === 0 || row === this.rows - 1 || col === 0 || col === this.cols - 1) {
-              // 边界
+
               this.pictures[row].push({
                 row: row,
                 col: col,
@@ -824,7 +824,7 @@
                 isBoundary: true
               });
             } else {
-              // 游戏区域
+
               this.pictures[row].push({
                 row: row,
                 col: col,
@@ -851,7 +851,7 @@
           var picture1 = pictures[row1][col1];
           var picture2 = pictures[row2][col2];
           
-          // 只交换非空图标的图片
+
           if (!picture1.isEmpty && !picture2.isEmpty) {
             var tempPic = picture1.pic;
             picture1.pic = picture2.pic;
@@ -874,7 +874,7 @@
           for (var col = 1; col < this.cols - 1; col++) {
             var picture = this.pictures[row][col];
             var emptyClass = picture.isEmpty ? 'empty' : '';
-            // 直接显示emoji
+
             html += `<td><div class="pic-box ${emptyClass}" data-row="${row}" data-col="${col}" data-index="${picture.index}">${picture.pic}</div></td>`;
           }
           html += '</tr>';
@@ -896,7 +896,7 @@
           return;
         }
         
-        // 如果之前没有选中任何图标
+
         if (!this.preClickInfo) {
           this.preClickInfo = curClickInfo;
           this.domAddActive(curIndex);
@@ -909,7 +909,7 @@
         var preCol = +preClickInfo.col;
         var preIndex = +preClickInfo.index;
 
-        // 如果点击的是同一个图标，取消选中
+
         if (preIndex === curIndex) {
           this.domRemoveActive(preIndex);
           this.preClickInfo = null;
@@ -917,7 +917,7 @@
           return;
         }
 
-        // 如果两个图标类型不同
+
         if (pictures[preRow][preCol].pic !== pictures[curRow][curCol].pic) {
           this.domRemoveActive(preIndex);
           this.preClickInfo = curClickInfo;
@@ -926,7 +926,7 @@
           return;
         }
         
-        // 检查是否可以连接 - 现在允许无限拐角
+
         console.log('检查连接:', {pre: [preCol, preRow], cur: [curCol, curRow]});
         if (this.canCleanup(preCol, preRow, curCol, curRow)) {
           console.log('可以连接');
@@ -1006,9 +1006,9 @@
         $('.score-value').text(this.score);
       },
 
-      // 移除drawLine函数
+
       drawLine: function () {
-        // 这个函数现在为空，不执行任何操作
+
       },
 
       updateStatus: function (preRow, preCol, curRow, curCol, preIndex, curIndex) {
@@ -1058,26 +1058,26 @@
         return true;
       },
 
-      // 修复连接检查函数
+
       canCleanup: function (x1, y1, x2, y2) {
         console.log('检查连接路径:', x1, y1, '->', x2, y2);
         
-        // 如果起点或终点为空，直接返回false
+
         if (this.pictures[y1][x1].isEmpty || this.pictures[y2][x2].isEmpty) {
           return false;
         }
         
-        // 使用改进的BFS检查任意拐角连接
+
         return this.canConnectWithBFS(x1, y1, x2, y2);
       },
 
-      // 改进的BFS算法
+
       canConnectWithBFS: function(x1, y1, x2, y2) {
-        // 使用队列进行BFS
+
         var queue = [];
         var visited = {};
         
-        // 初始化队列，从起点开始
+
         queue.push({
           x: x1, 
           y: y1, 
@@ -1087,7 +1087,7 @@
         });
         visited[x1 + ',' + y1] = true;
         
-        // 定义四个方向：上、右、下、左
+
         var directions = [
           {dx: 0, dy: -1, name: 'up'},    // 上
           {dx: 1, dy: 0, name: 'right'},  // 右
@@ -1098,40 +1098,40 @@
         while (queue.length > 0) {
           var current = queue.shift();
           
-          // 检查是否到达终点
+
           if (current.x === x2 && current.y === y2) {
             this.points = current.path;
             console.log('BFS找到路径，拐角数:', current.turns, '路径:', current.path);
             return true;
           }
           
-          // 尝试四个方向
+
           for (var i = 0; i < directions.length; i++) {
             var dir = directions[i];
             var newX = current.x + dir.dx;
             var newY = current.y + dir.dy;
             var key = newX + ',' + newY;
             
-            // 检查新位置是否在边界内且未被访问过
+
             if (newX >= 0 && newX < this.cols && newY >= 0 && newY < this.rows) {
               
-              // 检查该位置是否为空或者是终点
+
               var isEmptyOrTarget = this.pictures[newY][newX].isEmpty || (newX === x2 && newY === y2);
               
               if (isEmptyOrTarget && !visited[key]) {
                 visited[key] = true;
                 
-                // 计算拐角数
+
                 var newTurns = current.turns;
                 if (current.direction !== null && current.direction !== dir.name) {
                   newTurns++;
                 }
                 
-                // 创建新路径
+
                 var newPath = current.path.slice();
                 newPath.push([newX, newY]);
                 
-                // 将新位置加入队列
+
                 queue.push({
                   x: newX,
                   y: newY,
@@ -1151,7 +1151,7 @@
       bindDomEvents: function () {
         var self = this;
         
-        // 使用事件委托处理图标点击
+
         $('#game').on('click', function (e) {
           var target = e.target;
           if (target.classList.contains('pic-box') && !target.classList.contains('empty')) {
@@ -1190,7 +1190,7 @@
       }
     };
 
-    // 页面加载完成后初始化
+
     document.addEventListener('DOMContentLoaded', function() {
       console.log('页面加载完成');
       $('.start-btn').on('click', function () {
@@ -1198,7 +1198,7 @@
         $('.init-box').addClass('hidden');
         $('.game-box').removeClass('hidden');
         
-        // 检测设备类型并设置不同的配置
+
         const isMobile = window.innerWidth <= 768;
         
         var gameConfig = {

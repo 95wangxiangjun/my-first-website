@@ -116,7 +116,7 @@
             margin-bottom: 2rem;
         }
         
-        /* 华容道游戏样式 */
+        
         .sliding-puzzle-container {
             text-align: center;
         }
@@ -173,7 +173,7 @@
             pointer-events: none !important;
         }
         
-        /* 数字样式 */
+        
         .tile-number {
             position: absolute;
             bottom: 5px;
@@ -190,7 +190,7 @@
             font-weight: bold;
         }
         
-        /* 游戏控制按钮 */
+        
         .game-controls {
             display: flex;
             justify-content: center;
@@ -227,7 +227,7 @@
             background: rgba(100, 255, 218, 0.1);
         }
         
-        /* 消息样式 */
+        
         .success-message {
             background: rgba(76, 175, 80, 0.2);
             border: 1px solid #4caf50;
@@ -276,7 +276,7 @@
             font-size: 0.9rem;
         }
         
-        /* 游戏说明 */
+        
         .game-instructions {
             margin-top: 2rem;
             padding: 1.5rem;
@@ -307,7 +307,7 @@
             text-decoration: none;
         }
         
-        /* 响应式设计 */
+        
         @media (max-width: 768px) {
             .puzzle-board {
                 width: 300px;
@@ -380,7 +380,7 @@
             
             <div class="sliding-puzzle-container">
                 <div class="puzzle-board" id="puzzleBoard">
-                    <!-- 拼图块将通过JavaScript动态生成 -->
+                    
                 </div>
                 
                 <div class="game-controls">
@@ -417,20 +417,20 @@
     </footer>
 
     <script>
-        // 华容道游戏变量
+
         let slidingPuzzle = [];
         let emptyTile = { row: 3, col: 3 }; // 空格位置
         let moveCount = 0;
         let isGameCompleted = false; // 游戏完成状态
         
-        // DOM元素
+
         const puzzleBoard = document.getElementById('puzzleBoard');
         const moveCountElement = document.getElementById('moveCount');
         const slidingPuzzleResult = document.getElementById('slidingPuzzleResult');
         const newGameBtn = document.getElementById('newGameBtn');
         const checkBtn = document.getElementById('checkBtn');
         
-        // 初始化华容道游戏
+
         function initSlidingPuzzle() {
             const board = document.getElementById('puzzleBoard');
             board.innerHTML = '';
@@ -439,7 +439,7 @@
             slidingPuzzleResult.innerHTML = '';
             isGameCompleted = false; // 重置完成状态
             
-            // 初始化拼图数组 (1-15 + 空位)
+
             slidingPuzzle = [];
             for (let i = 1; i <= 15; i++) {
                 slidingPuzzle.push(i);
@@ -448,10 +448,10 @@
             
             emptyTile = { row: 3, col: 3 }; // 重置空位位置
             
-            // 确保可解的打乱算法
+
             shufflePuzzleSolvable();
             
-            // 创建拼图界面
+
             createPuzzleBoard();
             
             slidingPuzzleResult.innerHTML = `
@@ -462,7 +462,7 @@
             `;
         }
         
-        // 确保可解的打乱算法
+
         function shufflePuzzleSolvable() {
             const directions = [
                 { row: -1, col: 0 }, // 上
@@ -471,12 +471,12 @@
                 { row: 0, col: 1 }   // 右
             ];
             
-            // 进行足够多的随机移动（确保可解）
+
             const shuffleMoves = 50;
             for (let i = 0; i < shuffleMoves; i++) {
                 const validMoves = [];
                 
-                // 找出所有可能的移动方向
+
                 for (const dir of directions) {
                     const newRow = emptyTile.row + dir.row;
                     const newCol = emptyTile.col + dir.col;
@@ -485,13 +485,13 @@
                     }
                 }
                 
-                // 随机选择一个方向移动
+
                 if (validMoves.length > 0) {
                     const randomDir = validMoves[Math.floor(Math.random() * validMoves.length)];
                     const newRow = emptyTile.row + randomDir.row;
                     const newCol = emptyTile.col + randomDir.col;
                     
-                    // 交换位置
+
                     const emptyIndex = emptyTile.row * 4 + emptyTile.col;
                     const targetIndex = newRow * 4 + newCol;
                     
@@ -504,7 +504,7 @@
             }
         }
         
-        // 创建拼图界面
+
         function createPuzzleBoard() {
             const board = document.getElementById('puzzleBoard');
             board.innerHTML = '';
@@ -523,18 +523,18 @@
                     if (tileValue === 0) {
                         tile.classList.add('empty');
                     } else {
-                        // 设置北国风光图片背景
+
                         tile.style.backgroundImage = `url('images/beiguofengguang/1.jpg')`;
                         tile.style.backgroundSize = '400% 400%';
                         tile.style.backgroundPosition = `${(col * 100 / 3)}% ${(row * 100 / 3)}%`;
                         
-                        // 添加数字显示
+
                         const numberSpan = document.createElement('span');
                         numberSpan.className = 'tile-number';
                         numberSpan.textContent = tileValue;
                         tile.appendChild(numberSpan);
                         
-                        // 添加数字文本（主显示）
+
                         const numberText = document.createElement('span');
                         numberText.textContent = tileValue;
                         numberText.style.fontSize = '24px';
@@ -543,7 +543,7 @@
                         numberText.style.textShadow = '1px 1px 2px rgba(0,0,0,0.8)';
                         tile.appendChild(numberText);
                         
-                        // 只有在游戏未完成时才添加点击事件
+
                         if (!isGameCompleted) {
                             tile.addEventListener('click', () => moveTile(row, col));
                         }
@@ -552,54 +552,54 @@
                 }
             }
             
-            // 初始检查状态
+
             checkSlidingPuzzle();
         }
         
-        // 移动拼图块
+
         function moveTile(row, col) {
-            // 检查游戏是否已完成，如果已完成则阻止移动
+
             if (isGameCompleted) {
                 return;
             }
             
-            // 检查是否可以移动（是否与空位相邻）
+
             const rowDiff = Math.abs(row - emptyTile.row);
             const colDiff = Math.abs(col - emptyTile.col);
             
             if ((rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)) {
-                // 交换位置
+
                 const emptyIndex = emptyTile.row * 4 + emptyTile.col;
                 const targetIndex = row * 4 + col;
                 
                 [slidingPuzzle[emptyIndex], slidingPuzzle[targetIndex]] = 
                 [slidingPuzzle[targetIndex], slidingPuzzle[emptyIndex]];
                 
-                // 更新空位位置
+
                 emptyTile.row = row;
                 emptyTile.col = col;
                 
-                // 更新移动计数
+
                 moveCount++;
                 moveCountElement.textContent = moveCount;
                 
-                // 重新创建拼图界面
+
                 createPuzzleBoard();
                 
-                // 每次移动后自动检查完成状态
+
                 const isComplete = checkSlidingPuzzle();
                 
-                // 显示移动后的状态消息
+
                 showMoveMessage(isComplete);
             } else {
-                // 如果不能移动，显示提示消息
+
                 showCannotMoveMessage();
             }
         }
         
-        // 检查拼图完成状态
+
         function checkSlidingPuzzle() {
-            // 检查是否完成：1-15按顺序排列，最后一个位置是0
+
             let isComplete = true;
             for (let i = 0; i < 15; i++) {
                 if (slidingPuzzle[i] !== i + 1) {
@@ -608,18 +608,18 @@
                 }
             }
             
-            // 检查最后一个位置是否为空
+
             if (slidingPuzzle[15] !== 0) {
                 isComplete = false;
             }
             
-            // 设置游戏完成状态
+
             isGameCompleted = isComplete;
             
             return isComplete;
         }
         
-        // 显示移动后的状态消息
+
         function showMoveMessage(isComplete) {
             const resultDiv = document.getElementById('slidingPuzzleResult');
             if (isComplete) {
@@ -630,27 +630,27 @@
                     </div>
                 `;
                 
-                // 添加完成动画
+
                 const tiles = document.querySelectorAll('.puzzle-tile:not(.empty)');
                 tiles.forEach((tile, index) => {
                     setTimeout(() => {
                         tile.style.borderColor = '#4caf50';
                         tile.style.boxShadow = '0 0 15px rgba(76, 175, 80, 0.5)';
-                        // 移除点击事件，阻止继续移动
+
                         tile.style.cursor = 'default';
                         tile.classList.add('completed');
                         tile.onclick = null;
                     }, index * 50);
                 });
                 
-                // 同时移除空格周围的点击事件
+
                 const emptyTiles = document.querySelectorAll('.puzzle-tile.empty');
                 emptyTiles.forEach(tile => {
                     tile.style.cursor = 'default';
                     tile.classList.add('completed');
                 });
             } else {
-                // 计算正确位置的数量
+
                 let correctCount = 0;
                 for (let i = 0; i < 15; i++) {
                     if (slidingPuzzle[i] === i + 1) {
@@ -668,7 +668,7 @@
             }
         }
         
-        // 显示不能移动的提示消息
+
         function showCannotMoveMessage() {
             const resultDiv = document.getElementById('slidingPuzzleResult');
             resultDiv.innerHTML = `
@@ -678,14 +678,14 @@
                 </div>
             `;
             
-            // 3秒后恢复显示状态消息
+
             setTimeout(() => {
                 const isComplete = checkSlidingPuzzle();
                 showMoveMessage(isComplete);
             }, 2000);
         }
         
-        // 手动检验完成按钮的功能
+
         function checkSlidingPuzzleManual() {
             const isComplete = checkSlidingPuzzle();
             const resultDiv = document.getElementById('slidingPuzzleResult');
@@ -698,7 +698,7 @@
                     </div>
                 `;
                 
-                // 游戏完成时禁用所有拼图块
+
                 if (isComplete) {
                     const tiles = document.querySelectorAll('.puzzle-tile');
                     tiles.forEach(tile => {
@@ -708,7 +708,7 @@
                     });
                 }
             } else {
-                // 计算正确位置的数量
+
                 let correctCount = 0;
                 for (let i = 0; i < 15; i++) {
                     if (slidingPuzzle[i] === i + 1) {
@@ -726,11 +726,11 @@
             }
         }
         
-        // 按钮事件
+
         newGameBtn.addEventListener('click', initSlidingPuzzle);
         checkBtn.addEventListener('click', checkSlidingPuzzleManual);
         
-        // 初始化游戏
+
         initSlidingPuzzle();
     </script>
 </body>

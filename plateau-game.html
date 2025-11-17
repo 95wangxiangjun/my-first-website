@@ -101,7 +101,7 @@
             position: relative;
         }
         
-        /* 游戏画布容器 */
+        
         .game-canvas-container {
             position: relative;
             width: 100%;
@@ -122,7 +122,7 @@
             touch-action: none;
         }
         
-        /* 游戏信息栏 */
+        
         .game-stats {
             position: absolute;
             top: 10px;
@@ -142,7 +142,7 @@
             color: #64ffda;
         }
         
-        /* 控制方式说明 */
+        
         .game-controls {
             position: absolute;
             top: 10px;
@@ -178,7 +178,7 @@
             color: #64ffda;
         }
         
-        /* 游戏覆盖层 */
+        
         .game-overlay {
             position: absolute;
             top: 0;
@@ -217,7 +217,7 @@
             color: #64ffda;
         }
         
-        /* 按钮样式 */
+        
         .btn {
             background: #64ffda;
             color: #0a192f;
@@ -237,7 +237,7 @@
             box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
         }
         
-        /* 移动端虚拟控制按钮 */
+        
         .mobile-controls {
             display: none;
             position: absolute;
@@ -273,7 +273,7 @@
             background-color: rgba(79, 211, 196, 0.9);
         }
         
-        /* 游戏说明 */
+        
         .game-instructions {
             margin-top: 1rem;
             padding: 1.5rem;
@@ -304,7 +304,7 @@
             text-decoration: none;
         }
         
-        /* 响应式设计 */
+        
         @media (max-width: 768px) {
             header {
                 padding: 0.8rem 1rem;
@@ -388,7 +388,7 @@
     </style>
 </head>
 <body>
-    <!-- 页面头部 -->
+    
     <header>
         <div class="logo">
             <img src="images/item/item.jpg" alt="方寸屏间，万里河山" class="logo-image">
@@ -401,7 +401,7 @@
         </nav>
     </header>
     
-    <!-- 页面英雄区域 -->
+    
     <section class="page-hero">
         <div class="hero-content">
             <h1>高原牦牛骑手</h1>
@@ -409,15 +409,15 @@
         </div>
     </section>
     
-    <!-- 游戏主容器 -->
+    
     <main class="game-container">
         <div class="game-section">
             <h3 style="color: #64ffda; text-align: center; margin-bottom: 1rem;">高原探险挑战</h3>
             <p style="color: #a8b2d1; text-align: center; margin-bottom: 1rem;">驾驭牦牛穿越高原，收集经幡和酥油，避开障碍物</p>
             
-            <!-- 游戏画布区域 -->
+            
             <div class="game-canvas-container">
-                <!-- 游戏统计信息 -->
+                
                 <div class="game-stats">
                     <div class="stat-item">
                         <span>分数:</span>
@@ -437,7 +437,7 @@
                     </div>
                 </div>
 
-                <!-- 控制方式说明 -->
+                
                 <div class="game-controls">
                     <div class="control-title">控制方式</div>
                     <div class="control-item">
@@ -458,24 +458,24 @@
                     </div>
                 </div>
 
-                <!-- 移动端控制按钮 -->
+                
                 <div class="mobile-controls">
                     <button class="mobile-btn" id="leftBtn">←</button>
                     <button class="mobile-btn" id="jumpBtn">跳跃</button>
                     <button class="mobile-btn" id="rightBtn">→</button>
                 </div>
 
-                <!-- 游戏画布 -->
+                
                 <canvas id="gameCanvas"></canvas>
 
-                <!-- 开始界面 -->
+                
                 <div class="game-overlay" id="startScreen">
                     <h1 class="game-title">高原牦牛骑手</h1>
                     <p class="game-description">在辽阔的西部高原上，骑着牦牛穿越草原和山脉，收集经幡和酥油，避开岩石和河流！随着时间推移，牦牛速度会越来越快！</p>
                     <button class="btn" id="startBtn">开始游戏</button>
                 </div>
 
-                <!-- 游戏结束界面 -->
+                
                 <div class="game-overlay" id="gameOverScreen" style="display: none;">
                     <h1 class="game-title">游戏结束</h1>
                     <div class="score-display">
@@ -486,7 +486,7 @@
                     <button class="btn" id="restartBtn">再来一次</button>
                 </div>
 
-                <!-- 暂停界面 -->
+                
                 <div class="game-overlay" id="pauseScreen" style="display: none;">
                     <h1 class="game-title">游戏暂停</h1>
                     <button class="btn" id="resumeBtn">继续游戏</button>
@@ -494,7 +494,7 @@
                 </div>
             </div>
             
-            <!-- 游戏说明 -->
+            
             <div class="game-instructions">
                 <h4>游戏说明</h4>
                 <p>🎯 <strong>游戏提示：</strong>刚开始牦牛速度较慢，尽量靠近障碍物再跳</p>
@@ -506,31 +506,31 @@
         </div>
     </main>
     
-    <!-- 页面底部 -->
+    
     <footer>
         <p>方寸屏间，万里河山</p>
         <p>2025武汉大学参赛作品 | <a href="message-board.html">分享你的山河故事</a></p>
     </footer>
 
     <script>
-        // ===============================
-        // 高原牦牛骑手游戏 - JavaScript代码
-        // 游戏功能：高原探险，牦牛骑行，速度随时间增加
-        // 作者：武汉大学参赛团队
-        // 版本：1.0
-        // ===============================
 
-        // 获取画布和上下文
+
+
+
+
+
+
+
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // 设置画布尺寸
+
         function setCanvasSize() {
             const container = document.querySelector('.game-canvas-container');
             const maxWidth = container.clientWidth;
             const maxHeight = container.clientHeight;
             
-            // 保持16:9的宽高比
+
             const targetWidth = 800;
             const targetHeight = 450;
             const scale = Math.min(maxWidth / targetWidth, maxHeight / targetHeight);
@@ -541,17 +541,17 @@
             canvas.style.height = `${targetHeight * scale}px`;
         }
 
-        // 初始化画布尺寸
+
         setCanvasSize();
         window.addEventListener('resize', setCanvasSize);
         
-        // 设备类型检测
+
         function detectMobileDevice() {
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             return isMobile;
         }
         
-        // 游戏配置
+
         const config = {
             canvasWidth: canvas.width,
             canvasHeight: canvas.height,
@@ -572,7 +572,7 @@
             maxSpeedMultiplier: 5.0 // 最大速度倍数
         };
 
-        // 游戏状态
+
         const gameState = {
             isRunning: false,
             isPaused: false,
@@ -586,7 +586,7 @@
             maxSpeedReached: 1.0 // 达到的最高速度
         };
 
-        // 游戏对象
+
         const player = {
             x: canvas.width / 4,
             y: canvas.height - 150,
@@ -597,7 +597,7 @@
             isJumping: false,
             isInvincible: false,
             invincibleTimer: 0,
-            // 动画状态变量
+
             blinkTimer: 0,
             blinkInterval: 3000,
             blinkDuration: 200,
@@ -610,30 +610,30 @@
                 ctx.save();
                 ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
                 
-                // 如果在跳跃中，添加倾斜角度和旋转效果
+
                 if (this.isJumping) {
                     const jumpRotation = Math.sin(Date.now() * 0.005) * 0.1;
                     ctx.rotate(jumpRotation);
                 }
                 
-                // 无敌状态闪烁效果
+
                 if (this.isInvincible) {
                     const blinkState = Math.floor(Date.now() / 100) % 2;
                     ctx.globalAlpha = blinkState ? 0.4 : 0.8;
                 }
                 
-                // 更新动画计时器
+
                 this.updateAnimationTimers();
                 
-                // ========== 牦牛绘制 ==========
+
                 
-                // 牦牛身体
+
                 ctx.fillStyle = '#a8a29e';
                 ctx.beginPath();
                 ctx.ellipse(0, 5, 25, 30, 0, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // 牦牛身体纹理
+
                 ctx.fillStyle = '#9ca3af';
                 ctx.globalAlpha = 0.6;
                 for (let i = 0; i < 5; i++) {
@@ -643,15 +643,15 @@
                 }
                 ctx.globalAlpha = 1;
                 
-                // 牦牛头部
+
                 ctx.beginPath();
                 ctx.arc(0, -25, 20, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // 牛角
+
                 ctx.fillStyle = '#78716c';
                 
-                // 左牛角
+
                 ctx.beginPath();
                 ctx.moveTo(-10, -30);
                 ctx.quadraticCurveTo(-25, -45, -20, -35);
@@ -660,7 +660,7 @@
                 ctx.closePath();
                 ctx.fill();
                 
-                // 右牛角
+
                 ctx.beginPath();
                 ctx.moveTo(10, -30);
                 ctx.quadraticCurveTo(25, -45, 20, -35);
@@ -669,7 +669,7 @@
                 ctx.closePath();
                 ctx.fill();
                 
-                // 牦牛耳朵
+
                 ctx.beginPath();
                 ctx.moveTo(-18, -25);
                 ctx.quadraticCurveTo(-22, -35, -16, -32);
@@ -682,14 +682,14 @@
                 ctx.closePath();
                 ctx.fill();
                 
-                // 牦牛眼睛
+
                 ctx.fillStyle = 'white';
                 ctx.beginPath();
                 ctx.ellipse(-8, -30, 5, 3, 0, 0, Math.PI * 2);
                 ctx.ellipse(8, -30, 5, 3, 0, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // 眼球跟随
+
                 const eyeOffset = Math.sin(Date.now() * 0.005) * 1;
                 ctx.fillStyle = 'black';
                 ctx.beginPath();
@@ -697,23 +697,23 @@
                 ctx.arc(8 + eyeOffset, -30, 2, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // 牦牛鼻子和嘴巴
+
                 ctx.fillStyle = '#9ca3af';
                 ctx.beginPath();
                 ctx.ellipse(0, -20, 8, 5, 0, 0, Math.PI);
                 ctx.fill();
                 
-                // 鼻孔
+
                 ctx.fillStyle = '#6b7280';
                 ctx.beginPath();
                 ctx.arc(-3, -20, 1, 0, Math.PI * 2);
                 ctx.arc(3, -20, 1, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // 动态腿部动画
+
                 this.drawAnimatedLegs();
                 
-                // 牦牛尾巴（摇摆动画）
+
                 const tailX = 25 + Math.sin(Date.now() * 0.01) * 8;
                 const tailY = 0 + Math.cos(Date.now() * 0.01) * 5;
                 
@@ -724,23 +724,23 @@
                 ctx.quadraticCurveTo(25, -5, tailX, tailY);
                 ctx.stroke();
                 
-                // ========== 骑牛手绘制 ==========
+
                 
-                // 头部上下摆动
+
                 ctx.save();
                 const headBobOffset = Math.sin(this.headBobTimer) * 2;
                 ctx.translate(0, headBobOffset);
                 
-                // 骑手头部
+
                 ctx.fillStyle = '#f59e0b';
                 ctx.beginPath();
                 ctx.arc(0, -50, 10, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // 动态眼睛（眨眼效果）
+
                 this.drawAnimatedEyes();
                 
-                // 嘴巴（动态表情）
+
                 const mouthOpen = Math.sin(Date.now() * 0.002) > 0;
                 ctx.strokeStyle = 'black';
                 ctx.lineWidth = 1.5;
@@ -753,7 +753,7 @@
                 }
                 ctx.stroke();
                 
-                // 藏族帽子
+
                 ctx.fillStyle = '#991b1b';
                 ctx.beginPath();
                 ctx.moveTo(-12, -55);
@@ -765,21 +765,21 @@
                 
                 ctx.restore();
                 
-                // 骑手身体
+
                 ctx.fillStyle = '#d97706';
                 ctx.beginPath();
                 ctx.ellipse(0, -40, 15, 20, 0, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // 动态手臂（摇摆动画）
+
                 this.drawAnimatedArms();
                 
                 ctx.restore();
             },
             
-            // 更新动画计时器
+
             updateAnimationTimers() {
-                // 眨眼计时器
+
                 this.blinkTimer += 16;
                 if (this.blinkTimer > this.blinkInterval) {
                     this.isBlinking = true;
@@ -793,32 +793,32 @@
                     }
                 }
                 
-                // 腿部动画计时器
+
                 this.legAnimationTimer += 0.1;
                 
-                // 头部摆动计时器
+
                 this.headBobTimer += 0.08;
                 
-                // 手臂摆动计时器
+
                 this.armSwingTimer += 0.1;
             },
             
-            // 绘制动态腿部
+
             drawAnimatedLegs() {
                 ctx.fillStyle = '#78716c';
                 
-                // 前后腿交替运动
+
                 const legAngle1 = Math.sin(this.legAnimationTimer) * 0.3;
                 const legAngle2 = Math.sin(this.legAnimationTimer + Math.PI) * 0.3;
                 
-                // 左前腿
+
                 ctx.save();
                 ctx.translate(-20, 20);
                 ctx.rotate(legAngle1);
                 ctx.fillRect(-5, 0, 10, 25);
                 ctx.restore();
                 
-                // 右前腿
+
                 ctx.save();
                 ctx.translate(10, 20);
                 ctx.rotate(legAngle1);
@@ -826,7 +826,7 @@
                 ctx.fillRect(-5, 0, 10, 25);
                 ctx.restore();
                 
-                // 左后腿
+
                 ctx.save();
                 ctx.translate(-15, 35);
                 ctx.rotate(legAngle2);
@@ -834,7 +834,7 @@
                 ctx.fillRect(-4, 0, 8, 15);
                 ctx.restore();
                 
-                // 右后腿
+
                 ctx.save();
                 ctx.translate(7, 35);
                 ctx.rotate(legAngle2);
@@ -843,12 +843,12 @@
                 ctx.restore();
             },
             
-            // 绘制动态眼睛
+
             drawAnimatedEyes() {
                 ctx.fillStyle = 'white';
                 
                 if (this.isBlinking) {
-                    // 自然眨眼效果
+
                     const blinkProgress = this.blinkTimer / this.blinkDuration;
                     const eyeHeight = 3 * (1 - Math.sin(blinkProgress * Math.PI));
                     
@@ -857,13 +857,13 @@
                     ctx.ellipse(4, -52, 3, eyeHeight, 0, 0, Math.PI * 2);
                     ctx.fill();
                 } else {
-                    // 正常眼睛
+
                     ctx.beginPath();
                     ctx.ellipse(-4, -52, 3, 2, 0, 0, Math.PI * 2);
                     ctx.ellipse(4, -52, 3, 2, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // 眼球
+
                     ctx.fillStyle = 'black';
                     ctx.beginPath();
                     ctx.arc(-4, -52, 1.5, 0, Math.PI * 2);
@@ -872,12 +872,12 @@
                 }
             },
             
-            // 绘制动态手臂
+
             drawAnimatedArms() {
                 const armAngleLeft = Math.sin(this.armSwingTimer) * 0.4;
                 const armAngleRight = -Math.sin(this.armSwingTimer) * 0.4;
                 
-                // 左手臂
+
                 ctx.save();
                 ctx.translate(-10, -40);
                 ctx.rotate(armAngleLeft);
@@ -885,7 +885,7 @@
                 ctx.fillRect(-8, -3, 16, 10);
                 ctx.restore();
                 
-                // 右手臂
+
                 ctx.save();
                 ctx.translate(10, -40);
                 ctx.rotate(armAngleRight);
@@ -895,25 +895,25 @@
             },
             
             update() {
-                // 应用重力
+
                 this.speedY += config.gravity;
                 
-                // 更新位置
+
                 this.x += this.speedX;
                 this.y += this.speedY;
                 
-                // 边界检测
+
                 if (this.x < 0) this.x = 0;
                 if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
                 
-                // 地面检测
+
                 if (this.y + this.height > canvas.height - 80) {
                     this.y = canvas.height - 80 - this.height;
                     this.speedY = 0;
                     this.isJumping = false;
                 }
                 
-                // 更新无敌状态
+
                 if (this.isInvincible) {
                     this.invincibleTimer--;
                     if (this.invincibleTimer <= 0) {
@@ -955,16 +955,16 @@
             }
         };
 
-        // 障碍物数组
+
         const obstacles = [];
         
-        // 收集物数组
+
         const collectibles = [];
         
-        // 背景元素数组
+
         const backgroundElements = [];
 
-        // 创建随机障碍物
+
         function createObstacle() {
             const obstacleTypes = [
                 { width: 30, height: 20, color: '#78716c', type: 'rock' },
@@ -993,7 +993,7 @@
             });
         }
 
-        // 创建随机收集物
+
         function createCollectible() {
             const collectibleTypes = [
                 { width: 30, height: 40, color: '#ef4444', type: 'prayer_flag' },
@@ -1020,7 +1020,7 @@
             });
         }
 
-        // 创建背景元素
+
         function createBackgroundElements() {
             for (let i = 0; i < 50; i++) {
                 const elementType = Math.random() > 0.7 ? 'mountain' : 'grass';
@@ -1046,7 +1046,7 @@
                 });
             }
             
-            // 添加几个蒙古包
+
             for (let i = 0; i < 5; i++) {
                 backgroundElements.push({
                     x: Math.random() * canvas.width,
@@ -1059,7 +1059,7 @@
             }
         }
 
-        // 更新障碍物
+
         function updateObstacles() {
             const currentObstacleSpeed = config.baseObstacleSpeed * gameState.currentSpeedMultiplier;
             
@@ -1067,14 +1067,14 @@
                 const obstacle = obstacles[i];
                 obstacle.x -= currentObstacleSpeed;
                 
-                // 移除超出屏幕的障碍物
+
                 if (obstacle.x + obstacle.width < 0) {
                     obstacles.splice(i, 1);
                 }
             }
         }
 
-        // 更新收集物
+
         function updateCollectibles() {
             const currentCollectibleSpeed = config.baseCollectibleSpeed * gameState.currentSpeedMultiplier;
             
@@ -1082,20 +1082,20 @@
                 const collectible = collectibles[i];
                 collectible.x -= currentCollectibleSpeed;
                 
-                // 移除超出屏幕的收集物
+
                 if (collectible.x + collectible.width < 0) {
                     collectibles.splice(i, 1);
                 }
             }
         }
 
-        // 更新背景元素
+
         function updateBackgroundElements() {
             for (let i = backgroundElements.length - 1; i >= 0; i--) {
                 const element = backgroundElements[i];
                 element.x -= element.speed * gameState.currentSpeedMultiplier;
                 
-                // 当元素移出屏幕左侧时，重新放置到右侧
+
                 if (element.x < -element.size) {
                     element.x = canvas.width + element.size + Math.random() * 200;
                     
@@ -1110,20 +1110,20 @@
             }
         }
 
-        // 绘制背景
+
         function drawBackground() {
-            // 天空渐变
+
             const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.6);
             skyGradient.addColorStop(0, '#7dd3fc');
             skyGradient.addColorStop(1, '#0ea5e9');
             ctx.fillStyle = skyGradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // 地面
+
             ctx.fillStyle = '#22c55e';
             ctx.fillRect(0, canvas.height - 80, canvas.width, 80);
             
-            // 绘制远处的山脉轮廓
+
             ctx.fillStyle = '#1e293b';
             ctx.beginPath();
             ctx.moveTo(0, canvas.height - 200);
@@ -1138,7 +1138,7 @@
             ctx.fill();
         }
 
-        // 绘制背景元素
+
         function drawBackgroundElements() {
             for (const element of backgroundElements) {
                 ctx.save();
@@ -1185,7 +1185,7 @@
             }
         }
 
-        // 绘制障碍物
+
         function drawObstacles() {
             for (const obstacle of obstacles) {
                 ctx.save();
@@ -1233,18 +1233,18 @@
             }
         }
 
-        // 绘制收集物
+
         function drawCollectibles() {
             for (const collectible of collectibles) {
                 ctx.save();
                 ctx.translate(collectible.x, collectible.y);
                 
                 if (collectible.type === 'prayer_flag') {
-                    // 旗杆
+
                     ctx.fillStyle = '#78716c';
                     ctx.fillRect(-2, 0, 4, collectible.height);
                     
-                    // 旗帜
+
                     ctx.fillStyle = collectible.color;
                     ctx.beginPath();
                     ctx.moveTo(-collectible.width / 2, 0);
@@ -1264,9 +1264,9 @@
             }
         }
 
-        // 碰撞检测
+
         function checkCollisions() {
-            // 障碍物碰撞检测
+
             if (!player.isInvincible) {
                 for (const obstacle of obstacles) {
                     if (player.x < obstacle.x + obstacle.width &&
@@ -1279,7 +1279,7 @@
                 }
             }
             
-            // 收集物碰撞检测
+
             for (let i = collectibles.length - 1; i >= 0; i--) {
                 const collectible = collectibles[i];
                 if (!collectible.collected &&
@@ -1296,93 +1296,93 @@
             }
         }
 
-        // 更新游戏统计
+
         function updateStats() {
-            // 更新距离
+
             const distanceGained = Math.floor(config.baseObstacleSpeed * gameState.currentSpeedMultiplier);
             gameState.distance += distanceGained;
             document.getElementById('distance').textContent = `${gameState.distance}m`;
             
-            // 根据距离增加分数
+
             if (gameState.distance % 100 === 0) {
                 gameState.score += config.scorePerMeter;
                 document.getElementById('score').textContent = gameState.score;
             }
         }
 
-        // 增加游戏速度
+
         function increaseGameSpeed() {
-            // 每帧增加速度
+
             if (gameState.currentSpeedMultiplier < config.maxSpeedMultiplier) {
                 gameState.currentSpeedMultiplier += config.speedIncreaseRate;
                 if (gameState.currentSpeedMultiplier > gameState.maxSpeedReached) {
                     gameState.maxSpeedReached = gameState.currentSpeedMultiplier;
                 }
                 
-                // 更新速度显示
+
                 document.getElementById('speed').textContent = gameState.currentSpeedMultiplier.toFixed(1) + 'x';
             }
         }
 
-        // 游戏主循环
+
         function gameLoop(timestamp) {
             if (!gameState.isRunning || gameState.isPaused) return;
             
-            // 增加游戏时间
+
             gameState.gameTime++;
             
-            // 增加游戏速度
+
             increaseGameSpeed();
             
-            // 清空画布
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 绘制背景
+
             drawBackground();
             drawBackgroundElements();
             
-            // 更新背景元素
+
             updateBackgroundElements();
             
-            // 生成新障碍物
+
             const obstacleSpawnRate = config.obstacleSpawnRate / gameState.currentSpeedMultiplier;
             if (timestamp - gameState.lastObstacleSpawn > obstacleSpawnRate) {
                 createObstacle();
                 gameState.lastObstacleSpawn = timestamp;
             }
             
-            // 生成新收集物
+
             const collectibleSpawnRate = config.collectibleSpawnRate / gameState.currentSpeedMultiplier;
             if (timestamp - gameState.lastCollectibleSpawn > collectibleSpawnRate) {
                 createCollectible();
                 gameState.lastCollectibleSpawn = timestamp;
             }
             
-            // 更新障碍物和收集物
+
             updateObstacles();
             updateCollectibles();
             
-            // 绘制障碍物和收集物
+
             drawObstacles();
             drawCollectibles();
             
-            // 更新玩家
+
             player.update();
             player.draw();
             
-            // 碰撞检测
+
             checkCollisions();
             
-            // 更新统计
+
             updateStats();
             
-            // 继续游戏循环
+
             requestAnimationFrame(gameLoop);
         }
 
-        // 开始游戏
+
         function startGame() {
-            // 重置游戏状态
+
             gameState.isRunning = true;
             gameState.isPaused = false;
             gameState.score = 0;
@@ -1394,11 +1394,11 @@
             gameState.currentSpeedMultiplier = 1.0;
             gameState.maxSpeedReached = 1.0;
             
-            // 清空障碍物和收集物
+
             obstacles.length = 0;
             collectibles.length = 0;
             
-            // 重置玩家位置
+
             player.x = canvas.width / 4;
             player.y = canvas.height - 150;
             player.speedX = 0;
@@ -1406,35 +1406,35 @@
             player.isJumping = false;
             player.isInvincible = false;
             
-            // 更新统计显示
+
             document.getElementById('score').textContent = gameState.score;
             document.getElementById('distance').textContent = `${gameState.distance}m`;
             document.getElementById('lives').textContent = gameState.lives;
             document.getElementById('speed').textContent = '1.0x';
             
-            // 隐藏开始屏幕
+
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('gameOverScreen').style.display = 'none';
             document.getElementById('pauseScreen').style.display = 'none';
             
-            // 开始游戏循环
+
             requestAnimationFrame(gameLoop);
         }
 
-        // 暂停游戏
+
         function pauseGame() {
             gameState.isPaused = true;
             document.getElementById('pauseScreen').style.display = 'flex';
         }
 
-        // 继续游戏
+
         function resumeGame() {
             gameState.isPaused = false;
             document.getElementById('pauseScreen').style.display = 'none';
             requestAnimationFrame(gameLoop);
         }
 
-        // 游戏结束
+
         function gameOver() {
             gameState.isRunning = false;
             document.getElementById('finalScore').textContent = gameState.score;
@@ -1443,7 +1443,7 @@
             document.getElementById('gameOverScreen').style.display = 'flex';
         }
 
-        // 退出游戏
+
         function quitGame() {
             gameState.isRunning = false;
             document.getElementById('startScreen').style.display = 'flex';
@@ -1451,13 +1451,13 @@
             document.getElementById('gameOverScreen').style.display = 'none';
         }
 
-        // 按键状态
+
         const keys = {
             left: false,
             right: false
         };
 
-        // 键盘事件监听
+
         document.addEventListener('keydown', (e) => {
             if (!gameState.isRunning) return;
             if (e.key === ' ') {
@@ -1508,12 +1508,12 @@
             }
         });
 
-        // 移动端控制按钮事件
+
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
         const jumpBtn = document.getElementById('jumpBtn');
         
-        // 左移按钮
+
         leftBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (gameState.isRunning && !gameState.isPaused) {
@@ -1531,7 +1531,7 @@
             }
         });
 
-        // 右移按钮
+
         rightBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (gameState.isRunning && !gameState.isPaused) {
@@ -1549,7 +1549,7 @@
             }
         });
 
-        // 跳跃按钮
+
         jumpBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
             if (gameState.isRunning && !gameState.isPaused) {
@@ -1557,7 +1557,7 @@
             }
         });
 
-        // 按钮事件绑定
+
         const startBtn = document.getElementById('startBtn');
         const restartBtn = document.getElementById('restartBtn');
         const resumeBtn = document.getElementById('resumeBtn');
@@ -1568,10 +1568,10 @@
         resumeBtn.addEventListener('click', resumeGame);
         quitPauseBtn.addEventListener('click', quitGame);
 
-        // 初始化背景元素
+
         createBackgroundElements();
         
-        // 移动设备适配
+
         if (detectMobileDevice()) {
             config.playerSpeed = 8;
             config.playerJumpPower = 17;

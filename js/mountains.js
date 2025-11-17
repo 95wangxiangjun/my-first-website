@@ -1,21 +1,16 @@
-// 名山数据 - 12个山脉景点，每个包含多张照片
-// 搜索功能
+
+
 function initMountainsSearch() {
     const searchInput = document.getElementById('mountainsSearch');
     const searchResults = document.getElementById('mountainsResults');
     const mountainsGrid = document.getElementById('mountainsGrid');
-    
-    // 创建无结果提示
     const noResults = document.createElement('div');
     noResults.className = 'no-results';
     noResults.textContent = '未找到匹配的名山';
     noResults.style.display = 'none';
     mountainsGrid.parentNode.appendChild(noResults);
 
-    // 保存原始内容
-    const originalContents = {};
-    
-    // 初始化原始内容
+    const originalContents = {};    
     function initOriginalContents() {
         const cards = document.querySelectorAll('.mountain-card');
         cards.forEach((card, index) => {
@@ -26,19 +21,16 @@ function initMountainsSearch() {
         });
     }
 
-    // 高亮文本函数
     function highlightText(text, searchTerm) {
         if (!searchTerm) return text;
         const regex = new RegExp(searchTerm, 'gi');
         return text.replace(regex, match => `<span class="highlight">${match}</span>`);
     }
 
-    // 执行搜索
     function performSearch(searchTerm) {
         searchTerm = searchTerm.toLowerCase().trim();
         let matchCount = 0;
-        
-        // 重置所有内容
+          
         resetAllContent();
         
         if (!searchTerm) {
@@ -46,8 +38,7 @@ function initMountainsSearch() {
             noResults.style.display = 'none';
             return;
         }
-
-        // 搜索名山
+        
         const cards = document.querySelectorAll('.mountain-card');
         cards.forEach((card, index) => {
             const mountain = mountainsData[index];
@@ -55,8 +46,7 @@ function initMountainsSearch() {
 
             const nameElement = card.querySelector('.mountain-name');
             if (!nameElement) return;
-
-            // 检查是否匹配
+          
             const matches = mountain.name.toLowerCase().includes(searchTerm) ||
                            mountain.location.toLowerCase().includes(searchTerm) ||
                            mountain.description.toLowerCase().includes(searchTerm) ||
@@ -67,7 +57,7 @@ function initMountainsSearch() {
                 card.style.display = 'block';
                 card.style.opacity = '1';
                 
-                // 高亮匹配文本
+                
                 nameElement.innerHTML = highlightText(mountain.name, searchTerm);
                 
                 matchCount++;
@@ -75,21 +65,19 @@ function initMountainsSearch() {
                 card.style.display = 'none';
             }
         });
-
-        // 显示搜索结果
+ 
         if (matchCount > 0) {
             searchResults.textContent = `找到 ${matchCount} 个匹配的名山`;
             noResults.style.display = 'none';
             
-            // 滚动到第一个匹配项
+            
             scrollToFirstMatch();
         } else {
             searchResults.textContent = '';
             noResults.style.display = 'block';
         }
     }
-
-    // 重置所有内容
+    
     function resetAllContent() {
         const cards = document.querySelectorAll('.mountain-card');
         cards.forEach((card, index) => {
@@ -102,8 +90,7 @@ function initMountainsSearch() {
             }
         });
     }
-
-    // 滚动到第一个匹配项
+  
     function scrollToFirstMatch() {
         const firstMatch = document.querySelector('.mountain-card[style*="display: block"]');
         if (firstMatch) {
@@ -113,28 +100,24 @@ function initMountainsSearch() {
             });
         }
     }
-
-    // 事件监听
+    
     searchInput.addEventListener('input', function() {
         performSearch(this.value);
     });
 
-    // 点击搜索图标也触发搜索
+    
     document.querySelector('.search-icon').addEventListener('click', function() {
         performSearch(searchInput.value);
     });
 
-    // 初始化原始内容
     setTimeout(initOriginalContents, 100);
 }
 
-// 修改页面加载完成事件，添加搜索初始化
 document.addEventListener('DOMContentLoaded', function() {
     initMountainsGrid();
     initDetailShowcase();
-    initMountainsSearch(); // 新增搜索初始化
-    
-    // 导航栏滚动效果
+    initMountainsSearch(); 
+       
     window.addEventListener('scroll', function() {
         const header = document.querySelector('header');
         if(window.scrollY > 50) {
@@ -341,9 +324,8 @@ const mountainsData = [
     }
 ];
 
-// 未找到景点留言板块
 function createNotFoundSection() {
-    // 先检查是否已经存在，避免重复添加
+    
     if (document.querySelector('.not-found-section')) {
         return;
     }
@@ -387,7 +369,7 @@ function createNotFoundSection() {
         </div>
     `;
     
-    // 尝试多种插入位置
+    
     const possibleContainers = [
         document.querySelector('.mountains-container'),
         document.querySelector('.panorama-gallery'),
@@ -406,14 +388,13 @@ function createNotFoundSection() {
         }
     }
     
-    // 如果找不到合适的容器，就插入到body末尾
     if (container) {
         container.insertAdjacentHTML('afterend', notFoundHTML);
     } else {
         document.body.insertAdjacentHTML('beforeend', notFoundHTML);
     }
     
-    // 绑定按钮事件
+    
     setTimeout(() => {
         const messageBtn = document.getElementById('goToMessageBtn');
         if (messageBtn) {
@@ -422,16 +403,15 @@ function createNotFoundSection() {
     }, 100);
 }
 
-// 跳转到留言板块
 function goToMessageSection() {
-    // 方法1: 通过导航链接跳转
+    
     const messageLinks = document.querySelectorAll('a[href*="message"], a[href*="contact"], a[href*="留言"], a[href*="联系"]');
     if (messageLinks.length > 0) {
         messageLinks[0].click();
         return;
     }
     
-    // 方法2: 通过导航文本跳转
+    
     const navItems = document.querySelectorAll('nav a, .nav a, .navbar a, .menu a');
     for (let item of navItems) {
         if (item.textContent.includes('留言') || 
@@ -443,7 +423,6 @@ function goToMessageSection() {
         }
     }
     
-    // 方法3: 通过ID或class跳转
     const messageSections = [
         document.getElementById('message'),
         document.getElementById('contact'),
@@ -461,13 +440,11 @@ function goToMessageSection() {
         }
     }
     
-    // 方法4: 如果以上都找不到，显示提示
     alert('请在网站导航中找到"留言"或"联系我们"板块进行留言。');
 }
 
-// 初始化留言板块
 function initNotFoundSection() {
-    // 等待页面加载完成
+    
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
@@ -481,35 +458,32 @@ function initNotFoundSection() {
     }
 }
 
-// 手动测试函数
 function testNotFoundSection() {
     createNotFoundSection();
     console.log('测试留言板块 - 应该可以看到"没找到心仪的山川景点？"的板块');
 }
 
-// 自动初始化
+
 initNotFoundSection();
 
-// 导出函数供其他脚本使用
 window.goToMessageSection = goToMessageSection;
 window.testNotFoundSection = testNotFoundSection;
 
 console.log('名山数据加载完成，留言板块功能已就绪');
-// 轮播状态
+
 let carouselState = {
     currentMountainIndex: 0,
     currentImageIndex: 0,
     isPlaying: true,
     intervalId: null,
-    intervalTime: 2000 // 3秒切换一张照片
+    intervalTime: 2000 
 };
 
-// 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
     initMountainsGrid();
     initDetailShowcase();
     
-    // 导航栏滚动效果
+    
     window.addEventListener('scroll', function() {
         const header = document.querySelector('header');
         if(window.scrollY > 50) {
@@ -522,10 +496,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// 初始化山脉网格
 function initMountainsGrid() {
     const gridContainer = document.getElementById('mountainsGrid');
-    gridContainer.innerHTML = ''; // 清空容器
+    gridContainer.innerHTML = ''; 
     
     mountainsData.forEach(mountain => {
         const card = createMountainCard(mountain);
@@ -533,13 +506,13 @@ function initMountainsGrid() {
     });
 }
 
-// 创建山脉卡片 - 使用第一张图片作为卡片背景
+
 function createMountainCard(mountain) {
     const card = document.createElement('div');
     card.className = 'mountain-card';
     card.setAttribute('data-id', mountain.id);
     
-    // 使用第一张图片作为卡片背景
+    
     const firstImage = mountain.images[0];
     
     card.innerHTML = `
@@ -547,13 +520,13 @@ function createMountainCard(mountain) {
         <div class="mountain-name">${mountain.name}</div>
     `;
     
-    // 添加鼠标悬停事件
+    
     let hoverTimer;
     
     card.addEventListener('mouseenter', function() {
         clearTimeout(hoverTimer);
         
-        // 翻转动画完成后显示详情
+        
         hoverTimer = setTimeout(() => {
             const mountainIndex = mountainsData.findIndex(m => m.id === mountain.id);
             showMountainDetail(mountainIndex);
@@ -567,9 +540,9 @@ function createMountainCard(mountain) {
     return card;
 }
 
-// 初始化详情展示区域
+
 function initDetailShowcase() {
-    // 创建详情展示HTML结构
+    
     const detailShowcase = document.createElement('div');
     detailShowcase.className = 'detail-showcase';
     detailShowcase.innerHTML = `
@@ -598,26 +571,26 @@ function initDetailShowcase() {
             </div>
             <p class="detail-description" id="detailDescription">这里是山脉的详细描述...</p>
             <div class="detail-features" id="detailFeatures">
-                <!-- 特色标签将动态生成 -->
+                
             </div>
         </div>
         <button class="close-btn">&times;</button>
     `;
     
-    // 创建遮罩层
+    
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
     
-    // 添加到页面
+    
     document.body.appendChild(detailShowcase);
     document.body.appendChild(overlay);
     
-    // 添加关闭事件
+    
     const closeBtn = detailShowcase.querySelector('.close-btn');
     closeBtn.addEventListener('click', closeDetailShowcase);
     overlay.addEventListener('click', closeDetailShowcase);
     
-    // ESC键关闭
+    
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeDetailShowcase();
@@ -625,7 +598,7 @@ function initDetailShowcase() {
     });
 }
 
-// 显示山脉详细信息
+
 function showMountainDetail(mountainIndex) {
     carouselState.currentMountainIndex = mountainIndex;
     carouselState.currentImageIndex = 0;
@@ -633,21 +606,21 @@ function showMountainDetail(mountainIndex) {
     const detailShowcase = document.querySelector('.detail-showcase');
     const overlay = document.querySelector('.overlay');
     
-    // 更新内容
+    
     updateMountainContent();
     
-    // 显示详情展示
+    
     detailShowcase.classList.add('active');
     overlay.classList.add('active');
     
-    // 开始自动轮播
+    
     startAutoPlay();
     
-    // 禁止背景滚动
+    
     document.body.style.overflow = 'hidden';
 }
 
-// 更新山脉内容
+
 function updateMountainContent() {
     const mountain = mountainsData[carouselState.currentMountainIndex];
     const currentImage = mountain.images[carouselState.currentImageIndex];
@@ -660,14 +633,12 @@ function updateMountainContent() {
     const detailDescription = document.getElementById('detailDescription');
     const detailFeatures = document.getElementById('detailFeatures');
     
-    // 添加淡出效果
     detailImage.classList.add('fade-out');
     
     setTimeout(() => {
-        // 更新图片
-        detailImage.style.backgroundImage = `url('${currentImage}')`;
         
-        // 更新文字内容（只在第一次显示时更新）
+        detailImage.style.backgroundImage = `url('${currentImage}')`;
+          
         if (carouselState.currentImageIndex === 0) {
             detailTitle.textContent = mountain.name;
             detailLocation.textContent = mountain.location;
@@ -676,13 +647,12 @@ function updateMountainContent() {
             detailSeason.textContent = mountain.bestSeason || '四季皆宜';
             detailDescription.textContent = mountain.description;
             
-            // 更新特色标签
+            
             detailFeatures.innerHTML = mountain.features.map(feature => 
                 `<span class="detail-feature">${feature}</span>`
             ).join('');
         }
-        
-        // 添加淡入效果
+          
         detailImage.classList.remove('fade-out');
         detailImage.classList.add('fade-in');
         
@@ -692,14 +662,13 @@ function updateMountainContent() {
     }, 400);
 }
 
-// 切换到下一张图片
 function showNextImage() {
     const mountain = mountainsData[carouselState.currentMountainIndex];
     carouselState.currentImageIndex = (carouselState.currentImageIndex + 1) % mountain.images.length;
     updateMountainContent();
 }
 
-// 开始自动轮播
+
 function startAutoPlay() {
     stopAutoPlay();
     
@@ -710,7 +679,6 @@ function startAutoPlay() {
     }
 }
 
-// 停止自动轮播
 function stopAutoPlay() {
     if (carouselState.intervalId) {
         clearInterval(carouselState.intervalId);
@@ -718,7 +686,6 @@ function stopAutoPlay() {
     }
 }
 
-// 关闭详情展示
 function closeDetailShowcase() {
     const detailShowcase = document.querySelector('.detail-showcase');
     const overlay = document.querySelector('.overlay');
@@ -726,9 +693,9 @@ function closeDetailShowcase() {
     detailShowcase.classList.remove('active');
     overlay.classList.remove('active');
     
-    // 停止自动轮播
+    
     stopAutoPlay();
     
-    // 恢复背景滚动
+    
     document.body.style.overflow = 'auto';
 }

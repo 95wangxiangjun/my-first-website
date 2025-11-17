@@ -158,10 +158,10 @@
         #gameCanvas {
             width: 100%;
             height: 100%;
-            touch-action: none; /* 防止触摸时的默认行为 */
+            touch-action: none; 
         }
         
-        /* 移动端触摸控制按钮 */
+        
         .mobile-controls {
             display: none;
             position: absolute;
@@ -192,7 +192,7 @@
             transform: scale(0.95);
         }
         
-        /* 响应式设计 */
+        
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -213,7 +213,7 @@
             }
             
             .game-area {
-                height: 60vh; /* 自适应高度 */
+                height: 60vh; 
                 max-height: none;
             }
             
@@ -468,7 +468,7 @@
     </footer>
 
     <script>
-        // 游戏配置 - 优化物理参数
+
         const config = {
             canvasWidth: 800,
             canvasHeight: 600,
@@ -489,10 +489,10 @@
             ]
         };
         
-        // 图片缓存对象
+
         const imageCache = {};
         
-        // 预加载图片
+
         function preloadImages() {
             for (let i = 0; i < config.mountainTypes.length; i++) { // 预加载所有山峰图片
                 const mountainType = config.mountainTypes[i];
@@ -504,7 +504,7 @@
             }
         }
 
-        // 游戏状态
+
         let gameState = {
             score: 0,
             mountains: [],
@@ -520,7 +520,7 @@
             mergedIds: new Set()
         };
 
-        // DOM 元素
+
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
@@ -537,41 +537,41 @@
         const timerElement = document.getElementById('timer');
         const statusElement = document.getElementById('status');
 
-        // 调整Canvas尺寸以适应屏幕
+
         function resizeCanvas() {
             const gameArea = document.querySelector('.game-area');
             const rect = gameArea.getBoundingClientRect();
             
-            // 保持宽高比
+
             const aspectRatio = 4/3; // 原始宽高比
             let newWidth = rect.width;
             let newHeight = rect.height;
             
-            // 如果宽度过大，以高度为准
+
             if (newWidth / newHeight > aspectRatio) {
                 newWidth = newHeight * aspectRatio;
             } else {
                 newHeight = newWidth / aspectRatio;
             }
             
-            // 设置Canvas的实际宽高（以像素为单位）
+
             canvas.width = newWidth;
             canvas.height = newHeight;
             
-            // 更新配置中的尺寸
+
             config.canvasWidth = newWidth;
             config.canvasHeight = newHeight;
         }
         
-        // 初始化游戏
+
         function init() {
-            // 预加载图片
+
             preloadImages();
             
-            // 调整Canvas尺寸以适应屏幕
+
             resizeCanvas();
             
-            // 重置游戏状态
+
             gameState = {
                 score: 0,
                 mountains: [],
@@ -587,21 +587,21 @@
                 mergedIds: new Set()
             };
             
-            // 更新UI
+
             updateUI();
             updateStatus("游戏开始");
             
-            // 创建第一个山峰
+
             createNewMountain();
             
-            // 隐藏游戏结束界面
+
             gameOverElement.classList.add('hidden');
             
-            // 开始游戏循环
+
             requestAnimationFrame(gameLoop);
         }
 
-        // 创建新山峰
+
         function createNewMountain() {
             const mountainType = config.mountainTypes[gameState.nextMountainIndex];
             gameState.currentMountain = {
@@ -618,22 +618,22 @@
                 id: Date.now() + Math.random()
             };
             
-            // 重置计时器
+
             gameState.timer = 2;
             gameState.dropTime = 0;
             
-            // 更新下一个山峰
+
             gameState.nextMountainIndex = Math.floor(Math.random() * 3);
             updateNextMountainInfo();
         }
 
-        // 更新下一个山峰信息
+
         function updateNextMountainInfo() {
             const nextMountain = config.mountainTypes[gameState.nextMountainIndex];
             nextMountainNameElement.textContent = nextMountain.name;
         }
 
-        // 更新UI
+
         function updateUI() {
             scoreElement.textContent = gameState.score;
             timerElement.textContent = gameState.timer;
@@ -645,39 +645,39 @@
             }
         }
 
-        // 更新状态信息
+
         function updateStatus(message) {
             statusElement.textContent = message;
         }
 
-        // 绘制山峰
+
         function drawMountain(mountain) {
             const mountainType = config.mountainTypes[mountain.type];
             
-            // 绘制山峰主体
+
             ctx.beginPath();
             ctx.arc(mountain.x, mountain.y, mountain.radius, 0, Math.PI * 2);
             ctx.fillStyle = mountain.color;
             ctx.fill();
             
-            // 绘制山峰纹理
+
             ctx.beginPath();
             ctx.arc(mountain.x - mountain.radius/3, mountain.y - mountain.radius/3, mountain.radius/3, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
             ctx.fill();
             
-            // 如果是高级山峰，绘制对应的图片
+
             if (mountainType.image && imageCache[mountainType.image]) {
                 const img = imageCache[mountainType.image];
                 const imgSize = mountain.radius * 2.2; // 增大图片尺寸，使其能覆盖整个球体
                 
-                // 绘制圆形裁剪区域 - 调整为完整的球体半径
+
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(mountain.x, mountain.y, mountain.radius, 0, Math.PI * 2);
                 ctx.clip();
                 
-                // 绘制图片 - 扩大覆盖范围
+
                 ctx.drawImage(
                     img, 
                     mountain.x - imgSize / 2, 
@@ -688,7 +688,7 @@
                 ctx.restore();
             }
             
-            // 绘制山峰名称
+
             ctx.fillStyle = 'white';
             ctx.font = `${Math.max(12, mountain.radius/4)}px Arial`;
             ctx.textAlign = 'center';
@@ -696,29 +696,29 @@
             ctx.fillText(mountainType.name, mountain.x, mountain.y);
         }
 
-        // 绘制游戏场景
+
         function draw() {
-            // 清空画布
+
             ctx.clearRect(0, 0, config.canvasWidth, config.canvasHeight);
             
-            // 绘制背景
+
             drawBackground();
             
-            // 绘制所有山峰
+
             gameState.mountains.forEach(mountain => {
                 drawMountain(mountain);
             });
             
-            // 绘制当前控制的山峰
+
             if (gameState.currentMountain) {
                 drawMountain(gameState.currentMountain);
             }
             
-            // 绘制地面
+
             ctx.fillStyle = '#8d6e63';
             ctx.fillRect(0, config.canvasHeight - 20, config.canvasWidth, 20);
             
-            // 绘制游戏结束线
+
             ctx.strokeStyle = 'red';
             ctx.lineWidth = 2;
             ctx.setLineDash([5, 5]);
@@ -729,16 +729,16 @@
             ctx.setLineDash([]);
         }
 
-        // 绘制背景
+
         function drawBackground() {
-            // 绘制天空渐变
+
             const gradient = ctx.createLinearGradient(0, 0, 0, config.canvasHeight);
             gradient.addColorStop(0, '#1a2a6c');
             gradient.addColorStop(1, '#0a192f');
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, config.canvasWidth, config.canvasHeight);
             
-            // 绘制远山
+
             ctx.fillStyle = 'rgba(100, 255, 218, 0.1)';
             ctx.beginPath();
             ctx.moveTo(0, config.canvasHeight - 100);
@@ -751,7 +751,7 @@
             ctx.closePath();
             ctx.fill();
             
-            // 绘制云朵
+
             ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
             ctx.beginPath();
             ctx.arc(100, 80, 30, 0, Math.PI * 2);
@@ -766,28 +766,28 @@
             ctx.fill();
         }
 
-        // 更新游戏状态
+
         function update() {
             if (gameState.gameOver) return;
             
-            // 处理待处理的合并
+
             if (gameState.pendingMerges.length > 0 && !gameState.merging) {
                 const merge = gameState.pendingMerges.shift();
-                // 检查山峰是否已被合并
+
                 if (!gameState.mergedIds.has(merge.mountain1.id) && !gameState.mergedIds.has(merge.mountain2.id)) {
                     mergeMountains(merge.mountain1, merge.mountain2, merge.index1, merge.index2);
                 }
                 return;
             }
             
-            // 更新当前山峰位置
+
             if (gameState.currentMountain) {
-                // 左右移动
+
                 if (gameState.currentMountain.isMoving) {
-                    // 鼠标控制
+
                     canvas.addEventListener('mousemove', handleMouseMove);
                     
-                    // 边界检测
+
                     if (gameState.currentMountain.x - gameState.currentMountain.radius < 0) {
                         gameState.currentMountain.x = gameState.currentMountain.radius;
                     }
@@ -795,35 +795,35 @@
                         gameState.currentMountain.x = config.canvasWidth - gameState.currentMountain.radius;
                     }
                 } else {
-                    // 更新计时器
+
                     if (gameState.dropTime === 0) {
                         gameState.dropTime = Date.now();
                     } else {
                         const elapsed = Date.now() - gameState.dropTime;
                         gameState.timer = Math.max(0, 2 - Math.floor(elapsed / 1000));
                         
-                        // 如果计时器归零，强制生成新山
+
                         if (gameState.timer === 0) {
                             forceNewMountain();
                             return;
                         }
                     }
                     
-                    // 下落物理效果
+
                     gameState.currentMountain.vy += config.gravity;
                     gameState.currentMountain.y += gameState.currentMountain.vy;
                     
-                    // 检测碰撞
+
                     checkCollisions();
                     
-                    // 检测是否落地
+
                     const groundY = config.canvasHeight - 20;
                     if (gameState.currentMountain.y + gameState.currentMountain.radius >= groundY) {
                         gameState.currentMountain.y = groundY - gameState.currentMountain.radius;
-                        // 增加弹跳效果 - 提高反弹速度
+
                         gameState.currentMountain.vy = -gameState.currentMountain.vy * config.restitution;
                         
-                        // 如果速度很小，停止弹跳
+
                         if (Math.abs(gameState.currentMountain.vy) < 0.5) {
                             gameState.currentMountain.vy = 0;
                             gameState.currentMountain.isStable = true;
@@ -831,12 +831,12 @@
                             gameState.currentMountain = null;
                             createNewMountain();
                             
-                            // 检查游戏结束条件
+
                             checkGameOver();
                         }
                     }
                     
-                    // 检测是否稳定
+
                     if (gameState.currentMountain && 
                         Math.abs(gameState.currentMountain.vx) < 0.1 && 
                         Math.abs(gameState.currentMountain.vy) < 0.1) {
@@ -849,7 +849,7 @@
                             gameState.currentMountain = null;
                             createNewMountain();
                             
-                            // 检查游戏结束条件
+
                             checkGameOver();
                         }
                     } else {
@@ -858,13 +858,13 @@
                 }
             }
             
-            // 更新所有山峰
+
             gameState.mountains.forEach(mountain => {
-                // 应用摩擦力 - 现在摩擦力更小，山峰滚动更快
+
                 mountain.vx *= config.friction;
                 mountain.x += mountain.vx;
                 
-                // 边界检测
+
                 if (mountain.x - mountain.radius < 0) {
                     mountain.x = mountain.radius;
                     mountain.vx *= -config.restitution;
@@ -874,55 +874,55 @@
                     mountain.vx *= -config.restitution;
                 }
                 
-                // 地面检测 - 防止山在地下
+
                 const groundY = config.canvasHeight - 20;
                 if (mountain.y + mountain.radius > groundY) {
                     mountain.y = groundY - mountain.radius;
-                    // 增加弹跳效果
+
                     mountain.vy = -mountain.vy * config.restitution;
                     
-                    // 如果速度很小，停止弹跳
+
                     if (Math.abs(mountain.vy) < 0.5) {
                         mountain.vy = 0;
                     }
                 }
             });
             
-            // 检测山峰之间的碰撞和合成
+
             checkMountainCollisions();
             
-            // 在所有检查结束后，检查是否有山需要下落
+
             checkFallingMountains();
             
-            // 在所有检查结束后，检查是否有可以合成的山
+
             checkMergeOpportunities();
             
-            // 更新UI
+
             updateUI();
         }
 
-        // 检查是否有山需要下落
+
         function checkFallingMountains() {
             if (gameState.checkingStability) return;
             
             gameState.checkingStability = true;
             let anyMountainFalling = false;
             
-            // 检查所有山是否稳定
+
             for (let i = 0; i < gameState.mountains.length; i++) {
                 const mountain = gameState.mountains[i];
                 
-                // 如果山不是稳定的，检查它下面是否有支撑
+
                 if (!mountain.isStable) {
                     let hasSupport = false;
                     
-                    // 检查是否接触地面
+
                     const groundY = config.canvasHeight - 20;
                     if (mountain.y + mountain.radius >= groundY - 1) {
                         hasSupport = true;
                     }
                     
-                    // 检查是否接触其他山
+
                     for (let j = 0; j < gameState.mountains.length; j++) {
                         if (i === j) continue;
                         
@@ -931,7 +931,7 @@
                         const dy = mountain.y - other.y;
                         const distance = Math.sqrt(dx * dx + dy * dy);
                         
-                        // 如果下面的山支撑着上面的山
+
                         if (distance < mountain.radius + other.radius && 
                             other.y > mountain.y && 
                             Math.abs(dx) < (mountain.radius + other.radius) * 0.8) {
@@ -940,7 +940,7 @@
                         }
                     }
                     
-                    // 如果没有支撑，让山下落
+
                     if (!hasSupport) {
                         mountain.isStable = false;
                         mountain.vy += config.gravity;
@@ -948,7 +948,7 @@
                         anyMountainFalling = true;
                         updateStatus("山的形态正在改变");
                     } else {
-                        // 有支撑，标记为稳定
+
                         mountain.isStable = true;
                         mountain.vy = 0;
                     }
@@ -962,26 +962,26 @@
             gameState.checkingStability = false;
         }
 
-        // 检查是否有可以合成的山
+
         function checkMergeOpportunities() {
             if (gameState.merging) return;
             
-            // 检查所有山是否可以合成
+
             for (let i = 0; i < gameState.mountains.length; i++) {
                 for (let j = i + 1; j < gameState.mountains.length; j++) {
                     const mountain1 = gameState.mountains[i];
                     const mountain2 = gameState.mountains[j];
                     
-                    // 如果两个山类型相同且距离很近，则合成
+
                     if (mountain1.type === mountain2.type) {
                         const dx = mountain1.x - mountain2.x;
                         const dy = mountain1.y - mountain2.y;
                         const distance = Math.sqrt(dx * dx + dy * dy);
                         
-                        // 如果距离小于半径之和的1.2倍，则合成
+
                         if (distance < (mountain1.radius + mountain2.radius) * 1.2) {
                             updateStatus("发现可合成的山");
-                            // 添加到待处理合并队列
+
                             gameState.pendingMerges.push({
                                 mountain1: mountain1,
                                 mountain2: mountain2,
@@ -995,19 +995,19 @@
             }
         }
 
-        // 强制生成新山
+
         function forceNewMountain() {
             if (gameState.currentMountain) {
                 gameState.mountains.push(gameState.currentMountain);
                 gameState.currentMountain = null;
                 createNewMountain();
                 
-                // 检查游戏结束条件
+
                 checkGameOver();
             }
         }
 
-        // 鼠标移动处理
+
         function handleMouseMove(e) {
             if (gameState.currentMountain && gameState.currentMountain.isMoving) {
                 const rect = canvas.getBoundingClientRect();
@@ -1015,14 +1015,14 @@
             }
         }
 
-        // 鼠标点击处理
+
         function handleMouseClick(e) {
             if (gameState.currentMountain && gameState.currentMountain.isMoving) {
                 dropMountain();
             }
         }
 
-        // 检测当前山峰与其他山峰的碰撞
+
         function checkCollisions() {
             if (!gameState.currentMountain) return;
             
@@ -1033,13 +1033,13 @@
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 
                 if (distance < gameState.currentMountain.radius + mountain.radius) {
-                    // 碰撞发生
+
                     if (config.mergePriority && gameState.currentMountain.type === mountain.type) {
-                        // 相同类型，优先合并
+
                         mergeMountains(gameState.currentMountain, mountain, -1, i);
                         return;
                     } else {
-                        // 不同类型或未启用合并优先级，反弹
+
                         const angle = Math.atan2(dy, dx);
                         const targetX = mountain.x + Math.cos(angle) * (mountain.radius + gameState.currentMountain.radius);
                         const targetY = mountain.y + Math.sin(angle) * (mountain.radius + gameState.currentMountain.radius);
@@ -1047,15 +1047,15 @@
                         gameState.currentMountain.x = targetX;
                         gameState.currentMountain.y = targetY;
                         
-                        // 计算反弹速度 - 增加反弹效果
+
                         const speed = Math.sqrt(gameState.currentMountain.vx * gameState.currentMountain.vx + 
                                               gameState.currentMountain.vy * gameState.currentMountain.vy);
-                        // 增加碰撞后的速度
+
                         const collisionSpeed = Math.max(speed, 3); // 确保有最小速度
                         gameState.currentMountain.vx = Math.cos(angle) * collisionSpeed * config.restitution;
                         gameState.currentMountain.vy = Math.sin(angle) * collisionSpeed * config.restitution;
                         
-                        // 防止卡住 - 如果速度很小，直接设置为0
+
                         if (Math.abs(gameState.currentMountain.vx) < 0.1 && Math.abs(gameState.currentMountain.vy) < 0.1) {
                             gameState.currentMountain.vx = 0;
                             gameState.currentMountain.vy = 0;
@@ -1065,7 +1065,7 @@
             }
         }
 
-        // 检测山峰之间的碰撞和合成
+
         function checkMountainCollisions() {
             let merged = false;
             
@@ -1079,9 +1079,9 @@
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
                     if (distance < mountain1.radius + mountain2.radius) {
-                        // 碰撞发生
+
                         if (mountain1.type === mountain2.type) {
-                            // 相同类型，合成
+
                             gameState.pendingMerges.push({
                                 mountain1: mountain1,
                                 mountain2: mountain2,
@@ -1091,7 +1091,7 @@
                             merged = true;
                             break; // 一次只处理一个合成
                         } else {
-                            // 不同类型，反弹
+
                             const angle = Math.atan2(dy, dx);
                             const overlap = (mountain1.radius + mountain2.radius - distance) / 2;
                             
@@ -1100,11 +1100,11 @@
                             mountain2.x -= Math.cos(angle) * overlap;
                             mountain2.y -= Math.sin(angle) * overlap;
                             
-                            // 交换速度 - 增加碰撞后的速度
+
                             const tempVx = mountain1.vx;
                             const tempVy = mountain1.vy;
                             
-                            // 使用更大的速度进行反弹
+
                             mountain1.vx = mountain2.vx * config.restitution * 1.2;
                             mountain1.vy = mountain2.vy * config.restitution * 1.2;
                             mountain2.vx = tempVx * config.restitution * 1.2;
@@ -1116,14 +1116,14 @@
             }
         }
 
-        // 合并山峰
+
         function mergeMountains(mountain1, mountain2, index1, index2) {
             if (gameState.merging) return; // 防止重复合并
             gameState.merging = true;
             
             updateStatus("合成中...");
             
-            // 创建更高级的山峰
+
             const newType = mountain1.type + 1;
             if (newType < config.mountainTypes.length) {
                 const newMountainType = config.mountainTypes[newType];
@@ -1141,61 +1141,61 @@
                     id: Date.now() + Math.random()
                 };
                 
-                // 标记已合并的山峰
+
                 gameState.mergedIds.add(mountain1.id);
                 gameState.mergedIds.add(mountain2.id);
                 
-                // 移除被合并的山峰
+
                 if (index1 >= 0) {
                     gameState.mountains.splice(index1, 1);
-                    // 调整第二个索引
+
                     if (index2 > index1) index2--;
                 }
                 if (index2 >= 0) {
                     gameState.mountains.splice(index2, 1);
                 }
                 
-                // 添加新山峰
+
                 gameState.mountains.push(newMountain);
                 
-                // 更新分数
+
                 gameState.score += newMountainType.score;
                 
-                // 更新最高山峰
+
                 if (newType > gameState.highestMountain) {
                     gameState.highestMountain = newType;
                     updateMountainInfo(newType);
                 }
                 
-                // 应用挤压效果
+
                 applySqueezeEffect(newMountain);
                 
                 updateStatus(`成功合成 ${newMountainType.name}`);
                 updateUI();
                 
-                // 如果合并涉及当前山峰，创建新山
+
                 if (index1 === -1) {
                     gameState.currentMountain = null;
                     createNewMountain();
                 }
             }
             
-            // 重置合并标记
+
             setTimeout(() => {
                 gameState.merging = false;
-                // 清理已合并的ID集合，防止内存泄漏
+
                 if (gameState.mergedIds.size > 100) {
                     gameState.mergedIds = new Set();
                 }
             }, 300);
         }
 
-        // 应用挤压效果
+
         function applySqueezeEffect(newMountain) {
             for (let i = 0; i < gameState.mountains.length; i++) {
                 const mountain = gameState.mountains[i];
                 
-                // 跳过自己
+
                 if (mountain === newMountain) continue;
                 
                 const dx = newMountain.x - mountain.x;
@@ -1204,26 +1204,26 @@
                 const minDistance = newMountain.radius + mountain.radius;
                 
                 if (distance < minDistance) {
-                    // 计算重叠
+
                     const overlap = minDistance - distance;
                     const angle = Math.atan2(dy, dx);
                     
-                    // 将周围的山推开
+
                     mountain.x -= Math.cos(angle) * overlap * 0.5;
                     mountain.y -= Math.sin(angle) * overlap * 0.5;
                     
-                    // 给周围的山一个速度 - 增加挤压效果
+
                     const force = overlap * 0.15; // 增加挤压力度
                     mountain.vx -= Math.cos(angle) * force;
                     mountain.vy -= Math.sin(angle) * force;
                     
-                    // 标记为不稳定
+
                     mountain.isStable = false;
                 }
             }
         }
 
-        // 更新山峰信息
+
         function updateMountainInfo(type) {
             const mountainType = config.mountainTypes[type];
             mountainInfoElement.innerHTML = `
@@ -1232,7 +1232,7 @@
             `;
         }
 
-        // 放下当前山峰
+
         function dropMountain() {
             if (gameState.currentMountain && gameState.currentMountain.isMoving) {
                 gameState.currentMountain.isMoving = false;
@@ -1241,14 +1241,14 @@
             }
         }
 
-        // 移动当前山峰
+
         function moveMountain(direction) {
             if (gameState.currentMountain && gameState.currentMountain.isMoving) {
-                // 根据画布宽度调整移动速度，使在不同设备上移动速度一致
+
                 const speed = config.canvasWidth * 0.0125; // 相对于画布宽度的1.25%
                 gameState.currentMountain.x += direction * speed;
                 
-                // 边界检测
+
                 if (gameState.currentMountain.x - gameState.currentMountain.radius < 0) {
                     gameState.currentMountain.x = gameState.currentMountain.radius;
                 }
@@ -1258,7 +1258,7 @@
             }
         }
         
-        // 处理触摸事件
+
         function handleTouchStart(e) {
             e.preventDefault();
             const touches = e.touches;
@@ -1269,7 +1269,7 @@
                 const touchX = touch.clientX - rect.left;
                 const touchY = touch.clientY - rect.top;
                 
-                // 存储初始触摸位置
+
                 canvas.touchStartX = touchX;
                 canvas.touchStartTime = Date.now();
             }
@@ -1285,10 +1285,10 @@
                     const rect = canvas.getBoundingClientRect();
                     const touchX = touch.clientX - rect.left;
                     
-                    // 直接将触摸位置映射到山峰位置
+
                     gameState.currentMountain.x = touchX;
                     
-                    // 边界检测
+
                     if (gameState.currentMountain.x - gameState.currentMountain.radius < 0) {
                         gameState.currentMountain.x = gameState.currentMountain.radius;
                     }
@@ -1311,25 +1311,25 @@
                     const touchY = touch.clientY - rect.top;
                     const touchEndTime = Date.now();
                     
-                    // 计算触摸时间和距离，判断是点击还是滑动
+
                     const touchTime = touchEndTime - canvas.touchStartTime;
                     const touchDistance = Math.abs(touchX - canvas.touchStartX);
                     
-                    // 如果触摸时间短且移动距离小，视为点击放下
+
                     if (touchTime < 200 && touchDistance < 10) {
                         dropMountain();
                     }
                     
-                    // 清除触摸起始位置
+
                     delete canvas.touchStartX;
                     delete canvas.touchStartTime;
                 }
             }
         }
 
-        // 检查游戏是否结束
+
         function checkGameOver() {
-            // 检查是否有山峰超过顶部边界（红线）
+
             for (let i = 0; i < gameState.mountains.length; i++) {
                 if (gameState.mountains[i].y - gameState.mountains[i].radius <= 100) {
                     endGame();
@@ -1338,7 +1338,7 @@
             }
         }
 
-        // 游戏结束
+
         function endGame() {
             gameState.gameOver = true;
             finalScoreElement.textContent = gameState.score;
@@ -1353,7 +1353,7 @@
             updateStatus("游戏结束");
         }
 
-        // 游戏循环
+
         function gameLoop() {
             update();
             draw();
@@ -1363,7 +1363,7 @@
             }
         }
 
-        // 创建移动端控制按钮
+
         function createMobileControls() {
             const gameArea = document.querySelector('.game-area');
             const mobileControls = document.createElement('div');
@@ -1375,7 +1375,7 @@
             leftBtn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 moveMountain(-1);
-                // 持续移动效果
+
                 leftBtn.moveInterval = setInterval(() => moveMountain(-1), 100);
             });
             leftBtn.addEventListener('touchend', () => {
@@ -1396,7 +1396,7 @@
             rightBtn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 moveMountain(1);
-                // 持续移动效果
+
                 rightBtn.moveInterval = setInterval(() => moveMountain(1), 100);
             });
             rightBtn.addEventListener('touchend', () => {
@@ -1410,21 +1410,21 @@
             gameArea.appendChild(mobileControls);
         }
         
-        // 事件监听
+
         leftButton.addEventListener('click', () => moveMountain(-1));
         rightButton.addEventListener('click', () => moveMountain(1));
         dropButton.addEventListener('click', dropMountain);
         
-        // 添加鼠标事件监听
+
         canvas.addEventListener('click', handleMouseClick);
         canvas.addEventListener('mousemove', handleMouseMove);
         
-        // 添加触摸事件监听
+
         canvas.addEventListener('touchstart', handleTouchStart);
         canvas.addEventListener('touchmove', handleTouchMove);
         canvas.addEventListener('touchend', handleTouchEnd);
         
-        // 添加键盘事件监听
+
         document.addEventListener('keydown', (e) => {
             if (e.code === 'ArrowLeft') {
                 moveMountain(-1);
@@ -1436,7 +1436,7 @@
             }
         });
         
-        // 添加窗口大小变化事件监听
+
         window.addEventListener('resize', () => {
             if (!gameState.gameOver) {
                 resizeCanvas();
@@ -1445,10 +1445,10 @@
         
         restartButton.addEventListener('click', init);
         
-        // 创建移动端控制按钮
+
         createMobileControls();
         
-        // 初始化游戏
+
         init();
     </script>
 </body>

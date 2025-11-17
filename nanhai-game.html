@@ -118,7 +118,7 @@
             margin-bottom: 2rem;
         }
         
-        /* 游戏画布样式 */
+        
         .game-canvas-container {
             position: relative;
             width: 100%;
@@ -136,7 +136,7 @@
             cursor: none;
         }
         
-        /* 游戏控制按钮 */
+        
         .game-controls {
             display: flex;
             justify-content: center;
@@ -173,7 +173,7 @@
             background: rgba(100, 255, 218, 0.1);
         }
         
-        /* 游戏状态显示 */
+        
         .game-stats {
             display: flex;
             justify-content: space-around;
@@ -199,7 +199,7 @@
             font-size: 0.9rem;
         }
         
-        /* 游戏说明 */
+        
         .game-instructions {
             margin-top: 2rem;
             padding: 1.5rem;
@@ -218,7 +218,7 @@
             margin-bottom: 0.5rem;
         }
         
-        /* 游戏覆盖层 */
+        
         .game-overlay {
             position: absolute;
             top: 0;
@@ -264,7 +264,7 @@
             text-decoration: none;
         }
         
-        /* 响应式设计 */
+        
         @media (max-width: 768px) {
             .game-canvas-container {
                 height: 400px;
@@ -397,7 +397,7 @@
             const finalScore = document.getElementById('finalScore');
             const finalSize = document.getElementById('finalSize');
             
-            // 设置画布大小
+
             function resizeCanvas() {
                 canvas.width = canvas.clientWidth;
                 canvas.height = canvas.clientHeight;
@@ -406,7 +406,7 @@
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
             
-            // 游戏配置
+
             const config = {
                 playerInitialSize: 20,
                 playerSpeed: 3,
@@ -415,7 +415,7 @@
                 spawnRate: 0.01
             };
             
-            // 游戏状态
+
             const gameState = {
                 score: 0,
                 lives: 3,
@@ -430,7 +430,7 @@
                 keys: { w: false, s: false, a: false, d: false }
             };
             
-            // 玩家角色
+
             const player = {
                 x: canvas.width / 2,
                 y: canvas.height / 2,
@@ -455,7 +455,7 @@
                     
                     ctx.rotate(angle);
                     
-                    // 绘制玩家鱼
+
                     ctx.beginPath();
                     ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
                     ctx.fillStyle = this.color;
@@ -464,7 +464,7 @@
                     ctx.lineWidth = 2;
                     ctx.stroke();
                     
-                    // 绘制尾巴
+
                     ctx.beginPath();
                     ctx.moveTo(-this.size, 0);
                     ctx.lineTo(-this.size - this.size / 2, -this.size);
@@ -473,7 +473,7 @@
                     ctx.fillStyle = '#000000';
                     ctx.fill();
                     
-                    // 绘制眼睛
+
                     ctx.beginPath();
                     ctx.arc(this.size / 2, -this.size / 4, this.size / 6, 0, Math.PI * 2);
                     ctx.fillStyle = 'white';
@@ -496,7 +496,7 @@
                 }
             };
             
-            // 创建海洋生物
+
             function createCreature() {
                 const creatureType = Math.random();
                 let size, speed, points, color, type;
@@ -631,12 +631,12 @@
                         const angle = Math.atan2(this.dy, this.dx);
                         ctx.rotate(angle);
                         
-                        // 根据类型绘制不同的鱼
-                        // 在createCreature函数的draw方法中，替换switch语句部分：
+
+
 
 switch(this.type) {
     case 'shrimp':
-        // 虾米
+
         ctx.beginPath();
         ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
@@ -647,7 +647,7 @@ switch(this.type) {
         ctx.lineTo(-this.size * 1.5, this.size / 3);
         ctx.closePath();
         ctx.fill();
-        // 触须
+
         ctx.strokeStyle = this.color;
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -661,15 +661,15 @@ switch(this.type) {
         break;
         
     case 'crab':
-        // 螃蟹
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size * 0.8, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 蟹钳
+
         ctx.fillRect(this.size, -this.size / 4, this.size / 2, this.size / 2);
         ctx.fillRect(-this.size - this.size / 2, -this.size / 4, this.size / 2, this.size / 2);
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size / 3, -this.size / 2, 3, 0, Math.PI * 2);
         ctx.fillStyle = 'white';
@@ -680,12 +680,12 @@ switch(this.type) {
         break;
         
     case 'tropicalfish':
-        // 热带鱼（有条纹）
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 条纹
+
         ctx.strokeStyle = '#FF4500';
         ctx.lineWidth = 2;
         for (let i = -this.size / 2; i < this.size / 2; i += this.size / 4) {
@@ -694,7 +694,7 @@ switch(this.type) {
             ctx.lineTo(i, this.size / 2);
             ctx.stroke();
         }
-        // 尾巴
+
         ctx.beginPath();
         ctx.moveTo(-this.size, 0);
         ctx.lineTo(-this.size - this.size / 2, -this.size);
@@ -702,7 +702,7 @@ switch(this.type) {
         ctx.closePath();
         ctx.fillStyle = '#FF4500';
         ctx.fill();
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
         ctx.fillStyle = 'white';
@@ -710,31 +710,31 @@ switch(this.type) {
         break;
         
     case 'shark':
-        // 鲨鱼（有背鳍）
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 背鳍
+
         ctx.beginPath();
         ctx.moveTo(0, -this.size / 2);
         ctx.lineTo(this.size / 3, -this.size);
         ctx.lineTo(this.size / 2, -this.size / 2);
         ctx.closePath();
         ctx.fill();
-        // 尾巴
+
         ctx.beginPath();
         ctx.moveTo(-this.size, 0);
         ctx.lineTo(-this.size - this.size / 2, -this.size * 1.2);
         ctx.lineTo(-this.size - this.size / 2, this.size * 1.2);
         ctx.closePath();
         ctx.fill();
-        // 牙齿
+
         ctx.fillStyle = 'white';
         for (let i = 0; i < 5; i++) {
             ctx.fillRect(this.size / 2 + i * 5, 0, 3, 5);
         }
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
         ctx.fillStyle = 'black';
@@ -742,16 +742,16 @@ switch(this.type) {
         break;
         
     case 'clownfish':
-        // 小丑鱼（橙白条纹）
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 白色条纹
+
         ctx.fillStyle = 'white';
         ctx.fillRect(-this.size / 3, -this.size / 2, this.size / 4, this.size);
         ctx.fillRect(this.size / 4, -this.size / 2, this.size / 8, this.size);
-        // 尾巴
+
         ctx.beginPath();
         ctx.moveTo(-this.size, 0);
         ctx.lineTo(-this.size - this.size / 2, -this.size / 2);
@@ -759,7 +759,7 @@ switch(this.type) {
         ctx.closePath();
         ctx.fillStyle = '#FF5722';
         ctx.fill();
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
         ctx.fillStyle = 'black';
@@ -767,17 +767,17 @@ switch(this.type) {
         break;
         
     case 'butterflyfish':
-        // 蝴蝶鱼（有黑色斑点和长嘴）
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 黑色斑点
+
         ctx.beginPath();
         ctx.arc(-this.size / 2, 0, this.size / 5, 0, Math.PI * 2);
         ctx.fillStyle = 'black';
         ctx.fill();
-        // 长嘴
+
         ctx.beginPath();
         ctx.moveTo(this.size / 2, 0);
         ctx.lineTo(this.size * 0.8, -this.size / 8);
@@ -785,7 +785,7 @@ switch(this.type) {
         ctx.closePath();
         ctx.fillStyle = 'black';
         ctx.fill();
-        // 尾巴
+
         ctx.beginPath();
         ctx.moveTo(-this.size, 0);
         ctx.lineTo(-this.size - this.size / 3, 0);
@@ -793,7 +793,7 @@ switch(this.type) {
         ctx.lineCap = 'round';
         ctx.strokeStyle = this.color;
         ctx.stroke();
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size / 3, -this.size / 5, this.size / 12, 0, Math.PI * 2);
         ctx.fillStyle = 'white';
@@ -805,17 +805,17 @@ switch(this.type) {
         break;
         
     case 'turtle':
-        // 海龟
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size * 0.7, 0, 0, Math.PI * 2);
         ctx.fillStyle = '#5D4037';
         ctx.fill();
-        // 龟壳
+
         ctx.beginPath();
         ctx.ellipse(0, -this.size / 5, this.size * 0.9, this.size * 0.6, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 龟壳纹理
+
         ctx.strokeStyle = '#4E342E';
         ctx.lineWidth = 2;
         for (let i = -this.size * 0.4; i <= this.size * 0.4; i += this.size * 0.2) {
@@ -824,17 +824,17 @@ switch(this.type) {
             ctx.lineTo(i, -this.size / 5 + this.size * 0.3);
             ctx.stroke();
         }
-        // 四肢
+
         ctx.fillStyle = '#5D4037';
         ctx.fillRect(this.size * 0.6, -this.size * 0.2, this.size * 0.3, this.size * 0.1);
         ctx.fillRect(this.size * 0.6, this.size * 0.1, this.size * 0.3, this.size * 0.1);
         ctx.fillRect(-this.size * 0.9, -this.size * 0.2, this.size * 0.3, this.size * 0.1);
         ctx.fillRect(-this.size * 0.9, this.size * 0.1, this.size * 0.3, this.size * 0.1);
-        // 头部
+
         ctx.beginPath();
         ctx.arc(this.size * 0.7, 0, this.size * 0.2, 0, Math.PI * 2);
         ctx.fill();
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size * 0.8, -this.size * 0.1, this.size * 0.05, 0, Math.PI * 2);
         ctx.fillStyle = 'black';
@@ -842,31 +842,31 @@ switch(this.type) {
         break;
         
     case 'whale':
-        // 鲸鱼
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size * 0.4, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 背鳍
+
         ctx.beginPath();
         ctx.moveTo(-this.size * 0.3, -this.size * 0.4);
         ctx.lineTo(-this.size * 0.1, -this.size * 0.8);
         ctx.lineTo(0, -this.size * 0.4);
         ctx.closePath();
         ctx.fill();
-        // 尾鳍
+
         ctx.beginPath();
         ctx.moveTo(-this.size, 0);
         ctx.lineTo(-this.size - this.size * 0.3, -this.size * 0.3);
         ctx.lineTo(-this.size - this.size * 0.3, this.size * 0.3);
         ctx.closePath();
         ctx.fill();
-        // 喷水孔
+
         ctx.beginPath();
         ctx.arc(this.size * 0.5, -this.size * 0.2, this.size * 0.05, 0, Math.PI * 2);
         ctx.fillStyle = 'darkgray';
         ctx.fill();
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size * 0.6, -this.size * 0.1, this.size * 0.05, 0, Math.PI * 2);
         ctx.fillStyle = 'black';
@@ -874,12 +874,12 @@ switch(this.type) {
         break;
         
     case 'angelfish':
-        // 神仙鱼（有长鳍）
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 长背鳍
+
         ctx.beginPath();
         ctx.moveTo(-this.size * 0.5, -this.size / 2);
         ctx.lineTo(0, -this.size * 1.2);
@@ -887,14 +887,14 @@ switch(this.type) {
         ctx.closePath();
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 长腹鳍
+
         ctx.beginPath();
         ctx.moveTo(-this.size * 0.5, this.size / 2);
         ctx.lineTo(0, this.size * 1.2);
         ctx.lineTo(this.size * 0.5, this.size / 2);
         ctx.closePath();
         ctx.fill();
-        // 尾巴
+
         ctx.beginPath();
         ctx.moveTo(-this.size, 0);
         ctx.lineTo(-this.size - this.size / 2, -this.size / 3);
@@ -902,7 +902,7 @@ switch(this.type) {
         ctx.closePath();
         ctx.fillStyle = '#666';
         ctx.fill();
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
         ctx.fillStyle = 'white';
@@ -914,12 +914,12 @@ switch(this.type) {
         break;
         
     case 'surgeonfish':
-        // 刺尾鱼（有尾刺）
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 尾刺
+
         ctx.beginPath();
         ctx.moveTo(-this.size - this.size / 2, 0);
         ctx.lineTo(-this.size - this.size, -this.size / 4);
@@ -927,7 +927,7 @@ switch(this.type) {
         ctx.closePath();
         ctx.fillStyle = '#FF1493';
         ctx.fill();
-        // 尾巴
+
         ctx.beginPath();
         ctx.moveTo(-this.size, 0);
         ctx.lineTo(-this.size - this.size / 2, -this.size);
@@ -935,7 +935,7 @@ switch(this.type) {
         ctx.closePath();
         ctx.fillStyle = '#666';
         ctx.fill();
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
         ctx.fillStyle = 'white';
@@ -947,12 +947,12 @@ switch(this.type) {
         break;
         
     case 'bluefish':
-        // 蓝唐王鱼（蓝色身体，黄色条纹）
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 黄色条纹
+
         ctx.strokeStyle = '#FFD700';
         ctx.lineWidth = 3;
         ctx.beginPath();
@@ -963,7 +963,7 @@ switch(this.type) {
         ctx.moveTo(-this.size / 2, this.size / 3);
         ctx.lineTo(this.size / 2, this.size / 3);
         ctx.stroke();
-        // 尾巴
+
         ctx.beginPath();
         ctx.moveTo(-this.size, 0);
         ctx.lineTo(-this.size - this.size / 2, -this.size);
@@ -971,7 +971,7 @@ switch(this.type) {
         ctx.closePath();
         ctx.fillStyle = '#666';
         ctx.fill();
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
         ctx.fillStyle = 'white';
@@ -983,12 +983,12 @@ switch(this.type) {
         break;
         
     case 'lionfish':
-        // 狮子鱼（有毒刺）
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
         ctx.fill();
-        // 毒刺
+
         ctx.strokeStyle = '#DC143C';
         ctx.lineWidth = 2;
         for (let i = 0; i < 8; i++) {
@@ -1001,7 +1001,7 @@ switch(this.type) {
             );
             ctx.stroke();
         }
-        // 条纹
+
         ctx.strokeStyle = '#8B0000';
         ctx.lineWidth = 2;
         for (let i = -this.size / 2; i < this.size / 2; i += this.size / 3) {
@@ -1010,7 +1010,7 @@ switch(this.type) {
             ctx.lineTo(i, this.size / 2);
             ctx.stroke();
         }
-        // 尾巴
+
         ctx.beginPath();
         ctx.moveTo(-this.size, 0);
         ctx.lineTo(-this.size - this.size / 2, -this.size);
@@ -1018,7 +1018,7 @@ switch(this.type) {
         ctx.closePath();
         ctx.fillStyle = '#666';
         ctx.fill();
-        // 眼睛
+
         ctx.beginPath();
         ctx.arc(this.size / 2, -this.size / 4, this.size / 10, 0, Math.PI * 2);
         ctx.fillStyle = 'white';
@@ -1030,7 +1030,7 @@ switch(this.type) {
         break;
         
     default:
-        // 普通鱼
+
         ctx.beginPath();
         ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, Math.PI * 2);
         ctx.fillStyle = this.color;
@@ -1061,7 +1061,7 @@ switch(this.type) {
                         this.x += this.dx;
                         this.y += this.dy;
                         
-                        // 随机改变方向
+
                         if (Math.random() < 0.02) {
                             this.dx += (Math.random() - 0.5) * 0.5;
                             this.dy += (Math.random() - 0.5) * 0.5;
@@ -1082,9 +1082,9 @@ switch(this.type) {
                 };
             }
             
-            // 绘制背景
+
             function drawBackground() {
-                // 绘制渐变背景
+
                 const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
                 gradient.addColorStop(0, '#0a192f');
                 gradient.addColorStop(0.3, '#112240');
@@ -1092,7 +1092,7 @@ switch(this.type) {
                 ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
-                // 绘制网格
+
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
                 ctx.lineWidth = 1;
                 for (let i = 0; i < canvas.width; i += 50) {
@@ -1108,7 +1108,7 @@ switch(this.type) {
                     ctx.stroke();
                 }
                 
-                // 绘制气泡
+
                 for (let i = 0; i < 5; i++) {
                     const x = Math.random() * canvas.width;
                     const y = canvas.height + Math.sin(Date.now() * 0.001 + i) * 20;
@@ -1121,7 +1121,7 @@ switch(this.type) {
                 }
             }
             
-            // 更新游戏状态
+
             function updateGame() {
                 if (!gameState.isRunning || gameState.isPaused) return;
                 
@@ -1151,7 +1151,7 @@ switch(this.type) {
                 gameState.gameLoopId = requestAnimationFrame(updateGame);
             }
             
-            // 处理碰撞
+
             function handleCollision(creature, index) {
                 if (player.size > creature.size * 0.8) {
                     gameState.score += creature.points;
@@ -1174,7 +1174,7 @@ switch(this.type) {
                 }
             }
             
-            // 检查体型增长
+
             function checkSizeGrowth() {
                 const sizeThresholds = [100, 300, 700, 1500, 3000, 5000, 8000, 12000, 18000, 25000]; // 增加更多阈值
                 
@@ -1191,7 +1191,7 @@ switch(this.type) {
                 }
             }
             
-            // 渲染游戏
+
             function renderGame() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 drawBackground();
@@ -1206,7 +1206,7 @@ switch(this.type) {
                 gameState.creatures.forEach(creature => creature.draw());
             }
             
-            // 开始游戏
+
             function startGame() {
                 gameState.score = 0;
                 gameState.lives = 3;
@@ -1234,21 +1234,21 @@ switch(this.type) {
                 updateGame();
             }
             
-            // 暂停游戏
+
             function pauseGame() {
                 gameState.isPaused = true;
                 pauseScreen.style.display = 'flex';
                 cancelAnimationFrame(gameState.gameLoopId);
             }
             
-            // 继续游戏
+
             function resumeGame() {
                 gameState.isPaused = false;
                 pauseScreen.style.display = 'none';
                 updateGame();
             }
             
-            // 结束游戏
+
             function endGame() {
                 gameState.isRunning = false;
                 cancelAnimationFrame(gameState.gameLoopId);
@@ -1260,7 +1260,7 @@ switch(this.type) {
                 gameOverScreen.style.display = 'flex';
             }
             
-            // 键盘控制
+
             document.addEventListener('keydown', (e) => {
                 if (e.key.toLowerCase() === 'w') gameState.keys.w = true;
                 if (e.key.toLowerCase() === 's') gameState.keys.s = true;
@@ -1284,7 +1284,7 @@ switch(this.type) {
                 if (e.key.toLowerCase() === 'd') gameState.keys.d = false;
             });
             
-            // 按钮事件
+
             startButton.addEventListener('click', startGame);
             restartButton.addEventListener('click', startGame);
             resumeButton.addEventListener('click', resumeGame);
@@ -1306,7 +1306,7 @@ switch(this.type) {
                 }
             });
             
-            // 鼠标控制
+
             canvas.addEventListener('mousemove', (e) => {
                 if (!gameState.isRunning || gameState.isPaused) return;
                 
@@ -1314,12 +1314,12 @@ switch(this.type) {
                 player.x = e.clientX - rect.left;
                 player.y = e.clientY - rect.top;
                 
-                // 限制玩家在画布内
+
                 player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
                 player.y = Math.max(player.size, Math.min(canvas.height - player.size, player.y));
             });
             
-            // 触摸控制
+
             canvas.addEventListener('touchmove', (e) => {
                 if (!gameState.isRunning || gameState.isPaused) return;
                 e.preventDefault();
@@ -1329,7 +1329,7 @@ switch(this.type) {
                 player.x = touch.clientX - rect.left;
                 player.y = touch.clientY - rect.top;
                 
-                // 限制玩家在画布内
+
                 player.x = Math.max(player.size, Math.min(canvas.width - player.size, player.x));
                 player.y = Math.max(player.size, Math.min(canvas.height - player.size, player.y));
             }, { passive: false });

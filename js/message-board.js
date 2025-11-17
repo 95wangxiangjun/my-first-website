@@ -1,4 +1,4 @@
-// 留言板功能
+
 class MessageBoard {
     constructor() {
         this.messages = this.loadMessages();
@@ -13,30 +13,30 @@ class MessageBoard {
     }
 
     bindEvents() {
-        // 表单提交
+        
         document.getElementById('messageForm').addEventListener('submit', (e) => {
             e.preventDefault();
             this.previewMessage();
         });
 
-        // 字数统计
+        
         document.getElementById('messageContent').addEventListener('input', (e) => {
             this.updateCharCount(e.target.value.length);
         });
 
-        // 筛选按钮
+        
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 this.setFilter(e.target.dataset.filter);
             });
         });
 
-        // 加载更多
+        
         document.getElementById('loadMoreBtn').addEventListener('click', () => {
             this.loadMoreMessages();
         });
 
-        // 关闭预览模态框
+        
         document.querySelector('#previewModal .close-btn').addEventListener('click', () => {
             this.closePreview();
         });
@@ -200,7 +200,7 @@ class MessageBoard {
     setFilter(filter) {
         this.currentFilter = filter;
         
-        // 更新按钮状态
+        
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.filter === filter);
         });
@@ -227,7 +227,7 @@ class MessageBoard {
 
         grid.innerHTML = filteredMessages.map(message => this.createMessageHTML(message)).join('');
         
-        // 重新绑定点赞事件
+        
         this.bindLikeEvents();
     }
 
@@ -319,7 +319,7 @@ class MessageBoard {
             other: this.messages.filter(msg => msg.messageType === 'other').length
         };
 
-        // 更新筛选按钮计数
+        
         document.querySelectorAll('.filter-btn').forEach(btn => {
             const filter = btn.dataset.filter;
             const count = counts[filter];
@@ -330,8 +330,8 @@ class MessageBoard {
     }
 
     loadMoreMessages() {
-        // 这里可以实现加载更多功能
-        // 目前只是演示，实际项目中可以从服务器加载更多数据
+        
+        
         this.showSuccessMessage('已加载更多推荐内容！');
     }
 
@@ -341,7 +341,7 @@ class MessageBoard {
             return JSON.parse(saved);
         }
         
-        // 默认示例数据
+        
         return [
     {
         id: 1,
@@ -527,7 +527,7 @@ class MessageBoard {
         `;
     }
 
-    // 在 bindLikeEvents 方法中添加删除事件绑定
+    
     bindLikeEvents() {
         document.querySelectorAll('.like-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -536,7 +536,7 @@ class MessageBoard {
             });
         });
 
-        // 绑定删除按钮事件
+        
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const messageId = parseInt(e.target.closest('.delete-btn').dataset.id);
@@ -545,7 +545,7 @@ class MessageBoard {
         });
     }
 
-    // 添加删除消息方法
+    
     deleteMessage(messageId) {
         if (confirm('确定要删除这条推荐吗？此操作不可撤销。')) {
             this.messages = this.messages.filter(msg => msg.id !== messageId);
@@ -558,7 +558,7 @@ class MessageBoard {
 
 }
 
-// 全局函数供HTML调用
+
 function closePreview() {
     window.messageBoard.closePreview();
 }
@@ -567,11 +567,11 @@ function submitMessage() {
     window.messageBoard.submitMessage();
 }
 
-// 页面加载完成后初始化
+
 document.addEventListener('DOMContentLoaded', function() {
     window.messageBoard = new MessageBoard();
     
-    // 导航栏滚动效果
+    
     window.addEventListener('scroll', function() {
         const header = document.querySelector('header');
         if(window.scrollY > 50) {

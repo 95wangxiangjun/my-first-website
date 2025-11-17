@@ -1,4 +1,4 @@
-// 搜索功能
+
 function initRiversSearch() {
     const searchInput = document.getElementById('riversSearch');
     const searchResults = document.getElementById('riversResults');
@@ -10,17 +10,17 @@ function initRiversSearch() {
         return;
     }
     
-    // 创建无结果提示
+    
     const noResults = document.createElement('div');
     noResults.className = 'no-results';
     noResults.textContent = '未找到匹配的水域';
     noResults.style.display = 'none';
     riversGrid.parentNode.appendChild(noResults);
 
-    // 保存原始内容
+    
     const originalContents = {};
     
-    // 初始化原始内容
+    
     function initOriginalContents() {
         const cards = document.querySelectorAll('.river-card');
         console.log('初始化水域卡片数量:', cards.length);
@@ -33,19 +33,19 @@ function initRiversSearch() {
         });
     }
 
-    // 高亮文本函数
+    
     function highlightText(text, searchTerm) {
         if (!searchTerm) return text;
         const regex = new RegExp(searchTerm, 'gi');
         return text.replace(regex, match => `<span class="highlight">${match}</span>`);
     }
 
-    // 执行搜索
+    
     function performSearch(searchTerm) {
         searchTerm = searchTerm.toLowerCase().trim();
         let matchCount = 0;
         
-        // 重置所有内容
+        
         resetAllContent();
         
         if (!searchTerm) {
@@ -54,7 +54,7 @@ function initRiversSearch() {
             return;
         }
 
-        // 搜索水域
+        
         const cards = document.querySelectorAll('.river-card');
         
         cards.forEach((card, index) => {
@@ -64,7 +64,7 @@ function initRiversSearch() {
             const nameElement = card.querySelector('.river-name');
             if (!nameElement) return;
 
-            // 检查是否匹配
+            
             const matches = river.name.toLowerCase().includes(searchTerm) ||
                            river.location.toLowerCase().includes(searchTerm) ||
                            river.description.toLowerCase().includes(searchTerm) ||
@@ -75,7 +75,7 @@ function initRiversSearch() {
                 card.style.display = 'block';
                 card.style.opacity = '1';
                 
-                // 高亮匹配文本
+                
                 nameElement.innerHTML = highlightText(river.name, searchTerm);
                 
                 matchCount++;
@@ -84,12 +84,12 @@ function initRiversSearch() {
             }
         });
 
-        // 显示搜索结果
+        
         if (matchCount > 0) {
             searchResults.textContent = `找到 ${matchCount} 个匹配的水域`;
             noResults.style.display = 'none';
             
-            // 滚动到第一个匹配项
+            
             scrollToFirstMatch();
         } else {
             searchResults.textContent = '';
@@ -97,7 +97,7 @@ function initRiversSearch() {
         }
     }
 
-    // 重置所有内容
+    
     function resetAllContent() {
         const cards = document.querySelectorAll('.river-card');
         cards.forEach((card, index) => {
@@ -111,7 +111,7 @@ function initRiversSearch() {
         });
     }
 
-    // 滚动到第一个匹配项
+    
     function scrollToFirstMatch() {
         const firstMatch = document.querySelector('.river-card[style*="display: block"]');
         if (firstMatch) {
@@ -122,12 +122,12 @@ function initRiversSearch() {
         }
     }
 
-    // 事件监听
+    
     searchInput.addEventListener('input', function() {
         performSearch(this.value);
     });
 
-    // 点击搜索图标也触发搜索
+    
     const searchIcon = document.querySelector('.search-icon');
     if (searchIcon) {
         searchIcon.addEventListener('click', function() {
@@ -135,13 +135,13 @@ function initRiversSearch() {
         });
     }
 
-    // 初始化原始内容 - 等待卡片生成完成
+    
     setTimeout(() => {
         initOriginalContents();
         console.log('水域搜索功能初始化完成');
     }, 500);
 }
-// 水域数据 - 12个水域景点，每个包含多张照片
+
 const riversData = [
     {
         id: 1,
@@ -368,9 +368,9 @@ const riversData = [
     bestSeason: "夏秋季"
 }
 ];
-// 未找到景点留言板块
+
 function createNotFoundSection() {
-    // 先检查是否已经存在，避免重复添加
+    
     if (document.querySelector('.not-found-section')) {
         return;
     }
@@ -414,7 +414,7 @@ function createNotFoundSection() {
         </div>
     `;
     
-    // 尝试多种插入位置
+    
     const possibleContainers = [
         document.querySelector('.mountains-container'),
         document.querySelector('.panorama-gallery'),
@@ -433,14 +433,14 @@ function createNotFoundSection() {
         }
     }
     
-    // 如果找不到合适的容器，就插入到body末尾
+    
     if (container) {
         container.insertAdjacentHTML('afterend', notFoundHTML);
     } else {
         document.body.insertAdjacentHTML('beforeend', notFoundHTML);
     }
     
-    // 绑定按钮事件
+    
     setTimeout(() => {
         const messageBtn = document.getElementById('goToMessageBtn');
         if (messageBtn) {
@@ -449,16 +449,16 @@ function createNotFoundSection() {
     }, 100);
 }
 
-// 跳转到留言板块
+
 function goToMessageSection() {
-    // 方法1: 通过导航链接跳转
+    
     const messageLinks = document.querySelectorAll('a[href*="message"], a[href*="contact"], a[href*="留言"], a[href*="联系"]');
     if (messageLinks.length > 0) {
         messageLinks[0].click();
         return;
     }
     
-    // 方法2: 通过导航文本跳转
+    
     const navItems = document.querySelectorAll('nav a, .nav a, .navbar a, .menu a');
     for (let item of navItems) {
         if (item.textContent.includes('留言') || 
@@ -470,7 +470,7 @@ function goToMessageSection() {
         }
     }
     
-    // 方法3: 通过ID或class跳转
+    
     const messageSections = [
         document.getElementById('message'),
         document.getElementById('contact'),
@@ -488,13 +488,13 @@ function goToMessageSection() {
         }
     }
     
-    // 方法4: 如果以上都找不到，显示提示
+    
     alert('请在网站导航中找到"留言"或"联系我们"板块进行留言。');
 }
 
-// 初始化留言板块
+
 function initNotFoundSection() {
-    // 等待页面加载完成
+    
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
@@ -508,45 +508,45 @@ function initNotFoundSection() {
     }
 }
 
-// 手动测试函数
+
 function testNotFoundSection() {
     createNotFoundSection();
     console.log('测试留言板块 - 应该可以看到"没找到心仪的山川景点？"的板块');
 }
 
-// 自动初始化
+
 initNotFoundSection();
 
-// 导出函数供其他脚本使用
+
 window.goToMessageSection = goToMessageSection;
 window.testNotFoundSection = testNotFoundSection;
 
 console.log('名山数据加载完成，留言板块功能已就绪');
-// 轮播状态
+
 let carouselState = {
     currentRiverIndex: 0,
     currentImageIndex: 0,
     isPlaying: true,
     intervalId: null,
-    intervalTime: 3000 // 3秒切换一张照片
+    intervalTime: 3000 
 };
 
-// 页面加载完成后初始化
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('开始初始化水域页面...');
     
-    // 先初始化网格
+    
     initRiversGrid();
     
-    // 然后初始化详情展示
+    
     initDetailShowcase();
     
-    // 最后初始化搜索功能
+    
     setTimeout(() => {
         initRiversSearch();
     }, 300);
     
-    // 导航栏滚动效果
+    
     window.addEventListener('scroll', function() {
         const header = document.querySelector('header');
         if(window.scrollY > 50) {
@@ -559,10 +559,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// 初始化水域网格
+
 function initRiversGrid() {
     const gridContainer = document.getElementById('riversGrid');
-    gridContainer.innerHTML = ''; // 清空容器
+    gridContainer.innerHTML = ''; 
     
     riversData.forEach(river => {
         const card = createRiverCard(river);
@@ -570,13 +570,13 @@ function initRiversGrid() {
     });
 }
 
-// 创建水域卡片 - 使用第一张图片作为卡片背景
+
 function createRiverCard(river) {
     const card = document.createElement('div');
     card.className = 'river-card';
     card.setAttribute('data-id', river.id);
     
-    // 使用第一张图片作为卡片背景
+    
     const firstImage = river.images[0];
     
     card.innerHTML = `
@@ -584,13 +584,13 @@ function createRiverCard(river) {
         <div class="river-name">${river.name}</div>
     `;
     
-    // 添加鼠标悬停事件
+    
     let hoverTimer;
     
     card.addEventListener('mouseenter', function() {
         clearTimeout(hoverTimer);
         
-        // 翻转动画完成后显示详情
+        
         hoverTimer = setTimeout(() => {
             const riverIndex = riversData.findIndex(r => r.id === river.id);
             showRiverDetail(riverIndex);
@@ -604,9 +604,9 @@ function createRiverCard(river) {
     return card;
 }
 
-// 初始化详情展示区域
+
 function initDetailShowcase() {
-    // 创建详情展示HTML结构
+    
     const detailShowcase = document.createElement('div');
     detailShowcase.className = 'detail-showcase';
     detailShowcase.innerHTML = `
@@ -635,26 +635,26 @@ function initDetailShowcase() {
             </div>
             <p class="detail-description" id="detailDescription">这里是水域的详细描述...</p>
             <div class="detail-features" id="detailFeatures">
-                <!-- 特色标签将动态生成 -->
+                
             </div>
         </div>
         <button class="close-btn">&times;</button>
     `;
     
-    // 创建遮罩层
+    
     const overlay = document.createElement('div');
     overlay.className = 'overlay';
     
-    // 添加到页面
+    
     document.body.appendChild(detailShowcase);
     document.body.appendChild(overlay);
     
-    // 添加关闭事件
+    
     const closeBtn = detailShowcase.querySelector('.close-btn');
     closeBtn.addEventListener('click', closeDetailShowcase);
     overlay.addEventListener('click', closeDetailShowcase);
     
-    // ESC键关闭
+    
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeDetailShowcase();
@@ -662,7 +662,7 @@ function initDetailShowcase() {
     });
 }
 
-// 显示水域详细信息
+
 function showRiverDetail(riverIndex) {
     carouselState.currentRiverIndex = riverIndex;
     carouselState.currentImageIndex = 0;
@@ -670,21 +670,21 @@ function showRiverDetail(riverIndex) {
     const detailShowcase = document.querySelector('.detail-showcase');
     const overlay = document.querySelector('.overlay');
     
-    // 更新内容
+    
     updateRiverContent();
     
-    // 显示详情展示
+    
     detailShowcase.classList.add('active');
     overlay.classList.add('active');
     
-    // 开始自动轮播
+    
     startAutoPlay();
     
-    // 禁止背景滚动
+    
     document.body.style.overflow = 'hidden';
 }
 
-// 更新水域内容
+
 function updateRiverContent() {
     const river = riversData[carouselState.currentRiverIndex];
     const currentImage = river.images[carouselState.currentImageIndex];
@@ -697,14 +697,14 @@ function updateRiverContent() {
     const detailDescription = document.getElementById('detailDescription');
     const detailFeatures = document.getElementById('detailFeatures');
     
-    // 添加淡出效果
+    
     detailImage.classList.add('fade-out');
     
     setTimeout(() => {
-        // 更新图片
+        
         detailImage.style.backgroundImage = `url('${currentImage}')`;
         
-        // 更新文字内容（只在第一次显示时更新）
+        
         if (carouselState.currentImageIndex === 0) {
             detailTitle.textContent = river.name;
             detailLocation.textContent = river.location;
@@ -713,13 +713,13 @@ function updateRiverContent() {
             detailSeason.textContent = river.bestSeason || '四季皆宜';
             detailDescription.textContent = river.description;
             
-            // 更新特色标签
+            
             detailFeatures.innerHTML = river.features.map(feature => 
                 `<span class="detail-feature">${feature}</span>`
             ).join('');
         }
         
-        // 添加淡入效果
+        
         detailImage.classList.remove('fade-out');
         detailImage.classList.add('fade-in');
         
@@ -729,14 +729,14 @@ function updateRiverContent() {
     }, 400);
 }
 
-// 切换到下一张图片
+
 function showNextImage() {
     const river = riversData[carouselState.currentRiverIndex];
     carouselState.currentImageIndex = (carouselState.currentImageIndex + 1) % river.images.length;
     updateRiverContent();
 }
 
-// 开始自动轮播
+
 function startAutoPlay() {
     stopAutoPlay();
     
@@ -747,7 +747,7 @@ function startAutoPlay() {
     }
 }
 
-// 停止自动轮播
+
 function stopAutoPlay() {
     if (carouselState.intervalId) {
         clearInterval(carouselState.intervalId);
@@ -755,7 +755,7 @@ function stopAutoPlay() {
     }
 }
 
-// 关闭详情展示
+
 function closeDetailShowcase() {
     const detailShowcase = document.querySelector('.detail-showcase');
     const overlay = document.querySelector('.overlay');
@@ -763,9 +763,9 @@ function closeDetailShowcase() {
     detailShowcase.classList.remove('active');
     overlay.classList.remove('active');
     
-    // 停止自动轮播
+    
     stopAutoPlay();
     
-    // 恢复背景滚动
+    
     document.body.style.overflow = 'auto';
 }

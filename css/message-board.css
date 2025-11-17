@@ -1,6 +1,3 @@
-/* 留言板页面专用样式 */
-
-/* 页面英雄区域 */
 .page-hero {
     height: 50vh;
     position: relative;
@@ -16,7 +13,6 @@
                 url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
 }
 
-/* 主容器 */
 .message-board-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -28,7 +24,7 @@
     padding: 0 2rem;
 }
 
-/* 表单区域 */
+
 .message-form-section {
     padding: 4rem 0;
     background: rgba(23, 42, 69, 0.3);
@@ -41,7 +37,7 @@
     font-size: 1.1rem;
 }
 
-/* 表单样式 */
+
 .message-form {
     background: rgba(23, 42, 69, 0.7);
     padding: 2.5rem;
@@ -108,7 +104,7 @@
     font-size: 0.8rem;
 }
 
-/* 表单按钮 */
+
 .form-actions {
     display: flex;
     gap: 1rem;
@@ -146,7 +142,7 @@
     background: rgba(100, 255, 218, 0.1);
 }
 
-/* 留言展示区 */
+
 .messages-section {
     padding: 4rem 0;
 }
@@ -176,7 +172,7 @@
     color: #64ffda;
 }
 
-/* 留言网格 */
+
 .messages-grid {
     display: grid;
     gap: 2rem;
@@ -219,7 +215,7 @@
     font-size: 0.9rem;
 }
 
-/* 深色版本 - 根据不同类型使用不同深色背景 */
+
 .message-type {
     color: white !important;
     padding: 0.4rem 1rem;
@@ -231,24 +227,24 @@
     white-space: nowrap;
 }
 
-/* 为不同类型设置不同深色背景 */
+
 .message-type[data-type="mountain"] {
-    background: linear-gradient(135deg, #1a5276, #21618c) !important; /* 深蓝色 */
+    background: linear-gradient(135deg, #1a5276, #21618c) !important; 
 }
 
 .message-type[data-type="river"] {
-    background: linear-gradient(135deg, #186a3b, #1d8348) !important; /* 深绿色 */
+    background: linear-gradient(135deg, #186a3b, #1d8348) !important; 
 }
 
 .message-type[data-type="region"] {
-    background: linear-gradient(135deg, #6c3483, #7d3c98) !important; /* 深紫色 */
+    background: linear-gradient(135deg, #6c3483, #7d3c98) !important; 
 }
 
 .message-type[data-type="other"] {
-    background: linear-gradient(135deg, #784212, #8c4e15) !important; /* 深棕色 */
+    background: linear-gradient(135deg, #784212, #8c4e15) !important; 
 }
 
-/* 如果没有 data-type 属性时的默认样式 */
+
 .message-type:not([data-type]) {
     background: linear-gradient(135deg, #2c3e50, #34495e) !important;
     color: white !important;
@@ -322,7 +318,7 @@
     color: #ff6b6b;
 }
 
-/* 无留言状态 */
+
 .no-messages {
     text-align: center;
     padding: 4rem 2rem;
@@ -334,7 +330,7 @@
     margin-bottom: 1rem;
 }
 
-/* 预览模态框 */
+
 .preview-modal {
     max-width: 600px;
 }
@@ -352,12 +348,12 @@
     justify-content: flex-end;
 }
 
-/* 加载更多 */
+
 .load-more {
     text-align: center;
 }
 
-/* 响应式设计 */
+
 @media (max-width: 768px) {
     .form-row {
         grid-template-columns: 1fr;
@@ -400,27 +396,69 @@
         padding: 1.5rem;
     }
 }
-/* 修改下拉选择框样式 */
+
 .form-group select {
     background: rgba(23, 42, 69, 0.9) !important;
     color: #e6f1ff !important;
     border: 1px solid rgba(100, 255, 218, 0.3) !important;
 }
 
-/* 修改下拉选项的样式 */
+
 .form-group select option {
     background: rgba(23, 42, 69, 0.95) !important;
     color: #e6f1ff !important;
     padding: 0.8rem 1rem;
 }
 
-/* 鼠标悬停时的选项样式 */
+
 .form-group select option:hover {
     background: rgba(100, 255, 218, 0.2) !important;
 }
 
-/* 选中状态的选项样式 */
+
 .form-group select option:checked {
     background: rgba(100, 255, 218, 0.3) !important;
     color: #64ffda !important;
 }
+/* Logo样式 */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    height: 50px;
+    cursor: pointer;
+}
+
+.logo-image {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--accent-color);
+    transition: all 0.3s ease;
+}
+
+.logo-text {
+    font-size: 1.3rem;
+    font-weight: 600; 
+    color: var(--accent-color);
+    white-space: nowrap;
+    font-family: var(--font-family-primary);
+}
+
+.logo:hover .logo-image {
+    transform: rotate(15deg) scale(1.1);
+    box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+}
+
+/* 你的原有CSS代码保持不变 */
+.page-hero {
+    height: 50vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-top: 80px;
+}
+/* ... 后面是你原有的所有CSS代码 ... */

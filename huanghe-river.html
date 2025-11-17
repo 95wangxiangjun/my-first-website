@@ -116,7 +116,7 @@
             margin-bottom: 2rem;
         }
         
-        /* 黄河游戏样式 */
+        
         .river-game-container {
             margin: 1rem auto;
         }
@@ -168,7 +168,7 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
         
-        /* 游戏控制按钮 */
+        
         .game-controls {
             display: flex;
             justify-content: center;
@@ -212,7 +212,7 @@
             background: rgba(100, 255, 218, 0.1);
         }
         
-        /* 游戏说明 */
+        
         .game-instructions {
             margin-top: 2rem;
             padding: 1.5rem;
@@ -249,7 +249,7 @@
             margin-bottom: 0.5rem;
         }
         
-        /* 游戏结果 */
+        
         .game-result {
             margin-top: 1rem;
             padding: 1rem;
@@ -281,7 +281,7 @@
             border-radius: 5px;
         }
         
-        /* 移动端控制按钮 */
+        
         .mobile-controls {
             display: none;
             justify-content: space-between;
@@ -332,7 +332,7 @@
             text-decoration: none;
         }
         
-        /* 响应式设计 */
+        
         @media (max-width: 768px) {
             .game-header {
                 flex-direction: column;
@@ -348,7 +348,7 @@
                 max-width: 500px;
             }
             
-            /* 显示移动端控制按钮 */
+            
             .mobile-controls {
                 display: flex;
             }
@@ -405,7 +405,7 @@
             }
         }
 
-        /* 平板设备优化 */
+        
         @media (min-width: 769px) and (max-width: 1024px) {
             .river-game canvas {
                 width: 100%;
@@ -471,7 +471,7 @@
                     <canvas id="riverCanvas" width="800" height="500"></canvas>
                 </div>
                 
-                <!-- 移动端控制按钮 -->
+                
                 <div class="mobile-controls">
                     <div class="mobile-btn left-btn">←</div>
                     <div class="mobile-btn boost-btn">⚡</div>
@@ -536,7 +536,7 @@
     </footer>
 
     <script>
-        // 游戏变量
+
         let gameActive = false;
         let gamePaused = false;
         let score = 0;
@@ -550,7 +550,7 @@
         let boostTime = 0;
         let gameInterval;
         
-        // 游戏元素
+
         let scenery = [];
         let obstacles = [];
         let powerUps = [];
@@ -560,17 +560,17 @@
         let lastPowerUpTime = 0;
         let gameTime = 0;
         
-        // 难度设置
+
         let difficultyLevel = 1;
         let obstacleFrequency = 1.5;
         let sceneryFrequency = 2;
         let currentSpeed = 3;
         
-        // 移动端控制状态
+
         let leftPressed = false;
         let rightPressed = false;
         
-        // DOM元素
+
         const canvas = document.getElementById('riverCanvas');
         const ctx = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
@@ -582,14 +582,14 @@
         const restartBtn = document.getElementById('restartBtn');
         const gameResult = document.getElementById('gameResult');
         
-        // 移动端控制按钮
+
         const leftBtn = document.querySelector('.left-btn');
         const rightBtn = document.querySelector('.right-btn');
         const boostBtn = document.querySelector('.boost-btn');
 
-        // 初始化游戏
+
         function initGame() {
-            // 停止之前的游戏循环
+
             if (gameInterval) {
                 clearInterval(gameInterval);
                 gameInterval = null;
@@ -609,7 +609,7 @@
             currentSpeed = 3;
             gameTime = 0;
             
-            // 清空所有游戏元素
+
             scenery = [];
             obstacles = [];
             powerUps = [];
@@ -618,7 +618,7 @@
             lastSceneryTime = 0;
             lastPowerUpTime = 0;
             
-            // 重置移动端控制状态
+
             leftPressed = false;
             rightPressed = false;
             
@@ -640,7 +640,7 @@
             `;
         }
         
-        // 开始游戏
+
         function startGame() {
             if (gameActive) return;
             
@@ -655,7 +655,7 @@
                 </div>
             `;
             
-            // 游戏主循环
+
             gameInterval = setInterval(() => {
                 if (!gameActive || gamePaused) return;
                 
@@ -663,24 +663,24 @@
                 drawGame();
                 updateDisplay();
                 
-                // 更新难度
+
                 updateDifficulty();
                 
             }, 16);
         }
         
-        // 更新游戏状态
+
         function updateGame() {
             if (!gameActive || gamePaused) return;
             
             gameTime += 0.016;
             
-            // 更新船只位置 - 优先使用键盘控制，如果没有键盘输入再使用移动端控制
+
             if (boatVelocityX !== 0) {
-                // 使用键盘控制
+
                 boatX += boatVelocityX;
             } else {
-                // 使用移动端控制
+
                 if (leftPressed) {
                     boatX -= boatSpeed;
                 } else if (rightPressed) {
@@ -690,7 +690,7 @@
             
             boatX = Math.max(30, Math.min(canvas.width - 30, boatX));
             
-            // 处理加速效果
+
             if (boostActive) {
                 boostTime -= 0.016;
                 if (boostTime <= 0) {
@@ -698,48 +698,48 @@
                 }
             }
             
-            // 生成障碍物
+
             if (gameTime - lastObstacleTime > obstacleFrequency) {
                 generateObstacle();
                 lastObstacleTime = gameTime;
             }
             
-            // 生成风景点
+
             if (gameTime - lastSceneryTime > sceneryFrequency) {
                 generateScenery();
                 lastSceneryTime = gameTime;
             }
             
-            // 生成能量道具
+
             if (gameTime - lastPowerUpTime > 8) {
                 generatePowerUp();
                 lastPowerUpTime = gameTime;
             }
             
-            // 更新障碍物
+
             updateObstacles();
             
-            // 更新风景点
+
             updateScenery();
             
-            // 更新能量道具
+
             updatePowerUps();
             
-            // 更新粒子效果
+
             updateParticles();
             
-            // 增加漂流距离
+
             distance += currentSpeed * 0.1;
         }
         
-        // 更新障碍物
+
         function updateObstacles() {
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 const obstacle = obstacles[i];
                 obstacle.y += obstacle.speed;
                 obstacle.rotation += obstacle.rotationSpeed;
                 
-                // 碰撞检测
+
                 const distance = Math.sqrt(
                     Math.pow(boatX - obstacle.x, 2) + Math.pow(boatY - obstacle.y, 2)
                 );
@@ -749,10 +749,10 @@
                     createExplosion(obstacle.x, obstacle.y, obstacle.color);
                     obstacles.splice(i, 1);
                     
-                    // 立即更新显示
+
                     updateDisplay();
                     
-                    // 检查游戏结束
+
                     if (lives <= 0) {
                         gameOver();
                         return; // 立即返回，不再处理其他障碍物
@@ -760,18 +760,18 @@
                     continue;
                 }
                 
-                // 移除超出屏幕的障碍物
+
                 if (obstacle.y > canvas.height + 50) {
                     obstacles.splice(i, 1);
                 }
             }
         }
         
-        // 游戏结束
+
         function gameOver() {
             console.log("游戏结束被调用，当前生命值:", lives);
             
-            // 立即停止游戏循环
+
             if (gameInterval) {
                 clearInterval(gameInterval);
                 gameInterval = null;
@@ -780,12 +780,12 @@
             gameActive = false;
             lives = 0;
             
-            // 更新按钮状态
+
             startGameBtn.disabled = false;
             startGameBtn.textContent = '重新开始';
             pauseBtn.disabled = true;
             
-            // 更新显示
+
             updateDisplay();
             
             gameResult.innerHTML = `
@@ -797,7 +797,7 @@
             `;
         }
         
-        // 暂停游戏
+
         function pauseGame() {
             if (!gameActive) return;
             
@@ -819,7 +819,7 @@
             }
         }
         
-        // 键盘控制（电脑端）
+
         document.addEventListener('keydown', (e) => {
             if (!gameActive || gamePaused) return;
             
@@ -846,9 +846,9 @@
             }
         });
         
-        // 移动端触摸控制
+
         function initMobileControls() {
-            // 左按钮
+
             leftBtn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 leftPressed = true;
@@ -859,7 +859,7 @@
                 leftPressed = false;
             });
             
-            // 右按钮
+
             rightBtn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 rightPressed = true;
@@ -870,7 +870,7 @@
                 rightPressed = false;
             });
             
-            // 加速按钮
+
             boostBtn.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 if (!boostActive && gameActive && !gamePaused) {
@@ -879,7 +879,7 @@
                 }
             });
             
-            // 防止按钮的默认行为
+
             [leftBtn, rightBtn, boostBtn].forEach(btn => {
                 btn.addEventListener('contextmenu', (e) => e.preventDefault());
                 btn.style.webkitUserSelect = 'none';
@@ -887,7 +887,7 @@
             });
         }
         
-        // 按钮事件
+
         startGameBtn.addEventListener('click', function() {
             if (lives <= 0) {
                 initGame();
@@ -899,7 +899,7 @@
         pauseBtn.addEventListener('click', pauseGame);
         restartBtn.addEventListener('click', initGame);
         
-        // 生成障碍物
+
         function generateObstacle() {
             const obstacleTypes = [
                 { type: 'bomb', emoji: '💣', color: '#ff4444', radius: 25, speed: currentSpeed + 1, damage: 1 },
@@ -918,9 +918,9 @@
             });
         }
         
-        // 生成风景点
+
         function generateScenery() {
-            // 金币
+
             scenery.push({
                 x: Math.random() * (canvas.width - 40) + 20,
                 y: -20,
@@ -933,7 +933,7 @@
                 rotation: 0
             });
             
-            // 偶尔生成高价值风景点
+
             if (Math.random() < 0.3) {
                 scenery.push({
                     x: Math.random() * (canvas.width - 60) + 30,
@@ -949,7 +949,7 @@
             }
         }
         
-        // 生成能量道具
+
         function generatePowerUp() {
             const powerUpTypes = [
                 { type: 'health', emoji: '💚', color: '#4caf50', radius: 22 },
@@ -969,14 +969,14 @@
             });
         }
         
-        // 更新风景点
+
         function updateScenery() {
             for (let i = scenery.length - 1; i >= 0; i--) {
                 const item = scenery[i];
                 item.y += item.speed;
                 item.rotation += 0.05;
                 
-                // 碰撞检测
+
                 const dist = Math.sqrt(
                     Math.pow(boatX - item.x, 2) + Math.pow(boatY - item.y, 2)
                 );
@@ -989,21 +989,21 @@
                     continue;
                 }
                 
-                // 移除超出屏幕的风景点
+
                 if (item.y > canvas.height + 50) {
                     scenery.splice(i, 1);
                 }
             }
         }
         
-        // 更新能量道具
+
         function updatePowerUps() {
             for (let i = powerUps.length - 1; i >= 0; i--) {
                 const powerUp = powerUps[i];
                 powerUp.y += powerUp.speed;
                 powerUp.rotation += 0.03;
                 
-                // 碰撞检测
+
                 const dist = Math.sqrt(
                     Math.pow(boatX - powerUp.x, 2) + Math.pow(boatY - powerUp.y, 2)
                 );
@@ -1016,14 +1016,14 @@
                     continue;
                 }
                 
-                // 移除超出屏幕的能量道具
+
                 if (powerUp.y > canvas.height + 50) {
                     powerUps.splice(i, 1);
                 }
             }
         }
         
-        // 应用能量道具效果
+
         function applyPowerUp(type) {
             switch(type) {
                 case 'health':
@@ -1039,7 +1039,7 @@
             }
         }
         
-        // 更新粒子效果
+
         function updateParticles() {
             for (let i = particles.length - 1; i >= 0; i--) {
                 const particle = particles[i];
@@ -1053,7 +1053,7 @@
             }
         }
         
-        // 创建爆炸效果
+
         function createExplosion(x, y, color) {
             for (let i = 0; i < 15; i++) {
                 particles.push({
@@ -1068,7 +1068,7 @@
             }
         }
         
-        // 创建收集效果
+
         function createCollectionEffect(x, y, color) {
             for (let i = 0; i < 8; i++) {
                 particles.push({
@@ -1083,7 +1083,7 @@
             }
         }
         
-        // 创建护盾效果
+
         function createShieldEffect() {
             for (let i = 0; i < 20; i++) {
                 const angle = (i / 20) * Math.PI * 2;
@@ -1099,7 +1099,7 @@
             }
         }
         
-        // 更新难度
+
         function updateDifficulty() {
             difficultyLevel = Math.floor(distance / 500) + 1;
             currentSpeed = 3 + difficultyLevel * 0.5;
@@ -1109,7 +1109,7 @@
             difficultyElement.textContent = difficultyNames[Math.min(difficultyLevel - 1, 4)] || '极限';
         }
         
-        // 绘制游戏
+
         function drawGame() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawRiverBackground();
@@ -1121,7 +1121,7 @@
             drawUI();
         }
         
-        // 绘制黄河背景
+
         function drawRiverBackground() {
             const skyGradient = ctx.createLinearGradient(0, 0, 0, 150);
             skyGradient.addColorStop(0, '#1a5276');
@@ -1153,7 +1153,7 @@
             ctx.fillRect(0, canvas.height - 50, canvas.width, 15);
         }
         
-        // 绘制粒子效果
+
         function drawParticles() {
             particles.forEach(particle => {
                 ctx.save();
@@ -1166,7 +1166,7 @@
             });
         }
         
-        // 绘制障碍物
+
         function drawObstacles() {
             obstacles.forEach(obstacle => {
                 ctx.save();
@@ -1180,7 +1180,7 @@
             });
         }
         
-        // 绘制风景点
+
         function drawScenery() {
             scenery.forEach(item => {
                 if (item.collected) return;
@@ -1195,7 +1195,7 @@
             });
         }
         
-        // 绘制能量道具
+
         function drawPowerUps() {
             powerUps.forEach(powerUp => {
                 if (powerUp.collected) return;
@@ -1210,7 +1210,7 @@
             });
         }
         
-        // 绘制船只
+
         function drawBoat() {
             ctx.save();
             ctx.translate(boatX, boatY);
@@ -1253,7 +1253,7 @@
             ctx.restore();
         }
         
-        // 绘制UI信息
+
         function drawUI() {
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 16px Arial';
@@ -1277,17 +1277,17 @@
             }
         }
         
-        // 更新显示
+
         function updateDisplay() {
             scoreElement.textContent = score;
             livesElement.textContent = lives;
             distanceElement.textContent = `${Math.floor(distance)}m`;
         }
         
-        // 初始化移动端控制
+
         initMobileControls();
         
-        // 初始化游戏
+
         initGame();
     </script>
 </body>

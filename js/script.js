@@ -1,4 +1,8 @@
-// 分类标签功能
+/**
+ * 初始化分类标签点击事件
+ * 为山脉、河流、区域分类标签添加交互功能
+ * 支持点击和键盘事件，实现分类页面导航
+ */
 function initCategoryTags() {
     const categoryTags = document.querySelectorAll('.category-tag');
     
@@ -8,22 +12,19 @@ function initCategoryTags() {
             navigateToCategory(category);
         });
         
-        // 添加键盘支持
+        
         tag.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 const category = this.getAttribute('data-category');
                 navigateToCategory(category);
             }
         });
-        
-        // 设置可访问性
         tag.setAttribute('tabindex', '0');
         tag.setAttribute('role', 'button');
         tag.setAttribute('aria-label', `查看${getCategoryName(category)}详情`);
     });
 }
 
-// 跳转到分类页面
 function navigateToCategory(category) {
     const pageMap = {
         'mountains': 'mountains.html?from=category-tags',
@@ -33,7 +34,7 @@ function navigateToCategory(category) {
     
     const page = pageMap[category];
     if (page) {
-        // 添加点击反馈
+        
         const tag = document.querySelector(`[data-category="${category}"]`);
         tag.style.transform = 'scale(0.95)';
         
@@ -43,7 +44,6 @@ function navigateToCategory(category) {
     }
 }
 
-// 获取分类名称
 function getCategoryName(category) {
     const names = {
         'mountains': '名山峻岭',
@@ -52,13 +52,18 @@ function getCategoryName(category) {
     };
     return names[category] || category;
 }
-// 主题切换功能 - 修复版本
+/**
+ * 初始化主题切换系统
+ * 管理深色/浅色模式切换
+ * 持久化用户主题偏好到本地存储
+ * 动态更新界面颜色方案
+ */
 function initTheme() {
     const themeSwitch = document.getElementById('theme-checkbox');
     const themeLabel = document.querySelector('.theme-label');
     const currentTheme = localStorage.getItem('theme') || 'dark';
     
-    // 应用保存的主题
+    
     document.documentElement.setAttribute('data-theme', currentTheme);
     
     if (currentTheme === 'light') {
@@ -68,9 +73,9 @@ function initTheme() {
         themeLabel.textContent = '浅色模式';
     }
     
-    // 切换主题事件 - 修复事件冒泡问题
+    
     themeSwitch.addEventListener('change', function(e) {
-        // 阻止事件冒泡，避免影响其他元素
+        
         e.stopPropagation();
         
         if (this.checked) {
@@ -83,10 +88,18 @@ function initTheme() {
             themeLabel.textContent = '浅色模式';
         }
         
-        // 强制重新计算样式
+        
         document.body.clientWidth;
     });
 }
+/**
+ * 景点核心数据仓库
+ * 按类型分层存储：
+ * - mountain: 山脉数据（黄山、泰山、珠峰等）
+ * - river: 水域数据（黄河、长江、湖泊等）  
+ * - region: 区域数据（北国、江南、西部等）
+ * 每个条目包含：标题、图片、描述、详情等完整信息
+ */
 const locationData = {
     mountain: {
         1: {
@@ -239,19 +252,25 @@ const locationData = {
         }
     }
 };
-// 修改暂停和恢复函数
+
 function pauseCarousel() {
     clearInterval(carouselInterval);
-    carouselContainer.classList.add('paused'); // 添加暂停状态类
+    carouselContainer.classList.add('paused'); 
 }
 
 function resumeCarousel() {
     clearInterval(carouselInterval);
-    carouselContainer.classList.remove('paused'); // 移除暂停状态类
+    carouselContainer.classList.remove('paused'); 
     if (currentImages.length > 1) {
         carouselInterval = setInterval(nextSlide, 3000);
     }
 }
+/**
+ * 初始化地图标记交互系统
+ * 管理地图上位置标记的点击、悬停事件
+ * 控制详情面板的显示和轮播图功能
+ * 处理图片轮播的自动播放和手动控制
+ */
 function initMapMarkers() {
     const markers = document.querySelectorAll('.location-marker');
     const locationDetail = document.getElementById('locationDetail');
@@ -265,7 +284,7 @@ function initMapMarkers() {
     let currentImages = [];
     let carouselInterval;
 
-    // 轮播控制函数
+    
     function showSlide(index) {
         const slides = document.querySelectorAll('.carousel-slide');
         const indicators = document.querySelectorAll('.carousel-indicator');
@@ -291,29 +310,29 @@ function initMapMarkers() {
         showSlide(prevIndex);
     }
 
-    // 暂停轮播函数
+    
     function pauseCarousel() {
         clearInterval(carouselInterval);
     }
 
-    // 恢复轮播函数
+    
     function resumeCarousel() {
         clearInterval(carouselInterval);
         if (currentImages.length > 1) {
-            carouselInterval = setInterval(nextSlide, 2000); // 2秒轮播一次
+            carouselInterval = setInterval(nextSlide, 2000); 
         }
     }
 
-    // 绑定轮播控制按钮
+    
     document.getElementById('carouselPrev').addEventListener('click', prevSlide);
     document.getElementById('carouselNext').addEventListener('click', nextSlide);
 
-    // 添加鼠标事件监听器
+    
     if (carouselContainer) {
-        // 鼠标进入轮播区域时暂停
+        
         carouselContainer.addEventListener('mouseenter', pauseCarousel);
 
-        // 鼠标离开轮播区域时恢复
+        
         carouselContainer.addEventListener('mouseleave', resumeCarousel);
     }
 
@@ -322,38 +341,34 @@ function initMapMarkers() {
             const type = this.dataset.type;
             const id = this.dataset.id;
 
-            // 根据类型和ID获取对应的数据
+            
             const locationData = getLocationData(type, id);
 
             if (locationData) {
-                // 隐藏初始提示，显示详情框架
+                
                 initialPrompt.style.display = 'none';
                 carouselContainer.style.display = 'block';
                 detailContent.style.display = 'block';
 
-                // 激活详情框架
+                
                 locationDetail.classList.add('active');
 
-                // 清空之前的轮播内容
+                
                 carouselSlides.innerHTML = '';
                 carouselIndicators.innerHTML = '';
                 currentImages = locationData.images || [];
-
-                // 创建轮播图片
                 currentImages.forEach((image, index) => {
                     const slide = document.createElement('div');
                     slide.className = `carousel-slide ${index === 0 ? 'active' : ''}`;
                     slide.style.backgroundImage = `url(${image})`;
                     carouselSlides.appendChild(slide);
-
-                    // 创建指示器
+                    
                     const indicator = document.createElement('button');
                     indicator.className = `carousel-indicator ${index === 0 ? 'active' : ''}`;
                     indicator.addEventListener('click', () => showSlide(index));
                     carouselIndicators.appendChild(indicator);
                 });
-
-                // 更新详情内容（删除了解更多按钮）
+                
                 detailContent.innerHTML = `
                     <h3>${locationData.name}</h3>
                     <div class="panorama-stats">
@@ -363,17 +378,15 @@ function initMapMarkers() {
                     </div>
                     <p>${locationData.description}</p>
                 `;
-
-                // 重置轮播索引
+                
                 currentCarouselIndex = 0;
 
-                // 自动轮播（可选）
-                pauseCarousel(); // 先清除之前的定时器
+                pauseCarousel(); 
                 if (currentImages.length > 1) {
-                    resumeCarousel(); // 开始新的轮播
+                    resumeCarousel(); 
                 }
 
-                // 添加点击标记的动画反馈
+                
                 this.style.animation = 'pulse 0.5s ease';
                 setTimeout(() => {
                     this.style.animation = '';
@@ -381,8 +394,7 @@ function initMapMarkers() {
             }
         });
     });
-
-    // 添加地图标记悬停效果
+    
     markers.forEach(marker => {
         marker.addEventListener('mouseenter', function () {
             this.style.transform = 'translate(-50%, -50%) scale(1.3)';
@@ -393,7 +405,13 @@ function initMapMarkers() {
         });
     });
 }
-// 详细信息数据
+/**
+ * 获取指定类型和ID的景点数据
+ * 数据查询工具函数，统一数据访问接口
+ * @param {string} type - 数据类型（mountain/river/region）
+ * @param {string} id - 数据条目ID
+ * @returns {Object|null} 景点数据对象或null
+ */
 function getLocationData(type, id) {
     const data = {
         mountain: {
@@ -541,16 +559,16 @@ function getLocationData(type, id) {
                 stats: ['海拔: 1492米', '位置: 河南省', '称号: 中岳']
             },
             '14': {
-    name: '塔里木盆地',
-    description: '塔里木盆地位于中国新疆南部，是中国最大的内陆盆地，也是世界第二大流动沙漠——塔克拉玛干沙漠的所在地。这里有着独特的地理环境和丰富的自然资源。',
-    images: [
-        'images/tarim/1.jpg',
-        'images/tarim/2.jpg',
-        'images/tarim/3.jpg',
-        'images/tarim/4.jpg'
-    ],
-    stats: ['面积: 约53万平方公里', '位置: 新疆南部', '特征: 中国最大内陆盆地']
-}          
+                name: '塔里木盆地',
+                description: '塔里木盆地位于中国新疆南部，是中国最大的内陆盆地，也是世界第二大流动沙漠——塔克拉玛干沙漠的所在地。这里有着独特的地理环境和丰富的自然资源。',
+                images: [
+                    'images/tarim/1.jpg',
+                    'images/tarim/2.jpg',
+                    'images/tarim/3.jpg',
+                    'images/tarim/4.jpg'
+                ],
+                stats: ['面积: 约53万平方公里', '位置: 新疆南部', '特征: 中国最大内陆盆地']
+            },         
         },
         river: {
             '1': {
@@ -684,16 +702,35 @@ function getLocationData(type, id) {
                     'images/xihu/4.jpg'
                 ],
                 stats: ['面积: 6.39km²', '位置: 杭州市', '荣誉: 世界遗产']
-            }
+            },
+            '15': {
+                name: '日月潭',
+                description: '日月潭位于中国台湾省南投县，是台湾最大的天然湖泊，也是著名的风景名胜区。湖光山色相映成趣，以拉鲁岛为界，北半湖形如日轮，南半湖状似月钩，故名日月潭。',
+                images: [
+                    'images/sun_moon_lake/1.jpg',
+                    'images/sun_moon_lake/2.jpg',
+                    'images/sun_moon_lake/3.jpg',
+                    'images/sun_moon_lake/4.jpg'
+                ],
+                stats: ['面积: 约53万平方公里', '位置: 新疆南部', '特征: 中国最大内陆盆地']
+        } 
         }
     };
 
     return data[type] ? data[type][id] : null;
 }
-// 游戏数据
+/**
+ * 互动游戏数据配置
+ * 为每个景点配置对应的教育游戏
+ * 游戏类型包括：
+ * - 拼图游戏：空间认知能力
+ * - 合成游戏：逻辑思维能力  
+ * - 知识问答：记忆理解能力
+ * - 动作游戏：反应协调能力
+ */
 const gameData = {
     mountain: {
-        1: {  // 黄山
+        1: {  
             title: "黄山拼图挑战",
             description: "通过拼图游戏了解黄山的奇松怪石",
             gameHtml: `
@@ -701,13 +738,31 @@ const gameData = {
                     <h3>黄山拼图挑战</h3>
                     <p>点击下方按钮，开始黄山拼图挑战！体验黄山的奇松怪石美景</p>
                     <div class="external-game-link">
-                        <!-- 预览图和跳转按钮 -->
-                        <a href="huangshan-puzzle.html" class="btn btn-primary">🎮开始拼图挑战</a>
+                        <div class="game-preview">
+                            <div class="preview-image" style="background: linear-gradient(135deg, #0a192f, #112240); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">
+                                拼图挑战
+                            </div>
+                            <div class="preview-overlay">
+                                <span class="play-icon">▶</span>
+                            </div>
+                        </div>
+                        
+                        <div class="game-info">
+                            <h4>黄山拼图挑战</h4>
+                            <p>通过拼图游戏，深入了解黄山的奇松、怪石、云海、温泉四绝</p>
+                            <a href="huangshan-puzzle.html" class="btn btn-primary">
+                                🎮 开始游戏
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="game-tips">
+                        <p>💡 <strong>游戏提示：</strong>拖动拼图碎片到正确位置，完成黄山的美丽风景拼图</p>
                     </div>
                 </div>
             `
         },
-        2: {  // 泰山 - 山水合成游戏
+        2: {  
             title: "泰山山水合成",
             description: "通过合成游戏体验泰山的雄伟壮丽",
             gameHtml: `
@@ -739,7 +794,7 @@ const gameData = {
                 </div>
             `
         },
-        3: {  // 珠穆朗玛峰的ID
+        3: {  
             title: "珠穆朗玛峰2048挑战",
             description: "攀登数字高峰，体验珠穆朗玛峰的壮丽", 
             gameHtml: `
@@ -774,7 +829,7 @@ const gameData = {
         }
     },
     river: {
-    1: {  // 黄河
+    1: {  
         title: "黄河漂流记",
         description: "沿着黄河漂流，收集沿岸风景", 
         gameHtml: `
@@ -782,13 +837,31 @@ const gameData = {
                 <h3>黄河漂流记</h3>
                 <p>点击下方按钮，开始黄河漂流冒险！</p>
                 <div class="external-game-link">
-                    <!-- 预览图和跳转按钮 -->
-                    <a href="huanghe-river.html" class="btn btn-primary">🎮 开始漂流冒险</a>
+                    <div class="game-preview">
+                        <div class="preview-image" style="background: linear-gradient(135deg, #0a192f, #112240); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">
+                            漂流冒险
+                        </div>
+                        <div class="preview-overlay">
+                            <span class="play-icon">▶</span>
+                        </div>
+                    </div>
+                    
+                    <div class="game-info">
+                        <h4>黄河漂流记</h4>
+                        <p>沿着黄河漂流，收集沿岸风景，体验母亲河的壮丽景色</p>
+                        <a href="huanghe-river.html" class="btn btn-primary">
+                            🎮 开始游戏
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="game-tips">
+                    <p>💡 <strong>游戏提示：</strong>控制漂流方向，收集沿途风景，避开障碍物</p>
                 </div>
             </div>
         `
     },
-    2: {  // 长江 - 长江守护者游戏
+    2: {  
         title: "长江守护者",
         description: "保护长江生态环境，清理污染物",
         gameHtml: `
@@ -820,7 +893,7 @@ const gameData = {
             </div>
         `
     },
-    3: {  // 南海 - 大鱼吃小鱼
+    3: {  
         title: "南海大鱼吃小鱼",
         description: "在南海深海中生存成长，体验海洋生态",
         gameHtml: `
@@ -855,33 +928,71 @@ const gameData = {
     }
 },
 region: {
-  1: {  // 北国风光
-    title: "北国风光华容道", 
-    description: "滑动拼图，还原北国冰雪美景",
-    gameHtml: `
-      <div class="game-section">
-        <h3>北国风光华容道</h3>
-        <p>点击下方按钮，开始北国风光华容道挑战！</p>
-        <div class="external-game-link">
-          <a href="beiguo-sliding.html" class="btn btn-primary">🎮 开始华容道挑战</a>
-        </div>
-      </div>
-    `
-  },
-  2: {  // 江南水乡消消乐
-            title: "江南水乡消消乐",
-            description: "消除相同图案，体验江南水乡的温婉韵味", 
-            gameHtml: `
-                <div class="game-section">
-                    <h3>江南水乡消消乐</h3>
-                    <p>点击下方按钮，开始江南水乡消消乐挑战！</p>
-                    <div class="external-game-link">
-                        <a href="jiangnanshuixiang.html" class="btn btn-primary">🎮 开始消消乐挑战</a>
+    1: {  
+        title: "北国风光华容道", 
+        description: "滑动拼图，还原北国冰雪美景",
+        gameHtml: `
+            <div class="game-section">
+                <h3>北国风光华容道</h3>
+                <p>点击下方按钮，开始北国风光华容道挑战！</p>
+                <div class="external-game-link">
+                    <div class="game-preview">
+                        <div class="preview-image" style="background: linear-gradient(135deg, #0a192f, #112240); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">
+                            华容道
+                        </div>
+                        <div class="preview-overlay">
+                            <span class="play-icon">▶</span>
+                        </div>
+                    </div>
+                    
+                    <div class="game-info">
+                        <h4>北国风光华容道</h4>
+                        <p>滑动拼图，还原北国冰雪美景，体验冰雪世界的魅力</p>
+                        <a href="beiguo-sliding.html" class="btn btn-primary">
+                            🎮 开始游戏
+                        </a>
                     </div>
                 </div>
+                
+                <div class="game-tips">
+                    <p>💡 <strong>游戏提示：</strong>通过滑动拼图块，还原北国风光的完整图片</p>
+                </div>
+            </div>
+        `
+    },
+    2: {  
+        title: "江南水乡消消乐",
+        description: "消除相同图案，体验江南水乡的温婉韵味", 
+        gameHtml: `
+            <div class="game-section">
+                <h3>江南水乡消消乐</h3>
+                <p>点击下方按钮，开始江南水乡消消乐挑战！</p>
+                <div class="external-game-link">
+                    <div class="game-preview">
+                        <div class="preview-image" style="background: linear-gradient(135deg, #0a192f, #112240); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">
+                            消消乐
+                        </div>
+                        <div class="preview-overlay">
+                            <span class="play-icon">▶</span>
+                        </div>
+                    </div>
+                    
+                    <div class="game-info">
+                        <h4>江南水乡消消乐</h4>
+                        <p>消除相同图案，体验江南水乡的温婉韵味和小桥流水人家</p>
+                        <a href="jiangnanshuixiang.html" class="btn btn-primary">
+                            🎮 开始游戏
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="game-tips">
+                    <p>💡 <strong>游戏提示：</strong>连接三个或以上相同图案进行消除，创造连击获得高分</p>
+                </div>
+            </div>
             `
         },
-        3: {  // 高原牦牛骑手
+        3: {  
             title: "高原牦牛骑手",
             description: "在辽阔高原上骑行牦牛，体验西部探险的刺激",
             gameHtml: `
@@ -916,14 +1027,14 @@ region: {
     }
 };
 
-// 页面加载完成后执行
+
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('quiz')) {
         new MountainRiverQuiz();
     }
     initCategoryTags();
     initTheme();
-    // 模态框功能
+    
     const modal = document.getElementById('infoModal');
     const closeBtn = document.querySelector('.close-btn');
     const learnMoreBtns = document.querySelectorAll('.filter-btn');
@@ -936,7 +1047,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
         
-        // 添加键盘可访问性
+        
         logo.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 window.scrollTo({
@@ -947,7 +1058,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // 打开模态框
+    
     learnMoreBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             const type = this.getAttribute('data-type');
@@ -960,7 +1071,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('modalTitle').textContent = data.title;
                 document.getElementById('modalDescription').textContent = data.description;
                 
-                // 创建标签页内容
+                
                 const detailsTab = `
                     <div class="tab-content active" id="detailsTab">
                         ${data.details}
@@ -995,7 +1106,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 modal.style.display = 'block';
                 
-                // 初始化游戏（如果有）
+                
                 if (game) {
                     setTimeout(() => {
                         if (type === 'mountain' && id === '1') {
@@ -1013,21 +1124,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 关闭模态框
+    
     closeBtn.addEventListener('click', function() {
         modal.style.display = 'none';
-        // 停止黄河游戏
+        
         if (riverGameInterval) {
             clearInterval(riverGameInterval);
             riverGameActive = false;
         }
     });
 
-    // 点击模态框外部关闭
+    
     window.addEventListener('click', function(event) {
         if (event.target === modal) {
             modal.style.display = 'none';
-            // 停止黄河游戏
+            
             if (riverGameInterval) {
                 clearInterval(riverGameInterval);
                 riverGameActive = false;
@@ -1035,7 +1146,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 平滑滚动效果
+    
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
@@ -1053,7 +1164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // 导航栏滚动效果
+    
     window.addEventListener('scroll', function() {
         const header = document.querySelector('header');
         if(window.scrollY > 50) {
@@ -1065,17 +1176,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 探索更多按钮 - 修改为支持下拉菜单
+    
 document.getElementById('exploreMore').addEventListener('click', function(e) {
     e.preventDefault();
-    // 点击按钮时也可以显示下拉菜单（可选）
+    
     const dropdown = this.parentElement.querySelector('.explore-dropdown');
     dropdown.style.opacity = dropdown.style.opacity === '1' ? '0' : '1';
     dropdown.style.visibility = dropdown.style.visibility === 'visible' ? 'hidden' : 'visible';
     dropdown.style.transform = dropdown.style.transform === 'translateY(0px)' ? 'translateY(-10px)' : 'translateY(0)';
 });
 
-// 点击页面其他区域关闭下拉菜单
+
 document.addEventListener('click', function(e) {
     const exploreContainer = document.querySelector('.explore-more-container');
     const dropdown = document.querySelector('.explore-dropdown');
@@ -1088,28 +1199,41 @@ document.addEventListener('click', function(e) {
 });
 });
 
-// 标签页切换函数
+/**
+ * 切换模态框内容选项卡
+ * 在"详细信息"和"互动游戏"标签间切换
+ * 更新活动状态和显示内容
+ * @param {string} tabName - 要激活的选项卡ID
+ */
 function switchTab(tabName) {
-    // 隐藏所有标签内容
+    
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
     });
     
-    // 移除所有标签按钮的active类
+    
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     
-    // 显示选中的标签内容
+    
     document.getElementById(tabName).classList.add('active');
     
-    // 激活对应的标签按钮
+    
     event.target.classList.add('active');
 }
 
-// ========== 数据可视化功能 ==========
+/**
+ * 数据可视化核心类
+ * 负责创建和管理所有图表组件：
+ * - 山脉高度柱状图
+ * - 河流长度饼图  
+ * - 游客量趋势折线图
+ * - 季节性访问雷达图
+ * 支持主题切换和交互事件
+ */
 class DataVisualization {
-    // 在DataVisualization类中添加完整的颜色管理
+    
 constructor() {
     this.charts = {};
     this.init();
@@ -1118,14 +1242,14 @@ constructor() {
 updateAllChartsForTheme() {
     const colors = this.getChartColors();
     
-    // 更新游客访问热度图表
+    
     if (this.charts.visitor) {
         this.charts.visitor.options.scales.x.grid.color = colors.gridLine;
         this.charts.visitor.options.scales.y.grid.color = colors.gridLine;
         this.charts.visitor.update();
     }
     
-    // 更新四季访问分布图表
+    
     if (this.charts.season) {
         this.charts.season.options.scales.r.grid.color = colors.gridLine;
         this.charts.season.options.scales.r.angleLines.color = colors.angleLine;
@@ -1133,21 +1257,21 @@ updateAllChartsForTheme() {
     }
 }
 
-// 获取当前主题的颜色
+
 getChartColors() {
     const isLight = document.documentElement.getAttribute('data-theme') === 'light';
     return {
         textPrimary: isLight ? '#2d3748' : '#e6f1ff',
         textSecondary: isLight ? '#4a5568' : '#a8b2d1',
-        gridLine: isLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.1)', // 浅色主题用深灰色网格线
-        angleLine: isLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.1)', // 浅色主题用深灰色角度线
+        gridLine: isLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.1)', 
+        angleLine: isLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.1)', 
         pointLabel: isLight ? '#4a5568' : '#a8b2d1',
         tooltipBg: isLight ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.9)',
         tooltipBorder: isLight ? '#3182ce' : '#64ffda'
     };
 }
 
-// 更新所有图表颜色
+
 updateAllChartColors() {
     const colors = this.getChartColors();
     
@@ -1159,11 +1283,11 @@ updateAllChartColors() {
     });
 }
 
-// 更新单个图表颜色
+
 updateChartColors(chart, colors) {
-    // 更新坐标轴
+    
     if (chart.options.scales) {
-        // 柱状图坐标轴
+        
         if (chart.options.scales.x && chart.options.scales.x.ticks) {
             chart.options.scales.x.ticks.color = colors.textSecondary;
         }
@@ -1174,7 +1298,7 @@ updateChartColors(chart, colors) {
             chart.options.scales.y.title.color = colors.textSecondary;
         }
         
-        // 雷达图坐标轴
+        
         if (chart.options.scales.r) {
             chart.options.scales.r.grid.color = colors.gridLine;
             chart.options.scales.r.angleLines.color = colors.angleLine;
@@ -1184,7 +1308,7 @@ updateChartColors(chart, colors) {
         }
     }
     
-    // 更新工具提示
+    
     if (chart.options.plugins && chart.options.plugins.tooltip) {
         chart.options.plugins.tooltip.backgroundColor = colors.tooltipBg;
         chart.options.plugins.tooltip.borderColor = colors.tooltipBorder;
@@ -1203,7 +1327,11 @@ updateChartColors(chart, colors) {
         this.updateAllChartsForTheme();
     }, 500);
     }
-    
+/**
+ * 创建山脉高度对比柱状图
+ * 展示中国主要山峰的海拔数据
+ * 支持点击查看详细信息和交互高亮
+ */
     createMountainChart() {
     const ctx = document.getElementById('mountainChart').getContext('2d');
     const data = {
@@ -1230,7 +1358,7 @@ updateChartColors(chart, colors) {
             borderWidth: 2,
             borderRadius: 8,
             borderSkipped: false,
-            // 增加悬停区域
+            
             hoverBackgroundColor: [
                 'rgba(100, 255, 218, 1)',
                 'rgba(100, 255, 218, 0.9)',
@@ -1250,11 +1378,11 @@ updateChartColors(chart, colors) {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            // 关键：增加悬停检测灵敏度
+            
             interaction: {
-                mode: 'index',  // 改为index模式，更容易触发
-                intersect: false, // 不要求精确相交
-                axis: 'x' // 只在X轴方向检测
+                mode: 'index',  
+                intersect: false, 
+                axis: 'x' 
             },
             plugins: {
                 legend: {
@@ -1266,7 +1394,7 @@ updateChartColors(chart, colors) {
                     bodyColor: 'white',
                     borderColor: '#64ffda',
                     borderWidth: 1,
-                    // 增加工具提示的显示范围
+                    
                     position: 'nearest',
                     callbacks: {
                         label: function(context) {
@@ -1289,7 +1417,7 @@ updateChartColors(chart, colors) {
             scales: {
                 y: {
                     beginAtZero: true,
-                    // 设置合适的Y轴范围，让低海拔山峰更明显
+                    
                     suggestedMax: 10000,
                     title: {
                         display: true,
@@ -1297,7 +1425,7 @@ updateChartColors(chart, colors) {
                         color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()
                     },
                     grid: {
-                        color: 'rgba(0, 0, 0, 0.5)'  // 更深的黑
+                        color: 'rgba(0, 0, 0, 0.5)'  
                     },
                     ticks: {
                         color: getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim()
@@ -1313,7 +1441,7 @@ updateChartColors(chart, colors) {
                     }
                 }
             },
-            // 增强悬停效果
+            
             onHover: (event, elements) => {
                 const canvas = event.native.target;
                 if (elements.length > 0) {
@@ -1324,14 +1452,14 @@ updateChartColors(chart, colors) {
                     this.resetMountainBarHighlight();
                 }
             },
-            // 增强点击检测
+            
             onClick: (event, elements) => {
-                // 即使没有精确悬停在柱子上，也尝试检测
+                
                 if (elements.length > 0) {
                     const index = elements[0].index;
                     this.handleMountainClick(index);
                 } else {
-                    // 如果没有检测到元素，尝试通过X坐标计算
+                    
                     const chart = this.charts.mountain;
                     if (chart && event.x !== undefined && event.y !== undefined) {
                         const elements = chart.getElementsAtEventForMode(event, 'index', { intersect: false }, true);
@@ -1341,7 +1469,7 @@ updateChartColors(chart, colors) {
                     }
                 }
             },
-            // 动画配置
+            
             animations: {
                 duration: 1000,
                 easing: 'easeOutQuart'
@@ -1352,24 +1480,24 @@ updateChartColors(chart, colors) {
     this.createMountainLegend();
 }
 
-// 处理山脉点击
+
 handleMountainClick(index) {
     const mountainName = this.charts.mountain.data.labels[index];
     const mountainHeight = this.charts.mountain.data.datasets[0].data[index];
     this.showMountainDetail(mountainName, mountainHeight);
     
-    // 点击动画
+    
     this.animateMountainBarClick(index);
 }
 
-// 增强高亮效果
+
 highlightMountainBar(index) {
     const chart = this.charts.mountain;
     if (chart) {
         const meta = chart.getDatasetMeta(0);
         meta.data.forEach((bar, i) => {
             if (i === index) {
-                // 增强高亮效果
+                
                 bar.options.borderWidth = 4;
                 bar.options.borderColor = '#ffffff';
                 bar.options.backgroundColor = this.getHoverColor(bar.options.backgroundColor);
@@ -1379,16 +1507,16 @@ highlightMountainBar(index) {
     }
 }
 
-// 获取悬停颜色
+
 getHoverColor(originalColor) {
-    // 简单地将颜色变亮
+    
     if (originalColor.includes('rgba')) {
         return originalColor.replace(/0\.[0-9]+\)$/, '1)');
     }
     return originalColor;
 }
 
-// 重置高亮
+
 resetMountainBarHighlight() {
     const chart = this.charts.mountain;
     if (chart) {
@@ -1402,7 +1530,7 @@ resetMountainBarHighlight() {
     }
 }
 
-// 重置柱状图高亮
+
 resetMountainBarHighlight() {
     const chart = this.charts.mountain;
     if (chart) {
@@ -1415,19 +1543,19 @@ resetMountainBarHighlight() {
     }
 }
 
-// 柱状图点击动画
+
 animateMountainBarClick(index) {
     const chart = this.charts.mountain;
     if (chart) {
         const meta = chart.getDatasetMeta(0);
         const bar = meta.data[index];
         
-        // 临时改变颜色
+        
         const originalColor = bar.options.backgroundColor;
         bar.options.backgroundColor = '#ffffff';
         chart.update();
         
-        // 恢复颜色
+        
         setTimeout(() => {
             bar.options.backgroundColor = originalColor;
             chart.update();
@@ -1435,7 +1563,7 @@ animateMountainBarClick(index) {
     }
 }
 
-// 显示山脉详情
+
 showMountainDetail(name, height) {
     const mountainDetails = {
         '珠穆朗玛峰': {
@@ -1493,7 +1621,7 @@ showMountainDetail(name, height) {
     this.showCustomMountainModal(name, height, detail);
 }
 
-// 自定义山脉详情模态框
+
 showCustomMountainModal(name, height, detail) {
     const modal = document.createElement('div');
     modal.className = 'mountain-modal';
@@ -1595,7 +1723,7 @@ showCustomMountainModal(name, height, detail) {
     
     document.body.appendChild(modal);
     
-    // 关闭事件
+    
     const closeBtn = modal.querySelector('.mountain-modal-close');
     const okBtn = modal.querySelector('.mountain-modal-ok');
     const closeModal = () => {
@@ -1637,7 +1765,7 @@ createMountainLegend() {
             <span>${label}</span>
         `;
         
-        // 为图例添加交互
+        
         item.addEventListener('click', () => {
             const height = this.charts.mountain.data.datasets[0].data[index];
             this.showMountainDetail(label, height);
@@ -1658,7 +1786,11 @@ createMountainLegend() {
         legend.appendChild(item);
     });
 }
-    
+/**
+ * 创建河流长度分布饼图
+ * 可视化中国主要河流的长度占比
+ * 圆形布局，支持分段点击和悬停效果
+ */    
     createRiverChart() {
     const ctx = document.getElementById('riverChart').getContext('2d');
     
@@ -1697,15 +1829,15 @@ createMountainLegend() {
     };
     
     this.charts.river = new Chart(ctx, {
-        type: 'doughnut',  // 改为圆环图
+        type: 'doughnut',  
         data: riverData,
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '60%',  // 圆环的大小，百分比越大环越细
+            cutout: '60%',  
             plugins: {
                 legend: {
-                    display: false  // 使用自定义图例
+                    display: false  
                 },
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.9)',
@@ -1750,19 +1882,19 @@ createMountainLegend() {
     this.createRiverLegend();
 }
 
-// 高亮点
-// 高亮点
+
+
 highlightRiverPoint(index) {
     const chart = this.charts.river;
     if (chart) {
         const meta = chart.getDatasetMeta(0);
         
-        // 重置所有扇区
+        
         meta.data.forEach((arc, i) => {
             arc.options.borderWidth = 2;
         });
         
-        // 高亮当前扇区
+        
         if (meta.data[index]) {
             meta.data[index].options.borderWidth = 4;
         }
@@ -1771,7 +1903,7 @@ highlightRiverPoint(index) {
     }
 }
 
-// 重置高亮
+
 resetRiverHighlight() {
     const chart = this.charts.river;
     if (chart) {
@@ -1783,7 +1915,7 @@ resetRiverHighlight() {
     }
 }
 
-// 点击动画
+
 animateRiverPointClick(index) {
     const chart = this.charts.river;
     if (chart) {
@@ -1791,9 +1923,9 @@ animateRiverPointClick(index) {
         const arc = meta.data[index];
         
         if (arc) {
-            // 脉冲动画
+            
             const originalRadius = arc.options.radius;
-            arc.options.radius = originalRadius * 0.9;  // 向内收缩
+            arc.options.radius = originalRadius * 0.9;  
             
             chart.update();
             
@@ -1805,7 +1937,7 @@ animateRiverPointClick(index) {
     }
 }
 
-// 重置高亮
+
 resetRiverHighlight() {
     const chart = this.charts.river;
     if (chart) {
@@ -1818,21 +1950,21 @@ resetRiverHighlight() {
     }
 }
 
-// 处理点击
+
 handleRiverClick(index) {
     const riverName = this.charts.river.data.labels[index];
     const riverLength = this.charts.river.data.datasets[0].data[index];
     
-    // 点击动画
+    
     this.animateRiverPointClick(index);
     
-    // 显示详情
+    
     setTimeout(() => {
         this.showRiverDetail(riverName, riverLength);
     }, 200);
 }
 
-// 点击动画
+
 animateRiverPointClick(index) {
     const chart = this.charts.river;
     if (chart) {
@@ -1840,7 +1972,7 @@ animateRiverPointClick(index) {
         const point = meta.data[index];
         
         if (point) {
-            // 脉冲动画
+            
             const originalRadius = point.options.radius;
             point.options.radius = originalRadius * 1.5;
             
@@ -1853,7 +1985,7 @@ animateRiverPointClick(index) {
         }
     }
 }
-// ========== 标准圆形饼图 ==========
+
  createRiverChart() {
     const ctx = document.getElementById('riverChart').getContext('2d');
 
@@ -1894,11 +2026,11 @@ animateRiverPointClick(index) {
         data: riverData,
         options: {
             responsive: true,
-            maintainAspectRatio: true, // 改为true保持宽高比
-            aspectRatio: 1, // 设置为1确保正圆形
+            maintainAspectRatio: true, 
+            aspectRatio: 1, 
             rotation: -90,
             circumference: 360,
-            // 精确交互配置
+            
             events: ['mousemove', 'mouseout', 'click', 'touchstart'],
             interaction: {
                 mode: 'point',
@@ -1983,25 +2115,25 @@ animateRiverPointClick(index) {
         }
     });
 
-    // 添加圆形检测和调整
+    
     this.ensurePerfectCircle();
 
      this.createPreciseLegend();
      
 }
     
-// 确保完美圆形
+
 ensurePerfectCircle() {
     const canvas = document.getElementById('riverChart');
     const container = canvas.parentElement;
 
-    // 监听窗口大小变化，保持圆形
+    
     const maintainCircle = () => {
         const containerWidth = container.clientWidth;
-        // 设置容器高度等于宽度，确保正圆形
+        
         container.style.height = containerWidth + 'px';
 
-        // 强制图表重新渲染以适应新尺寸
+        
         if (this.charts.river) {
             setTimeout(() => {
                 this.charts.river.resize();
@@ -2009,25 +2141,25 @@ ensurePerfectCircle() {
         }
     };
 
-    // 初始设置
+    
     maintainCircle();
 
-    // 监听窗口大小变化
+    
     window.addEventListener('resize', maintainCircle);
 
-    // 监听容器大小变化
+    
     const resizeObserver = new ResizeObserver(maintainCircle);
     resizeObserver.observe(container);
 }
 
-// 精确高亮方法
+
 highlightExactSegment(index) {
     const chart = this.charts.river;
     if (chart && chart.data) {
         try {
             const meta = chart.getDatasetMeta(0);
             if (meta && meta.data[index]) {
-                // 重置所有扇形
+                
                 meta.data.forEach((arc, i) => {
                     if (arc) {
                         arc.options = {
@@ -2039,7 +2171,7 @@ highlightExactSegment(index) {
                     }
                 });
 
-                // 精确高亮当前扇形
+                
                 const arc = meta.data[index];
                 arc.options = {
                     ...arc.options,
@@ -2056,7 +2188,7 @@ highlightExactSegment(index) {
     }
 }
 
-// 精确重置高亮
+
 resetExactHighlight() {
     const chart = this.charts.river;
     if (chart) {
@@ -2073,7 +2205,7 @@ resetExactHighlight() {
     }
 }
 
-// 精确点击处理
+
 handleExactClick(index) {
     if (!this.charts.river || !this.charts.river.data) return;
 
@@ -2082,16 +2214,16 @@ handleExactClick(index) {
 
     console.log(`精确点击: ${riverName}, 长度: ${riverLength}公里`);
 
-    // 精确点击动画
+    
     this.animateExactSegmentClick(index);
 
-    // 显示详情
+    
     setTimeout(() => {
         this.showRiverDetail(riverName, riverLength);
     }, 300);
 }
 
-// 精确点击动画
+
 animateExactSegmentClick(index) {
     const chart = this.charts.river;
     if (chart) {
@@ -2099,10 +2231,10 @@ animateExactSegmentClick(index) {
         const arc = meta.data[index];
 
         if (arc) {
-            // 精确的脉冲动画 - 只在当前扇形上
+            
             const originalOuterRadius = arc.outerRadius;
 
-            // 临时扩展当前扇形
+            
             arc.outerRadius = originalOuterRadius * 1.08;
             chart.update();
 
@@ -2114,7 +2246,7 @@ animateExactSegmentClick(index) {
     }
 }
 
-// 创建精确图例
+
 createPreciseLegend() {
     const legend = document.getElementById('riverLegend');
     legend.innerHTML = '';
@@ -2157,7 +2289,7 @@ createPreciseLegend() {
             <span style="font-weight: 500; font-size: 0.95rem;">${label}</span>
         `;
 
-        // 精确的图例交互
+        
         item.addEventListener('click', () => {
             const riverLength = this.charts.river.data.datasets[0].data[index];
             this.showRiverDetail(label, riverLength);
@@ -2192,14 +2324,14 @@ createPreciseLegend() {
     });
 }
 
-// 获取悬停颜色
+
 getHoverColor(originalColor) {
     if (originalColor.includes('rgba')) {
         return originalColor.replace(/0\.[0-9]+\)$/, '1)');
     }
     return originalColor;
 }
-// 更新图例创建
+
 createRiverLegend() {
     const legend = document.getElementById('riverLegend');
     legend.innerHTML = '';
@@ -2233,7 +2365,7 @@ createRiverLegend() {
             <span style="font-weight: 500;">${label}</span>
         `;
         
-        // 图例交互
+        
         item.addEventListener('click', () => {
             const length = this.charts.river.data.datasets[0].data[index];
             this.showRiverDetail(label, length);
@@ -2266,10 +2398,10 @@ createRiverLegend() {
 }
 
 
-// 增强图例交互
+
 createRiverLegend() {
     const legend = document.getElementById('riverLegend');
-    legend.innerHTML = ''; // 清空原有内容
+    legend.innerHTML = ''; 
     
     const labels = this.charts.river.data.labels;
     const colors = this.charts.river.data.datasets[0].backgroundColor;
@@ -2300,12 +2432,12 @@ createRiverLegend() {
             <span style="font-weight: 500;">${label}</span>
         `;
         
-        // 为图例添加增强交互
+        
         item.addEventListener('click', () => {
             const length = this.charts.river.data.datasets[0].data[index];
             this.showRiverDetail(label, length);
             
-            // 图例点击反馈
+            
             item.style.background = 'rgba(100, 255, 218, 0.2)';
             setTimeout(() => {
                 item.style.background = 'transparent';
@@ -2340,7 +2472,7 @@ createRiverLegend() {
     });
 }
 
-// 增强河流详情显示
+
 showRiverDetail(name, length) {
     const riverDetails = {
         '长江': {
@@ -2391,9 +2523,9 @@ showRiverDetail(name, length) {
     this.showCustomRiverModal(name, length, detail);
 }
 
-// 自定义河流详情模态框
+
 showCustomRiverModal(name, length, detail) {
-    // 创建模态框
+    
     const modal = document.createElement('div');
     modal.className = 'river-modal';
     modal.style.cssText = `
@@ -2474,7 +2606,7 @@ showCustomRiverModal(name, length, detail) {
     
     document.body.appendChild(modal);
     
-    // 关闭事件
+    
     const closeBtn = modal.querySelector('.river-modal-close');
     const okBtn = modal.querySelector('.river-modal-ok');
     const closeModal = () => {
@@ -2515,7 +2647,7 @@ createRiverLegend() {
             <span>${label}</span>
         `;
         
-        // 为图例添加交互
+        
         item.addEventListener('click', () => {
             const length = this.charts.river.data.datasets[0].data[index];
             this.showRiverDetail(label, length);
@@ -2534,7 +2666,11 @@ createRiverLegend() {
         legend.appendChild(item);
     });
 }
-    
+/**
+ * 创建游客量趋势折线图
+ * 显示主要景点的年度游客数量变化
+ * 带填充区域的折线图，平滑曲线展示趋势
+ */    
     createVisitorChart() {
     const ctx = document.getElementById('visitorChart').getContext('2d');
     const colors = this.getChartColors();
@@ -2634,7 +2770,11 @@ createRiverLegend() {
         `;
         legend.appendChild(item);
     }
-    
+/**
+ * 创建季节性访问热度雷达图
+ * 多维度展示不同季节的景点访问热度
+ * 支持季节筛选和动态数据更新
+ */    
     createSeasonChart() {
     const ctx = document.getElementById('seasonChart').getContext('2d');
     const colors = this.getChartColors();
@@ -2709,7 +2849,7 @@ createRiverLegend() {
 }
     
     bindEvents() {
-    // 季节筛选按钮事件
+    
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const season = e.target.dataset.season;
@@ -2719,7 +2859,7 @@ createRiverLegend() {
         });
     });
 
-    // 主题切换时更新图表颜色
+    
     const themeObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.attributeName === 'data-theme') {
@@ -2750,12 +2890,12 @@ createRiverLegend() {
     }
     
     updateChartColors() {
-        // 更新所有图表的颜色以适应主题
+        
         const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim();
         
         Object.values(this.charts).forEach(chart => {
             if (chart.options.scales) {
-                // 更新坐标轴颜色
+                
                 if (chart.options.scales.x && chart.options.scales.x.ticks) {
                     chart.options.scales.x.ticks.color = textColor;
                 }
@@ -2775,41 +2915,41 @@ createRiverLegend() {
     }
 }
 
-// 更新初始化函数
-// 更新初始化函数
+
+
 document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('quiz')) {
         new MountainRiverQuiz();
     }
     console.log('DOM加载完成，初始化所有功能...');
     
-    // 初始化主题切换
+    
     initTheme();
     
-    // 初始化主模态框功能
+    
     initMainModal();
     
-    // 初始化全景画廊
+    
     if (document.querySelector('.panorama-container')) {
         console.log('初始化全景画廊');
         new PanoramaGallery();
     }
     
-    // 初始化数据可视化
+    
     if (document.getElementById('mountainChart')) {
         console.log('初始化数据可视化');
         new DataVisualization();
     }
     
-    // 其他初始化...
+    
     initSmoothScroll();
     initNavbarEffect();
     initExploreMore();
 });
 
-// 添加缺失的初始化函数
+
 function initMainModal() {
-    // 主模态框的初始化代码（原有的模态框功能）
+    
     const modal = document.getElementById('infoModal');
     const closeBtn = modal.querySelector('.close-btn');
     const learnMoreBtns = document.querySelectorAll('.filter-btn');
@@ -2886,7 +3026,15 @@ function initMainModal() {
     });
 }
 
-// ========== 山河知识问答功能 ==========
+/**
+ * 地理知识问答系统
+ * 包含环保意识的随机题目测试
+ * 功能特点：
+ * - 随机抽题机制
+ * - 实时评分系统
+ * - 答案解析展示
+ * - 多难度等级评价
+ */
 class MountainRiverQuiz {
     constructor() {
         this.questions = [
@@ -3347,18 +3495,18 @@ class MountainRiverQuiz {
     }
 }
 
-// 初始化问答系统
+
 document.addEventListener('DOMContentLoaded', function() {
-    // 其他初始化代码...
+    
     if (document.getElementById('quiz')) {
         new MountainRiverQuiz();
     }
-    // 初始化问答系统
+    
     if (document.getElementById('quiz')) {
         new MountainRiverQuiz();
     }
 });
-// 初始化地图标记交互
+
 function initMapInteraction() {
     const markers = document.querySelectorAll('.location-marker');
     const detailImage = document.getElementById('detailImage');
@@ -3370,7 +3518,7 @@ function initMapInteraction() {
             const id = this.getAttribute('data-id');
             const location = locationData[type][id];
 
-            // 更新详情区域内容
+            
             detailImage.style.backgroundImage = `url('${location.image}')`;
 
             let statsHtml = '';
@@ -3401,63 +3549,66 @@ function initMapInteraction() {
                 <div class="detail-more">${location.details}</div>
             `;
 
-            // 高亮当前选中的标记
+            
             markers.forEach(m => m.classList.remove('active'));
             this.classList.add('active');
         });
     });
 }
 
-// 在页面加载完成后初始化
+
 document.addEventListener('DOMContentLoaded', function () {
     initTheme();
-    initMapInteraction(); // 添加地图交互初始化
-    // 其他初始化函数...
+    initMapInteraction(); 
+    
 });
-// 等待页面DOM加载完成
+
 document.addEventListener('DOMContentLoaded', function () {
-    // 绑定地图标记点击事件
+    
     bindMarkerEvents();
-    // 绑定"了解更多"按钮点击事件
+    
     bindLearnMoreEvents();
 });
 
-// 绑定地图标记点击事件
+
 function bindMarkerEvents() {
     const markers = document.querySelectorAll('.location-marker');
     markers.forEach(marker => {
         marker.addEventListener('click', function () {
             const type = this.getAttribute('data-type');
             const id = parseInt(this.getAttribute('data-id'));
-            showDetail(type, id); // 显示详情
+            showDetail(type, id); 
         });
     });
 }
 
-// 绑定"了解更多"按钮点击事件
+
 function bindLearnMoreEvents() {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(button => {
         button.addEventListener('click', function () {
             const type = this.getAttribute('data-type');
             const id = parseInt(this.getAttribute('data-id'));
-            showDetail(type, id); // 显示详情
+            showDetail(type, id); 
         });
     });
 }
-
-// 根据类型和ID显示对应详情
-// 根据类型和ID显示对应详情（适配新数据结构）
+/**
+ * 显示指定景点的详细信息
+ * 更新详情面板的图片、标题、描述和统计数据
+ * @param {string} type - 景点类型
+ * @param {string} id - 景点ID  
+ */
 function showDetail(type, id) {
-    // 从统一数据源中获取数据（例如：locationData.river[2] 对应长江）
+    
     const data = locationData[type]?.[id];
 
-    // 获取详情区域元素
+    
     const detailImage = document.getElementById('detailImage');
     const detailContent = document.getElementById('detailContent');
-    const detailTitle = document.getElementById('detailTitle'); // 若有标题元素
+    const detailTitle = document.getElementById('detailTitle'); 
 
-    // 处理数据不存在的情况
+    
     if (!data) {
         detailImage.style.backgroundImage = 'none';
         detailContent.innerHTML = '<h3>未找到相关信息</h3>';
@@ -3465,44 +3616,44 @@ function showDetail(type, id) {
         return;
     }
 
-    // 更新详情内容
-    detailImage.style.backgroundImage = `url('${data.image}')`; // 图片
-    if (detailTitle) detailTitle.textContent = data.title; // 标题（若有）
+    
+    detailImage.style.backgroundImage = `url('${data.image}')`; 
+    if (detailTitle) detailTitle.textContent = data.title; 
 
-    // 拼接详情HTML（包含描述和详细信息）
+    
     detailContent.innerHTML = `
-        <p class="detail-brief">${data.description}</p> <!-- 简短描述 -->
-        <div class="detail-full">${data.details}</div> <!-- 详细信息（含HTML） -->
+        <p class="detail-brief">${data.description}</p> 
+        <div class="detail-full">${data.details}</div> 
     `;
 
-    // 显示详情区域（若初始隐藏）
+    
     const detailContainer = document.getElementById('locationDetail');
     if (detailContainer) detailContainer.classList.add('active');
 }
-// 页面加载完成后绑定事件
+
 document.addEventListener('DOMContentLoaded', function () {
-    // 绑定地图标记点击事件
+    
     document.querySelectorAll('.location-marker').forEach(marker => {
         marker.addEventListener('click', function () {
-            const type = this.getAttribute('data-type'); // 如 "river"
-            const id = this.getAttribute('data-id'); // 如 "2"
-            showDetail(type, id); // 传递类型和ID
+            const type = this.getAttribute('data-type'); 
+            const id = this.getAttribute('data-id'); 
+            showDetail(type, id); 
         });
     });
 });
 document.addEventListener('DOMContentLoaded', function () {
-    // 其他初始化代码...
+    
     initMapMarkers();
-    // 其他初始化代码...
+    
 });
 
-// 打开B站视频函数
+
 function openBilibiliVideo(bvid) {
-    // 直接跳转到指定的B站视频
+    
     const videoUrl = `https://www.bilibili.com/video/${bvid}`;
     window.open(videoUrl, '_blank');
 }
-// 滚动进度条
+
 function initScrollProgress() {
     const progressBar = document.createElement('div');
     progressBar.className = 'progress-bar';
@@ -3515,9 +3666,9 @@ function initScrollProgress() {
         progressBar.style.width = scrolled + '%';
     });
 }
-// 增强版平滑滚动（包含分类标签）
+
 function initEnhancedSmoothScroll() {
-    // 为所有锚点链接添加平滑滚动（包括开始探索按钮）
+    
     document.querySelectorAll('a[href^="#"]').forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -3529,27 +3680,27 @@ function initEnhancedSmoothScroll() {
                 const targetElement = document.querySelector(targetId);
                 
                 if (targetElement) {
-                    // 计算目标位置（考虑导航栏高度）
+                    
                     const navHeight = document.querySelector('header').offsetHeight;
                     let targetPosition;
                     
-                    // 如果是分类标签，稍微向上偏移以显示完整区域
+                    
                     if (targetId === '#category-tags') {
                         targetPosition = targetElement.offsetTop - navHeight - 40;
                     } else {
                         targetPosition = targetElement.offsetTop - navHeight - 20;
                     }
                     
-                    // 平滑滚动
+                    
                     window.scrollTo({
                         top: targetPosition,
                         behavior: 'smooth'
                     });
                     
-                    // 更新 URL
+                    
                     history.pushState(null, null, targetId);
                     
-                    // 添加视觉反馈（如果是导航链接）
+                    
                     if (this.closest('nav')) {
                         highlightActiveNavLink(targetId);
                     }
@@ -3558,7 +3709,7 @@ function initEnhancedSmoothScroll() {
         });
     });
     
-    // 高亮当前活动的导航链接
+    
     function highlightActiveNavLink(activeId) {
         document.querySelectorAll('nav a[href^="#"]').forEach(link => {
             link.classList.remove('active');
@@ -3570,7 +3721,7 @@ function initEnhancedSmoothScroll() {
         }
     }
     
-    // 监听滚动，更新活动链接
+    
     window.addEventListener('scroll', function() {
         const sections = document.querySelectorAll('section[id]');
         const navHeight = document.querySelector('header').offsetHeight;
@@ -3590,13 +3741,21 @@ function initEnhancedSmoothScroll() {
     });
 }
 
-// 在页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
     initEnhancedSmoothScroll();
-    initCategoryTags(); // 确保分类标签功能也初始化
-    // 其他初始化代码...
+    initCategoryTags(); 
+    
 });
-// 英雄区域轮播控制
+/**
+ * 首页英雄区域轮播图控制器
+ * 管理背景图片的自动轮播和用户交互
+ * 功能包括：
+ * - 播放/暂停控制
+ * - 轮播速度调节（慢速/正常/快速）
+ * - 鼠标悬停暂停
+ * - 触摸设备支持
+ * - 键盘快捷键（空格键切换）
+ */
 class HeroCarousel {
     constructor() {
         this.carousel = document.getElementById('heroCarousel');
@@ -3610,24 +3769,24 @@ class HeroCarousel {
     }
     
     initControls() {
-        // 暂停/播放按钮
+        
         this.pauseBtn.addEventListener('click', () => {
             this.togglePlay();
         });
         
-        // 速度控制按钮
+        
         this.speedBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const speed = e.target.getAttribute('data-speed');
                 this.setSpeed(speed);
                 
-                // 更新按钮状态
+                
                 this.speedBtns.forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
             });
         });
         
-        // 鼠标悬停暂停
+        
         this.carousel.addEventListener('mouseenter', () => {
             this.pause();
         });
@@ -3640,7 +3799,7 @@ class HeroCarousel {
     }
     
     addHoverEffects() {
-        // 触摸设备支持
+        
         this.carousel.addEventListener('touchstart', () => {
             this.pause();
         });
@@ -3665,7 +3824,7 @@ class HeroCarousel {
     }
     
     setSpeed(speed) {
-        // 移除所有速度类
+        
         this.carousel.classList.remove('hero-carousel-slow', 'hero-carousel-fast');
         
         switch(speed) {
@@ -3688,11 +3847,11 @@ class HeroCarousel {
     }
 }
 
-// 初始化英雄区域轮播
+
 document.addEventListener('DOMContentLoaded', function() {
     const heroCarousel = new HeroCarousel();
     
-    // 键盘控制
+    
     document.addEventListener('keydown', function(e) {
         if (e.code === 'Space') {
             e.preventDefault();
@@ -3701,7 +3860,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// 添加速度控制按钮（可选功能）
+
 function addSpeedControls(heroCarousel) {
     const controlsHtml = `
         <div class="hero-controls" style="
@@ -3745,17 +3904,56 @@ function addSpeedControls(heroCarousel) {
     const heroSection = document.querySelector('.hero');
     heroSection.insertAdjacentHTML('beforeend', controlsHtml);
     
-    // 添加速度控制事件
+    
     document.querySelectorAll('.speed-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const speed = this.getAttribute('data-speed');
             heroCarousel.setSpeed(speed);
             
-            // 更新按钮状态
+            
             document.querySelectorAll('.speed-btn').forEach(b => {
                 b.style.background = 'rgba(255,255,255,0.2)';
             });
             this.style.background = 'rgba(255,255,255,0.4)';
         });
     });
+}
+/**
+ * Logo点击返回顶部功能
+ * 为网站logo添加平滑滚动到页面顶部的交互
+ * 功能特性：
+ * - 平滑滚动动画
+ * - 键盘可访问性支持（Enter/Space键）
+ * - 事件冒泡阻止，避免冲突
+ * - 光标样式提示可点击性
+ */
+const logoImage = document.querySelector('.logo-image');
+
+if (logoImage) {
+    // 点击事件
+    logoImage.addEventListener('click', function(e) {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        
+        // 关键：阻止事件冒泡，避免被其他事件处理程序干扰
+        e.stopPropagation();
+        e.preventDefault();
+    });
+    
+    // 键盘事件
+    logoImage.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    });
+    
+    // 确保可点击性
+    logoImage.style.cursor = 'pointer';
+    logoImage.setAttribute('tabindex', '0');
 }

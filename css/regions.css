@@ -1,6 +1,6 @@
-/* 区域特色大全页面专用样式 */
 
-/* 页面英雄区域 */
+
+
 .page-hero {
     height: 60vh;
     position: relative;
@@ -21,7 +21,7 @@
     margin-bottom: 1rem;
 }
 
-/* 区域网格布局 */
+
 .regions-grid-container {
     max-width: 1400px;
     margin: 0 auto;
@@ -37,7 +37,7 @@
     transition: all 0.6s ease;
 }
 
-/* 区域卡片样式 - 简化版，只有名字 */
+
 .region-card {
     position: relative;
     height: 350px;
@@ -79,7 +79,7 @@
     padding: 0 2rem;
 }
 
-/* 卡片悬停效果 - 只翻转一次 */
+
 .region-card:hover {
     z-index: 100;
 }
@@ -104,7 +104,7 @@
     }
 }
 
-/* 详情展示区域 */
+
 .detail-showcase {
     position: fixed;
     top: 50%;
@@ -129,7 +129,7 @@
     pointer-events: all;
 }
 
-/* 图片区域 - 向左倾斜 */
+
 .detail-image-container {
     flex: 0 0 65%;
     height: 100%;
@@ -160,7 +160,7 @@
     }
 }
 
-/* 图片轮播淡入淡出效果 */
+
 .detail-image.fade-out {
     opacity: 0;
     transition: opacity 0.8s ease;
@@ -171,7 +171,7 @@
     transition: opacity 0.8s ease;
 }
 
-/* 文字区域 */
+
 .detail-text-container {
     flex: 0 0 30%;
     height: 80%;
@@ -262,7 +262,7 @@
     transform: translateY(-1px);
 }
 
-/* 关闭按钮 */
+
 .close-btn {
     position: absolute;
     top: -15px;
@@ -287,7 +287,7 @@
     transform: rotate(90deg);
 }
 
-/* 遮罩层 */
+
 .overlay {
     position: fixed;
     top: 0;
@@ -307,14 +307,14 @@
     visibility: visible;
 }
 
-/* 当详情激活时，模糊其他卡片 */
+
 .detail-showcase.active ~ .regions-grid-container .regions-grid {
     filter: blur(8px) brightness(0.6);
     transform: scale(0.98);
     pointer-events: none;
 }
 
-/* 响应式设计 */
+
 @media (max-width: 1200px) {
     .detail-showcase {
         width: 90%;
@@ -393,7 +393,7 @@
         }
     }
 }
-/* 搜索功能样式 */
+
 .search-container {
     text-align: center;
     margin: 30px 0;
